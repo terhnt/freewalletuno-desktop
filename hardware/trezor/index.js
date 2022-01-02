@@ -28,7 +28,7 @@ function getXpubkey(net='mainnet', callback){
 // Handle requesting a list of addresses
 function getAddressesFromXpub(net='mainnet', xpubkey,  limit=10, start=0){
     var network = (net=='testnet') ? 'testnet' : 'mainnet';
-    const node = xitcoin.HDNode.fromBase58(xpubkey, xitcoin.networks[network]).neutered();
+    const node = bitcoin.HDNode.fromBase58(xpubkey, bitcoin.networks[network]).neutered();
     addresses = [];
     var stop = start + limit;
     for(var i = start; i < stop; i++) {
@@ -40,13 +40,13 @@ function getAddressesFromXpub(net='mainnet', xpubkey,  limit=10, start=0){
 
 // Handle validating that a signed tx outputs match the unsigned tx outputs
 function isValidTransaction(unsignedTx, signedTx){
-    var u = xitcoin.Transaction.fromHex(unsignedTx), // Unsigned
-        s = xitcoin.Transaction.fromHex(signedTx);   // Signed
+    var u = bitcoin.Transaction.fromHex(unsignedTx), // Unsigned
+        s = bitcoin.Transaction.fromHex(signedTx);   // Signed
         v = true; // valid (true/false)
     // make sure outputs and values matches unsigned transaction
     s.outs.forEach(function(out, n){
-        var a = xitcoin.script.toASM(u.outs[n].script),
-            b = xitcoin.script.toASM(s.outs[n].script);
+        var a = bitcoin.script.toASM(u.outs[n].script),
+            b = bitcoin.script.toASM(s.outs[n].script);
         console.log('Unsigned output, value=', a, u.outs[n].value);
         console.log('Signed   output, value=', b, s.outs[n].value);
         // Error if outputs or values do not match
@@ -68,7 +68,7 @@ function signTx(net='mainnet', source, path, unsignedTx, callback){
         outputs = [],
         network = (net=='testnet') ? '0x80000001' : '0x80000000', // default to mainnet
         api_net = (net=='testnet') ? 'tuno' : 'uno',
-        tx      = xitcoin.Transaction.fromHex(unsignedTx),
+        tx      = bitcoin.Transaction.fromHex(unsignedTx),
         utxos   = {}; // object containing utxo hashes and specific output indexes to use
     // Convert BIP44 path into usable Trezor address_n
     var bip44   = path.split("'/"); // m / purpose' / coin_type' / account' / change / address_index
@@ -98,7 +98,7 @@ function signTx(net='mainnet', source, path, unsignedTx, callback){
             });
             // Build out a list of outputs
             tx.outs.forEach(function(out, n){
-                var asm = xitcoin.script.toASM(out.script),
+                var asm = bitcoin.script.toASM(out.script),
                     output = {};
                 if(/^OP_RETURN/.test(asm)){
                     output = {
