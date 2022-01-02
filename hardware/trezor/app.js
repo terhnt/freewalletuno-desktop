@@ -1,18 +1,18 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.trezor = f()}})(function(){var define,module,exports;return (function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s}return e})()({1:[function(require,module,exports){
 /*
  * Custom functions used to communicate with the wallet
- * 
+ *
  * browserify index.js --standalone trezor > app.js
  *
- * TODO: Figure out why signing testnet transactions is not working correctly (change address is different) 
+ * TODO: Figure out why signing testnet transactions is not working correctly (change address is different)
  */
 
 let bitcoin = require('bitcoinjs-lib');
 
 
-// Handle setting the currency network 
+// Handle setting the currency network
 function setCurrency(net='mainnet'){
-    var network = (net=='testnet') ? 'Testnet' : 'Bitcoin';
+    var network = (net=='testnet') ? 'Testnet' : 'Unobtanium';
     console.log('setCurrency network=',network);
     TrezorConnect.setCurrency(network);
 }
@@ -23,13 +23,13 @@ function getXpubkey(net='mainnet', callback){
     TrezorConnect.getXPubKey(null, function(response){
         if(typeof callback === 'function')
             callback(response);
-    });    
+    });
 }
 
-// Handle requesting a list of addresses 
+// Handle requesting a list of addresses
 function getAddressesFromXpub(net='mainnet', xpubkey,  limit=10, start=0){
     var network = (net=='testnet') ? 'testnet' : 'mainnet';
-    const node = bitcoin.HDNode.fromBase58(xpubkey, bitcoin.networks[network]).neutered();
+    const node = xitcoin.HDNode.fromBase58(xpubkey, xitcoin.networks[network]).neutered();
     addresses = [];
     var stop = start + limit;
     for(var i = start; i < stop; i++) {
@@ -41,13 +41,13 @@ function getAddressesFromXpub(net='mainnet', xpubkey,  limit=10, start=0){
 
 // Handle validating that a signed tx outputs match the unsigned tx outputs
 function isValidTransaction(unsignedTx, signedTx){
-    var u = bitcoin.Transaction.fromHex(unsignedTx), // Unsigned
-        s = bitcoin.Transaction.fromHex(signedTx);   // Signed
+    var u = xitcoin.Transaction.fromHex(unsignedTx), // Unsigned
+        s = xitcoin.Transaction.fromHex(signedTx);   // Signed
         v = true; // valid (true/false)
     // make sure outputs and values matches unsigned transaction
     s.outs.forEach(function(out, n){
-        var a = bitcoin.script.toASM(u.outs[n].script),
-            b = bitcoin.script.toASM(s.outs[n].script);
+        var a = xitcoin.script.toASM(u.outs[n].script),
+            b = xitcoin.script.toASM(s.outs[n].script);
         console.log('Unsigned output, value=', a, u.outs[n].value);
         console.log('Signed   output, value=', b, s.outs[n].value);
         // Error if outputs or values do not match
@@ -60,7 +60,7 @@ function isValidTransaction(unsignedTx, signedTx){
 // Handle signing a transaction
 // @net        = Network (mainnet, testnet)
 // @source     = Source Address
-// @path       = BIP44 Path (https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki)
+// @path       = BIP44 Path (https://github.com/unobtanium/bips/blob/master/bip-0044.mediawiki)
 // @unsignedTx = Unsigned Transaction in hex format
 // @callback   = Callback function
 function signTx(net='mainnet', source, path, unsignedTx, callback){
@@ -68,8 +68,8 @@ function signTx(net='mainnet', source, path, unsignedTx, callback){
     var inputs  = [],
         outputs = [],
         network = (net=='testnet') ? '0x80000001' : '0x80000000', // default to mainnet
-        api_net = (net=='testnet') ? 'tbtc' : 'btc',
-        tx      = bitcoin.Transaction.fromHex(unsignedTx),
+        api_net = (net=='testnet') ? 'tuno' : 'uno',
+        tx      = xitcoin.Transaction.fromHex(unsignedTx),
         utxos   = {}; // object containing utxo hashes and specific output indexes to use
     // Convert BIP44 path into usable Trezor address_n
     var bip44   = path.split("'/"); // m / purpose' / coin_type' / account' / change / address_index
@@ -79,7 +79,7 @@ function signTx(net='mainnet', source, path, unsignedTx, callback){
         var tx_hash = input.hash.reverse().toString('hex');
         utxos[tx_hash] = -1; // set to -1 so we can determine which ones have been processed and which have not
     });
-    // Define callback to run when done with API calls 
+    // Define callback to run when done with API calls
     var doneCb = function(){
         // Check if we are truly done
         var done = true;
@@ -92,14 +92,14 @@ function signTx(net='mainnet', source, path, unsignedTx, callback){
             tx.ins.forEach(function(input, n){
                 var tx_hash = input.hash.toString('hex'); // no need to reverse since it was already done above
                 inputs.push({
-                    address_n: address,         // Address 
+                    address_n: address,         // Address
                     prev_hash: tx_hash,         // Previous transaction hash
                     prev_index: utxos[tx_hash]  // output to use from previous transaction
                 })
             });
             // Build out a list of outputs
             tx.outs.forEach(function(out, n){
-                var asm = bitcoin.script.toASM(out.script),
+                var asm = xitcoin.script.toASM(out.script),
                     output = {};
                 if(/^OP_RETURN/.test(asm)){
                     output = {
@@ -156,14 +156,14 @@ function signTx(net='mainnet', source, path, unsignedTx, callback){
 // @signedTx = Signed Transaction in hex format
 // @callback = Callback function
 function broadcastTx(network, signedTx, callback){
-    var net  = (network=='testnet') ? 'BTCTEST' : 'BTC',
-        host = (network=='testnet') ? 'testnet.xchain.io' : 'xchain.io';
+    var net  = (network=='testnet') ? 'UNOTEST' : 'UNO',
+        host = (network=='testnet') ? 'unoparty-testnet.unoparty.xchain.io' : 'unoparty.xchain.io';
     // First try to broadcast using the XChain API
     $.ajax({
         type: "POST",
         url: 'https://' + host +  '/api/send_tx',
-        data: { 
-            tx_hex: signedTx 
+        data: {
+            tx_hex: signedTx
         },
         complete: function(o){
             // console.log('o=',o);
@@ -179,8 +179,8 @@ function broadcastTx(network, signedTx, callback){
                 $.ajax({
                     type: "POST",
                     url: 'https://chain.so/api/v2/send_tx/' + net,
-                    data: { 
-                        tx_hex: signedTx 
+                    data: {
+                        tx_hex: signedTx
                     },
                     dataType: 'json',
                     complete: function(o){
@@ -195,7 +195,7 @@ function broadcastTx(network, signedTx, callback){
                             cbError('Error while trying to broadcast signed transaction',callback);
                         }
                     }
-                });                
+                });
             }
         }
     });
@@ -212,7 +212,7 @@ module.exports = {
 },{"bitcoinjs-lib":19}],2:[function(require,module,exports){
 // base-x encoding
 // Forked from https://github.com/cryptocoinjs/bs58
-// Originally written by Mike Hearn for BitcoinJ
+// Originally written by Mike Hearn for UnobtaniumJ
 // Copyright (c) 2011 Google Inc
 // Ported to JavaScript by Stefan Thomas
 // Merged Buffer refactorings from base58-native by Stephen Pair
@@ -2078,7 +2078,7 @@ module.exports={
         "spec": ">=1.4.0 <2.0.0",
         "type": "range"
       },
-      "/Users/jjohnson/Sites/freewallet-desktop/node_modules/bitcoinjs-lib-zcash"
+      "/Users/jjohnson/Sites/freewalletuno-desktop/node_modules/bitcoinjs-lib-zcash"
     ]
   ],
   "_from": "bigi@>=1.4.0 <2.0.0",
@@ -2114,7 +2114,7 @@ module.exports={
   "_shasum": "9c665a95f88b8b08fc05cfd731f561859d725825",
   "_shrinkwrap": null,
   "_spec": "bigi@^1.4.0",
-  "_where": "/Users/jjohnson/Sites/freewallet-desktop/node_modules/bitcoinjs-lib-zcash",
+  "_where": "/Users/jjohnson/Sites/freewalletuno-desktop/node_modules/bitcoinjs-lib-zcash",
   "bugs": {
     "url": "https://github.com/cryptocoinjs/bigi/issues"
   },
@@ -2137,7 +2137,7 @@ module.exports={
   "keywords": [
     "cryptography",
     "math",
-    "bitcoin",
+    "unobtanium",
     "arbitrary",
     "precision",
     "arithmetic",
@@ -2201,7 +2201,7 @@ module.exports={
 }
 
 },{}],8:[function(require,module,exports){
-// Reference https://github.com/bitcoin/bips/blob/master/bip-0066.mediawiki
+// Reference https://github.com/unobtanium/bips/blob/master/bip-0066.mediawiki
 // Format: 0x30 [total-length] 0x02 [R-length] [R] 0x02 [S-length] [S]
 // NOTE: SIGHASH byte ignored AND restricted, truncate before use
 
@@ -2430,13 +2430,13 @@ module.exports={
   "OP_CHECKMULTISIGVERIFY": 175,
 
   "OP_NOP1": 176,
-  
+
   "OP_NOP2": 177,
   "OP_CHECKLOCKTIMEVERIFY": 177,
 
   "OP_NOP3": 178,
   "OP_CHECKSEQUENCEVERIFY": 178,
-  
+
   "OP_NOP4": 179,
   "OP_NOP5": 180,
   "OP_NOP6": 181,
@@ -3063,7 +3063,7 @@ ECPair.fromWIF = function (string, network) {
 
     if (!network) throw new Error('Unknown network version')
 
-  // otherwise, assume a network object (or default to bitcoin)
+  // otherwise, assume a network object (or default to unobtanium)
   } else {
     network = network || NETWORKS.bitcoin
 
@@ -3254,7 +3254,7 @@ function HDNode (keyPair, chainCode) {
 
 HDNode.HIGHEST_BIT = 0x80000000
 HDNode.LENGTH = 78
-HDNode.MASTER_SECRET = Buffer.from('Bitcoin seed', 'utf8')
+HDNode.MASTER_SECRET = Buffer.from('Unobtanium seed', 'utf8')
 
 HDNode.fromSeedBuffer = function (seed, network) {
   typeforce(types.tuple(types.Buffer, types.maybe(types.Network)), arguments)
@@ -3297,7 +3297,7 @@ HDNode.fromBase58 = function (string, networks) {
 
     if (!network) throw new Error('Unknown network version')
 
-  // otherwise, assume a network object (or default to bitcoin)
+  // otherwise, assume a network object (or default to unobtanium)
   } else {
     network = networks || NETWORKS.bitcoin
   }
@@ -3430,7 +3430,7 @@ HDNode.prototype.toBase58 = function (__isPrivate) {
   return base58check.encode(buffer)
 }
 
-// https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#child-key-derivation-ckd-functions
+// https://github.com/unobtanium/bips/blob/master/bip-0032.mediawiki#child-key-derivation-ckd-functions
 HDNode.prototype.derive = function (index) {
   typeforce(types.UInt32, index)
 
@@ -3569,23 +3569,34 @@ module.exports = {
 }
 
 },{"./address":11,"./block":12,"./bufferutils":13,"./crypto":14,"./ecpair":16,"./ecsignature":17,"./hdnode":18,"./networks":20,"./script":21,"./templates":23,"./transaction":45,"./transaction_builder":46,"bitcoin-ops":9}],20:[function(require,module,exports){
-// https://en.bitcoin.it/wiki/List_of_address_prefixes
-// Dogecoin BIP32 is a proposed standard: https://bitcointalk.org/index.php?topic=409731
+// https://en.xitcoin.it/wiki/List_of_address_prefixes
+// Dogecoin BIP32 is a proposed standard: https://unobtaniumtalk.org/index.php?topic=409731
 
 module.exports = {
-  bitcoin: {
-    messagePrefix: '\x18Bitcoin Signed Message:\n',
-    bech32: 'bc',
+  unobtanium: {
+    messagePrefix: '\x1BUnobtanium Signed Message:\n',
+    bech32: 'un',
     bip32: {
       public: 0x0488b21e,
       private: 0x0488ade4
     },
     pubKeyHash: 0x00,
-    scriptHash: 0x05,
-    wif: 0x80
+    scriptHash: 0x1E,
+    wif: 0xE0
+  },
+  bitcoin: {
+    messagePrefix: '\x1BUnobtanium Signed Message:\n',
+    bech32: 'un',
+    bip32: {
+      public: 0x0488b21e,
+      private: 0x0488ade4
+    },
+    pubKeyHash: 0x00,
+    scriptHash: 0x1E,
+    wif: 0xE0
   },
   testnet: {
-    messagePrefix: '\x18Bitcoin Signed Message:\n',
+    messagePrefix: '\x1bUnobtanium Signed Message:\n',
     bech32: 'tb',
     bip32: {
       public: 0x043587cf,
@@ -4942,7 +4953,7 @@ Transaction.prototype.clone = function () {
 /**
  * Hash transaction for signing a specific input.
  *
- * Bitcoin uses a different hash for each signed transaction input.
+ * Unobtanium uses a different hash for each signed transaction input.
  * This method copies the transaction, makes the necessary changes based on the
  * hashType, and then hashes the result.
  * This hash can then be used to sign the provided transaction input.
@@ -4950,7 +4961,7 @@ Transaction.prototype.clone = function () {
 Transaction.prototype.hashForSignature = function (inIndex, prevOutScript, hashType) {
   typeforce(types.tuple(types.UInt32, types.Buffer, /* types.UInt8 */ types.Number), arguments)
 
-  // https://github.com/bitcoin/bitcoin/blob/master/src/test/sighash_tests.cpp#L29
+  // https://github.com/unobtanium/unobtanium/blob/master/src/test/sighash_tests.cpp#L29
   if (inIndex >= this.ins.length) return ONE
 
   // ignore OP_CODESEPARATOR
@@ -4973,7 +4984,7 @@ Transaction.prototype.hashForSignature = function (inIndex, prevOutScript, hashT
 
   // SIGHASH_SINGLE: ignore all outputs, except at the same index?
   } else if ((hashType & 0x1f) === Transaction.SIGHASH_SINGLE) {
-    // https://github.com/bitcoin/bitcoin/blob/master/src/test/sighash_tests.cpp#L60
+    // https://github.com/unobtanium/unobtanium/blob/master/src/test/sighash_tests.cpp#L60
     if (inIndex >= this.outs.length) return ONE
 
     // truncate outputs after

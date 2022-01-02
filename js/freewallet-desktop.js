@@ -1,7 +1,7 @@
 /*********************************************************************
- * freewallet-desktop.js
+ * freewalletuno-desktop.js
  *
- * Custom javascript for FreeWallet (desktop version)
+ * Custom javascript for FreeWalletUno (desktop version)
  *********************************************************************/
 
 // Setup some short aliases
@@ -9,7 +9,7 @@ var ls = localStorage,
     ss = sessionStorage,
     bc = bitcore;
 
-// Define FreeWallet namespace
+// Define FreeWalletUno namespace
 FWUE = {};
 
 // Define object to hold data for dialog boxes
@@ -21,10 +21,10 @@ FWUE.API_KEYS = {};
 // Load wallet network (1=Mainnet, 2=Testnet)
 FWUE.WALLET_NETWORK = ls.getItem('walletNetwork') || 1;
 
-// Load latest network information (btc/xcp price, fee info, block info)
+// Load latest network information (btc/xup price, fee info, block info)
 FWUE.NETWORK_INFO =  JSON.parse(ls.getItem('networkInfo')) || {};
 
-// Wallet format (0=Counterwallet, 1=BIP39)
+// Wallet format (0=Unowallet, 1=BIP39)
 FWUE.WALLET_FORMAT = ls.getItem('walletFormat') || 0;
 
 // Minimum transaction fee
@@ -62,7 +62,7 @@ FWUE.WALLET_SERVER_INFO = {
         user: 'rpc',
         pass: 'rpc',
         ssl: false,
-        api_host: 'xchain.io',
+        api_host: 'unoparty.xchain.io',
         api_ssl: true
     },
     testnet: {
@@ -71,37 +71,37 @@ FWUE.WALLET_SERVER_INFO = {
         user: 'rpc',
         pass: 'rpc',
         ssl: false,
-        api_host: 'testnet.xchain.io',
+        api_host: 'unoparty-testnet.unoparty.xchain.io',
         api_ssl: true
     }
 };
 
 // Define the default and base markets for the Decentralized Exchange (DEX)
-FWUE.DEFAULT_MARKETS = ['BTC','XCP','BITCRYSTALS','PEPECASH','WILLCOIN'];
+FWUE.DEFAULT_MARKETS = ['UNO','XUP','BITCRYSTALS','PEPECASH','WILLCOIN'];
 FWUE.BASE_MARKETS    = JSON.parse(ls.getItem('walletMarkets')) || FWUE.DEFAULT_MARKETS;
 FWUE.MARKET_OPTIONS  = JSON.parse(ls.getItem('walletMarketOptions')) || [1,2]; // 1=named, 2=subasset, 3=numeric
 FWUE.BASE_MARKETS    = FWUE.BASE_MARKETS.slice(0, 10); // Limit exchange market list to 10
 
 // Define default dispenser watchlist assets
-FWUE.DEFAULT_DISPENSERS = ['XCP','PEPECASH'];
+FWUE.DEFAULT_DISPENSERS = ['XUP','PEPECASH'];
 FWUE.BASE_DISPENSERS    = JSON.parse(ls.getItem('walletDispensers')) || FWUE.DEFAULT_DISPENSERS;
 FWUE.DISPENSER_OPTIONS  = JSON.parse(ls.getItem('walletDispenserOptions')) || []; // 1=hide closed
 FWUE.BASE_DISPENSERS    = FWUE.BASE_DISPENSERS.slice(0, 10); // Limit dispenser watchlist to 10
 
-// Define arrays to hold BTCPay information
-FWUE.BTCPAY_ORDERS  = JSON.parse(ls.getItem('btcpayOrders'))  || {}; // array of order tx_hashes to monitor for BTCpay transactions
-FWUE.BTCPAY_MATCHES = JSON.parse(ls.getItem('btcpayMatches')) || {}; // array of order matches that have seen/processed
-FWUE.BTCPAY_QUEUE   = JSON.parse(ls.getItem('btcpayQueue'))   || {}; // Array of btcpay transactions to process
-// Example of how BTCPAY data is stored
-// FWUE.BTCPAY_ORDERS[network][address][order_hash] = autopay;                        // (autopay 0=false, 1=true)
-// FWUE.BTCPAY_MATCHES[network][order_hash]         = [order_match1, order_match2];   // Array of order match transactions that have been seen/added to queue
-// FWUE.BTCPAY_QUEUE[network]                       = [{ tx_info },{ tx_info }];      // Array of btcpay transactions to process
+// Define arrays to hold UNOPay information
+FWUE.UNOPAY_ORDERS  = JSON.parse(ls.getItem('unopayOrders'))  || {}; // array of order tx_hashes to monitor for UNOpay transactions
+FWUE.UNOPAY_MATCHES = JSON.parse(ls.getItem('unopayMatches')) || {}; // array of order matches that have seen/processed
+FWUE.UNOPAY_QUEUE   = JSON.parse(ls.getItem('unopayQueue'))   || {}; // Array of unopay transactions to process
+// Example of how UNOPAY data is stored
+// FWUE.UNOPAY_ORDERS[network][address][order_hash] = autopay;                        // (autopay 0=false, 1=true)
+// FWUE.UNOPAY_MATCHES[network][order_hash]         = [order_match1, order_match2];   // Array of order match transactions that have been seen/added to queue
+// FWUE.UNOPAY_QUEUE[network]                       = [{ tx_info },{ tx_info }];      // Array of unopay transactions to process
 
 // Define cache for asset information
 // We cache the data in order to reduce duplicate API calls as much as possible
 FWUE.ASSET_INFO  = {};
 // Example of cached asset data
-// FWUE.ASSET_INFO['BTC'] = {
+// FWUE.ASSET_INFO['UNO'] = {
 //     block:     0, // Block # when data was last updated
 //     ...
 // }
@@ -110,7 +110,7 @@ FWUE.ASSET_INFO  = {};
 // We cache the data in order to reduce duplicate API calls as much as possible
 FWUE.REPUTATION_INFO  = {};
 // Example of cached reputation data
-// FWUE.REPUTATION_INFO['BTC'] = {
+// FWUE.REPUTATION_INFO['UNO'] = {
 //     block:     0, // Block # when data was last updated
 //     ...
 // }
@@ -119,7 +119,7 @@ FWUE.REPUTATION_INFO  = {};
 // We cache the data in order to reduce duplicate API calls as much as possible
 FWUE.MARKET_DATA = {};
 // Example of cached market data
-// FWUE.MARKET_DATA['BTC/XCP'] = {
+// FWUE.MARKET_DATA['UNO/XUP'] = {
 //     block:      0, // Block # when data was last updated
 //     basics:    {}, // Basics (last price, high/low, volume)
 //     orderbook: {}, // Full Orderbook
@@ -133,7 +133,7 @@ FWUE.MARKET_DATA = {};
 // Start loading the wallet
 $(document).ready(function(){
 
-    // Quick hack to blow away any old data from freewallet.io/browser
+    // Quick hack to blow away any old data from freewalletuno.io/browser
     var old = ls.getItem("Balances");
     if(old){
         ls.clear();
@@ -180,7 +180,7 @@ function setXChainAPI( network ){
 
 // Handle checking for an updated wallet version
 function checkWalletUpgrade(version, message){
-    $.get('https://freewallet.io/releases/current', function(current){
+    $.get('https://freewalletuno.io/releases/current', function(current){
         // Only proceed if we have a response/version
         if(current){
             var a  = version.trim().split('.'),
@@ -198,7 +198,7 @@ function checkWalletUpgrade(version, message){
             if(update)
                 dialogUpdateAvailable(current.trim());
             else if(message)
-                dialogMessage('Current Release', 'You are running the latest version of FreeWallet', false, true);
+                dialogMessage('Current Release', 'You are running the latest version of FreeWalletUno, false, true);
 
         }
 
@@ -237,8 +237,8 @@ function initWallet(){
         // Decrypt the wallet using the current password (do this so we populate FWUE.WALLET_KEYS)
         decryptWallet(getWalletPassword());
     }
-    // Check if we have everything needed to authorize Auto-BTCpay transactions
-    checkBtcpayAuth();
+    // Check if we have everything needed to authorize Auto-UNOpay transactions
+    checkUnopayAuth();
     // Trigger an immediate check of if we need to update the wallet information (prices/balances)
     checkUpdateWallet();
     // Check every 60 seconds if we should update the wallet information
@@ -263,10 +263,10 @@ function resetWallet(){
     ls.removeItem('walletMarketOptions');
     ls.removeItem('walletDispeners');
     ls.removeItem('walletDispenserOptions');
-    ls.removeItem('btcpayOrders');
-    ls.removeItem('btcpayMatches');
-    ls.removeItem('btcpayQueue');
-    ss.removeItem('btcpayWallet');
+    ls.removeItem('unopayOrders');
+    ls.removeItem('unopayMatches');
+    ls.removeItem('unopayQueue');
+    ss.removeItem('unopayWallet');
     ss.removeItem('wallet');
     ss.removeItem('walletPassword');
     ss.removeItem('skipWalletAuth');
@@ -274,10 +274,10 @@ function resetWallet(){
     FWUE.WALLET_HISTORY   = [];
     FWUE.WALLET_KEYS      = {};
     FWUE.WALLET_FORMAT    = 0;
-    FWUE.BTCPAY_ORDERS    = {};
-    FWUE.BTCPAY_MATCHES   = {};
-    FWUE.BTCPAY_QUEUE     = {};
-    FWUE.BTCPAY_ORDERS    = {}
+    FWUE.UNOPAY_ORDERS    = {};
+    FWUE.UNOPAY_MATCHES   = {};
+    FWUE.UNOPAY_QUEUE     = {};
+    FWUE.UNOPAY_ORDERS    = {}
     FWUE.BASE_MARKETS     = FWUE.DEFAULT_MARKETS;
     FWUE.BASE_DISPENSERS  = FWUE.DEFAULT_DISPENSERS;
 }
@@ -300,7 +300,7 @@ function createWallet( passphrase, isBip39=false ){
     // Generate a passphrase if one is not passed
     if(!passphrase)
         passphrase = generateWalletPassphrase(isBip39);
-    // Support BIP39 and counterwallet's shorter wordlist
+    // Support BIP39 and unowallet's shorter wordlist
     if(isBip39){
         wallet = bip39.mnemonicToEntropy(passphrase);
     } else {
@@ -318,14 +318,14 @@ function createWallet( passphrase, isBip39=false ){
     ls.setItem('walletEncrypted',0);
     ls.setItem('walletNetwork',1);
     ss.removeItem('skipWalletAuth');
-    // Set the wallet format (0 = Counterwallet, 1=BIP39)
+    // Set the wallet format (0 = Unowallet, 1=BIP39)
     FWUE.WALLET_FORMAT = (isBip39) ? 1 : 0;
     ls.setItem('walletFormat', FWUE.WALLET_FORMAT); //
     // Add the first 10 addresses to the wallet (both mainnet and testnet)
     var networks = ['mainnet','testnet'];
     networks.forEach(function(net){
         var network = bc.Networks[net],
-            netname = (net=='testnet') ? 'testnet' : 'bitcoin';
+            netname = (net=='testnet') ? 'testnet' : 'unobtanium';
         var s = bc.HDPrivateKey.fromSeed(wallet, network);
         for(var i=0;i<10;i++){
             var d = s.derive("m/0'/0/" + i),
@@ -364,7 +364,7 @@ function addNewWalletAddress(net=1, type='normal'){
     label   = 'Address #' + (idx + 1);
     // Support generating Segwit Addresses (Bech32)
     if(type=='segwit'){
-        var netname = (net==2) ? 'testnet' : 'bitcoin';
+        var netname = (net==2) ? 'testnet' : 'unobtanium';
         var address = bitcoinjs.payments.p2wpkh({ pubkey: d.publicKey.toBuffer(), network: bitcoinjs.networks[netname] }).address;
         label = 'Segwit ' + label;
     }
@@ -428,7 +428,7 @@ function getWalletPassphrase(){
     var w = getWallet(),
         p = false;
     if(w){
-        // Counterwallet's Mnemonic wordlist
+        // Unowallet's Mnemonic wordlist
         if(FWUE.WALLET_FORMAT==0)
             p = Mnemonic.fromHex(w).toWords().toString().replace(/,/gi, " ");
         // BIP39 wordlist
@@ -688,7 +688,7 @@ function updateWalletOptions(){
         block = (FWUE.NETWORK_INFO.network_info) ? FWUE.NETWORK_INFO.network_info[net].block_height : 'NA';
     $('.footer-current-block').text('Block ' + numeral(block).format('0,0'));
     $('.footer-last-updated').html('Last updated <span data-livestamp='  + last.substr(0,last.length-3) + ' class="nowrap"></span>');
-    $('.footer-current-price').text('$' + numeral(getAssetPrice('XCP')).format('0,0.00') + ' USD');
+    $('.footer-current-price').text('$' + numeral(getAssetPrice('XUP')).format('0,0.00') + ' USD');
     var info = getWalletAddressInfo(FWUE.WALLET_ADDRESS);
     if(info.type==3){
         $('#action-view-privkey').hide();
@@ -770,7 +770,7 @@ function getAssetReputationInfo(asset, callback, force){
     if(!FWUE.REPUTATION_INFO[asset])
         FWUE.REPUTATION_INFO[asset] = {}
     if(update){
-        $.getJSON('https://reputation.coindaddy.io/api/asset/xcp/' + asset, function( data ){
+        $.getJSON('https://reputation.coindaddy.io/api/asset/xup/' + asset, function( data ){
             data.block = block;
             FWUE.REPUTATION_INFO[asset] = data;
             if(typeof callback === 'function')
@@ -785,7 +785,7 @@ function getAssetReputationInfo(asset, callback, force){
 function checkUpdateWallet(){
     updateNetworkInfo();
     checkDonateReminder();
-    checkBtcpayTransactions();
+    checkUnopayTransactions();
     var addr = getWalletAddress();
     if(addr){
         updateWalletBalances(addr);
@@ -831,41 +831,41 @@ function checkTokenAccess(feature){
     return access;
 }
 
-// Handle verifying that we have wallet seed available for BTCpay transactions
-function checkBtcpayAuth(){
-    // console.log('checkBtcpayAuth FWUE.BTCPAY_ORDERS=',FWUE.BTCPAY_ORDERS);
+// Handle verifying that we have wallet seed available for UNOpay transactions
+function checkUnopayAuth(){
+    // console.log('checkUnopayAuth FWUE.UNOPAY_ORDERS=',FWUE.UNOPAY_ORDERS);
     var enabled = false;
     $.each(['mainnet','testnet'],function(ndx, network){
-        $.each(FWUE.BTCPAY_ORDERS[network], function(address, orders){
+        $.each(FWUE.UNOPAY_ORDERS[network], function(address, orders){
             $.each(orders, function(order, autopay){
                 if(autopay==1)
                     enabled = true;
             });
         });
     });
-    // If Auto-BTCpay is enabled, make sure we have unlocked wallet available
-    var a = ss.getItem('btcpayWallet'),
+    // If Auto-UNOpay is enabled, make sure we have unlocked wallet available
+    var a = ss.getItem('unopayWallet'),
         b = ss.getItem('wallet');
     if(enabled && a==null){
         if(b){
-            ss.setItem('btcpayWallet',b);
+            ss.setItem('unopayWallet',b);
         } else {
-            dialogEnableBtcpay();
+            dialogEnableUnopay();
         }
     }
 }
 
-// Check the status of any btcpay transactions
-function checkBtcpayTransactions( force ){
-    // console.log('checkBtcpayTransactions');
+// Check the status of any unopay transactions
+function checkUnopayTransactions( force ){
+    // console.log('checkUnopayTransactions');
     var ls   = localStorage,
-        last = ls.getItem('btcpayLastUpdated') || 0,
+        last = ls.getItem('unopayLastUpdated') || 0,
         ms   = 300000,  // 5 minutes
         save = false;
     // Handle requesting updated order match information
     if((parseInt(last) + ms)  <= Date.now() || force ){
         $.each(['mainnet','testnet'], function(idx, network){
-            $.each(FWUE.BTCPAY_ORDERS[network],  function(address, orders){
+            $.each(FWUE.UNOPAY_ORDERS[network],  function(address, orders){
                 // Only request data if we have orders to monitor
                 if(Object.keys(orders).length){
                     // Set XChain url
@@ -881,21 +881,21 @@ function checkBtcpayTransactions( force ){
                                     if(data.status=='pending' && (data.tx0_hash==order||data.tx1_hash==order)){
                                         var tx  = (data.tx0_hash==order) ? data.tx1_hash : data.tx0_hash,           // tx hash of the other side of the order match
                                             src = (data.tx0_hash==order) ? data.tx0_address : data.tx1_address;     // source address for our order
-                                        // Initialize the BTCPAY objects if needed
-                                        if(!FWUE.BTCPAY_QUEUE[network])
-                                            FWUE.BTCPAY_QUEUE[network] = [];
-                                        if(!FWUE.BTCPAY_MATCHES[network])
-                                            FWUE.BTCPAY_MATCHES[network] = {};
-                                        if(!FWUE.BTCPAY_MATCHES[network][order])
-                                            FWUE.BTCPAY_MATCHES[network][order] = [];
+                                        // Initialize the UNOPAY objects if needed
+                                        if(!FWUE.UNOPAY_QUEUE[network])
+                                            FWUE.UNOPAY_QUEUE[network] = [];
+                                        if(!FWUE.UNOPAY_MATCHES[network])
+                                            FWUE.UNOPAY_MATCHES[network] = {};
+                                        if(!FWUE.UNOPAY_MATCHES[network][order])
+                                            FWUE.UNOPAY_MATCHES[network][order] = [];
                                         // Detect any orders we have not already seen
-                                        if(FWUE.BTCPAY_MATCHES[network][order].indexOf(tx)==-1){
-                                            // Add tx hash to BTCPAY_MATCHES so we know we have already detected this transaction
-                                            FWUE.BTCPAY_MATCHES[network][order].push(tx);
-                                            // Add tx info to BTCPAY_QUEUE so we can process
+                                        if(FWUE.UNOPAY_MATCHES[network][order].indexOf(tx)==-1){
+                                            // Add tx hash to UNOPAY_MATCHES so we know we have already detected this transaction
+                                            FWUE.UNOPAY_MATCHES[network][order].push(tx);
+                                            // Add tx info to UNOPAY_QUEUE so we can process
                                             data.autopay = autopay;
                                             data.source  = src;
-                                            FWUE.BTCPAY_QUEUE[network].push(data);
+                                            FWUE.UNOPAY_QUEUE[network].push(data);
                                             // Set flag to indicate we should save updated data
                                             save = true;
                                         }
@@ -904,114 +904,114 @@ function checkBtcpayTransactions( force ){
                             });
                             // Save updated data to disk
                             if(save){
-                                ls.setItem('btcpayMatches',JSON.stringify(FWUE.BTCPAY_MATCHES));
-                                ls.setItem('btcpayQueue',JSON.stringify(FWUE.BTCPAY_QUEUE));
+                                ls.setItem('unopayMatches',JSON.stringify(FWUE.UNOPAY_MATCHES));
+                                ls.setItem('unopayQueue',JSON.stringify(FWUE.UNOPAY_QUEUE));
                             }
-                            // Handle processing any BTCpay transaction
-                            processBtcpayQueue();
+                            // Handle processing any UNOpay transaction
+                            processUnopayQueue();
                         }
                     });
                 }
             });
         });
-        ls.setItem('btcpayLastUpdated', Date.now());
+        ls.setItem('unopayLastUpdated', Date.now());
     } else {
-        // Handle processing any BTCpay transactions in the queue
-        processBtcpayQueue();
+        // Handle processing any UNOpay transactions in the queue
+        processUnopayQueue();
     }
 }
 
-// Handle cleaning up BTCPAY data
-// - removes expired order matches from FWUE.BTCPAY_QUEUE
-// - removes expired order match data from FWUE.BTCPAY_MATCHES
-// - removes expired orders from FWUE.BTCPAY_ORDERS
-function cleanupBtcpay(){
-    // console.log('cleanupBtcpayQueue FWUE.BTCPAY_QUEUE=',FWUE.BTCPAY_QUEUE);
-    var last = ls.getItem('btcpayLastCleanup') || 0,
+// Handle cleaning up UNOPAY data
+// - removes expired order matches from FWUE.UNOPAY_QUEUE
+// - removes expired order match data from FWUE.UNOPAY_MATCHES
+// - removes expired orders from FWUE.UNOPAY_ORDERS
+function cleanupUnopay(){
+    // console.log('cleanupUnopayQueue FWUE.UNOPAY_QUEUE=',FWUE.UNOPAY_QUEUE);
+    var last = ls.getItem('unopayLastCleanup') || 0,
         ms   = 3600000; // 60 minutes
     // Loop through queue and process
     $.each(['mainnet','testnet'], function(ndx, network){
         // Remove expired order matches from the queue
         var arr = [],
-            len = (FWUE.BTCPAY_QUEUE[network]) ? FWUE.BTCPAY_QUEUE[network].length : 0;
-        $.each(FWUE.BTCPAY_QUEUE[network], function(idx, o){
+            len = (FWUE.UNOPAY_QUEUE[network]) ? FWUE.UNOPAY_QUEUE[network].length : 0;
+        $.each(FWUE.UNOPAY_QUEUE[network], function(idx, o){
             if(FWUE.NETWORK_INFO.network_info[network].block_height < o.expire_index)
                 arr.push(o);
         });
-        FWUE.BTCPAY_QUEUE[network] = arr;
+        FWUE.UNOPAY_QUEUE[network] = arr;
         // Save to disk if we detected any changes
         if(len!=arr.length)
-            ls.setItem('btcpayQueue',JSON.stringify(FWUE.BTCPAY_QUEUE));
-        // Remove expired orders from BTCPAY_ORDERS and BTCPAY_MATCHES
+            ls.setItem('unopayQueue',JSON.stringify(FWUE.UNOPAY_QUEUE));
+        // Remove expired orders from UNOPAY_ORDERS and UNOPAY_MATCHES
         if((parseInt(last) + ms)  <= Date.now()){
             var host = getXChainAPI(network);
-            $.each(FWUE.BTCPAY_ORDERS[network], function(address, orders){
+            $.each(FWUE.UNOPAY_ORDERS[network], function(address, orders){
                 $.each(orders, function(order, autopay){
                     $.getJSON( host + '/api/tx/' + order, function(data){
                         // Remove order if tx is mined and status is anything other than 'open'
                         if(data && data.block_index && data.status && data.status!='open')
-                            removeFromBtcpayOrders(order);
+                            removeFromUnopayOrders(order);
                     });
                 });
             });
             // Save last time we ran order expiration check
-            ls.setItem('btcpayLastCleanup', Date.now());
+            ls.setItem('unopayLastCleanup', Date.now());
         }
     });
 }
 
 // Handle locating and removing a specific order from future monitoring
-function removeFromBtcpayOrders(order_hash){
-    // console.log('removeFromBtcpayOrders order_hash=',order_hash);
+function removeFromUnopayOrders(order_hash){
+    // console.log('removeFromUnopayOrders order_hash=',order_hash);
     $.each(['mainnet','testnet'], function(ndx, network){
-        // Remove order data from FWUE.BTCPAY_ORDERS
-        $.each(FWUE.BTCPAY_ORDERS[network], function(address, orders){
+        // Remove order data from FWUE.UNOPAY_ORDERS
+        $.each(FWUE.UNOPAY_ORDERS[network], function(address, orders){
             var obj = {};
             $.each(orders, function(order, autopay){
                 if(order!=order_hash)
                     obj[order] = autopay;
             });
-            FWUE.BTCPAY_ORDERS[network][address] = obj;
+            FWUE.UNOPAY_ORDERS[network][address] = obj;
         });
-        // Remove order data from FWUE.BTCPAY_MATCHES
-        $.each(FWUE.BTCPAY_MATCHES[network], function(order, matches){
-            if(FWUE.BTCPAY_MATCHES[network][order])
-                delete FWUE.BTCPAY_MATCHES[network][order];
+        // Remove order data from FWUE.UNOPAY_MATCHES
+        $.each(FWUE.UNOPAY_MATCHES[network], function(order, matches){
+            if(FWUE.UNOPAY_MATCHES[network][order])
+                delete FWUE.UNOPAY_MATCHES[network][order];
         });
     });
     // Save updated data to disk
-    ls.setItem('btcpayOrders',JSON.stringify(FWUE.BTCPAY_ORDERS));
-    ls.setItem('btcpayMatches',JSON.stringify(FWUE.BTCPAY_MATCHES));
+    ls.setItem('unopayOrders',JSON.stringify(FWUE.UNOPAY_ORDERS));
+    ls.setItem('unopayMatches',JSON.stringify(FWUE.UNOPAY_MATCHES));
 }
 
 // Handle locating and removing a specific order from the queue
-function removeFromBtcpayQueue(tx0_hash, tx1_hash){
-    // console.log('removeFromBtcpayQueue x0_hash, tx1_hash=',x0_hash, tx1_hash);
+function removeFromUnopayQueue(tx0_hash, tx1_hash){
+    // console.log('removeFromUnopayQueue x0_hash, tx1_hash=',x0_hash, tx1_hash);
     $.each(['mainnet','testnet'], function(ndx, network){
-        $.each(FWUE.BTCPAY_QUEUE[network], function(idx, o){
+        $.each(FWUE.UNOPAY_QUEUE[network], function(idx, o){
             if((o.tx0_hash==tx0_hash && o.tx1_hash==tx1_hash)||o.tx0_hash==tx1_hash && o.tx1_hash==tx0_hash){
-                FWUE.BTCPAY_QUEUE[network].splice(idx,1);
+                FWUE.UNOPAY_QUEUE[network].splice(idx,1);
                 // Save the updated queue to disk and bail out
-                ls.setItem('btcpayQueue',JSON.stringify(FWUE.BTCPAY_QUEUE));
+                ls.setItem('unopayQueue',JSON.stringify(FWUE.UNOPAY_QUEUE));
                 return false;
             }
         });
     });
 }
 
-// Handle processing BTCPayment queue one item at a time
-function processBtcpayQueue(){
-    // console.log('processBtcpayQueue FWUE.BTCPAY_QUEUE=',FWUE.BTCPAY_QUEUE);
-    cleanupBtcpay();
-    // Set placeholder to hold data on first manual btcpay tx
+// Handle processing UNOPayment queue one item at a time
+function processUnopayQueue(){
+    // console.log('processUnopayQueue FWUE.UNOPAY_QUEUE=',FWUE.UNOPAY_QUEUE);
+    cleanupUnopay();
+    // Set placeholder to hold data on first manual unopay tx
     var data = false,
         a    = ss.getItem('wallet'),
-        b    = ss.getItem('btcpayWallet');
+        b    = ss.getItem('unopayWallet');
     // Loop through queue and process any valid order matches
     $.each(['mainnet','testnet'], function(ndx, network){
-        $.each(FWUE.BTCPAY_QUEUE[network], function(idx, o){
+        $.each(FWUE.UNOPAY_QUEUE[network], function(idx, o){
             if(o.autopay && (a||b)){
-                autoBtcpay(network, o);
+                autoUnopay(network, o);
             } else {
                 data = o;
                 data.network = network;
@@ -1021,19 +1021,19 @@ function processBtcpayQueue(){
     });
     // If we detected a transaction which needs manual processing, display the dialog box to the user
     if(data){
-        // Check if the BTCPay dialog box is visible... if so, bail out
-        if($('#btcpay-form').length)
+        // Check if the UNOPay dialog box is visible... if so, bail out
+        if($('#unopay-form').length)
             return;
         FWUE.DIALOG_DATA = data;
-        dialogBTCpay(false);
+        dialogUNOpay(false);
     }
 }
 
-// Handle automatically generating/signing/broadcasting a BTCpay transaction
-function autoBtcpay(network, o){
-    // console.log('autoBtcpay network, o=', network, o);
+// Handle automatically generating/signing/broadcasting a UNOpay transaction
+function autoUnopay(network, o){
+    // console.log('autoUnopay network, o=', network, o);
     var a       = ss.getItem('wallet'),
-        b       = ss.getItem('btcpayWallet'),
+        b       = ss.getItem('unopayWallet'),
         c       = false, // Flag to indicate if we should delete wallet after tx
         id      = o.tx0_hash + '_' + o.tx1_hash,
         fee     = FWUE.NETWORK_INFO.fee_info.optimal, // Use high priority fee for order matches
@@ -1041,7 +1041,7 @@ function autoBtcpay(network, o){
         fee_sat = getSatoshis(((fee / 1000) * size) * 0.00000001);
     // Check status of the wallet and hot-swap wallet into place if needed
     if(a==null){
-        // If no wallet/btcpayWallet is found, bail out
+        // If no wallet/unopayWallet is found, bail out
         if(b==null){
             return;
         } else {
@@ -1049,15 +1049,15 @@ function autoBtcpay(network, o){
             c = true;
         }
     }
-    // Handle automatically creating/signing/broadcasting the BTCpay tx
-    cpBtcpay(network, o.source, id, fee_sat, function(tx){
+    // Handle automatically creating/signing/broadcasting the UNOpay tx
+    cpUnopay(network, o.source, id, fee_sat, function(tx){
         // Only proceed if we have a valid tx hash for the broadcast tx... otherwise leave in queue so we can try again
         if(tx){
-            dialogMessage('<i class="fa fa-lg fa-check"></i> BTCPay Successful', '<center>Your BTC payment has been broadcast to the network and your order should complete shortly.' +
+            dialogMessage('<i class="fa fa-lg fa-check"></i> UNOPay Successful', '<center>Your UNO payment has been broadcast to the network and your order should complete shortly.' +
                           '<br/><br/><a class="btn btn-success" href="' + FWUE.XCHAIN_API + '/tx/' + tx + '" target="_blank">View Transaction</a></center>');
             // Remove the order match from the queue and check the queue again after a brief delay
-            removeFromBtcpayQueue(o.tx0_hash, o.tx1_hash);
-            setTimeout(function(){ processBtcpayQueue(); },1000);
+            removeFromUnopayQueue(o.tx0_hash, o.tx1_hash);
+            setTimeout(function(){ processUnopayQueue(); },1000);
         }
         // Handle removing the wallet if needed
         if(c)
@@ -1088,7 +1088,7 @@ function updateBalances(address, page, full, callback){
     });
 }
 
-// Handle updating BTC balance from external source with multiple failovers
+// Handle updating UNO balance from external source with multiple failovers
 function updateBTCBalance(address, callback){
     // Main API - Blockcypher
     getBTCBalance(address, 'blockcypher', function(bal){
@@ -1121,14 +1121,14 @@ function updateBTCBalance(address, callback){
     });
 }
 
-// Handle getting BTC balance (in satoshis) from various sources
+// Handle getting UNO balance (in satoshis) from various sources
 function getBTCBalance(address, source, callback){
     var addr = (address) ? address : FWUE.WALLET_ADDRESS,
-        bal  = false; // BTC Balance or false for failure
+        bal  = false; // UNO Balance or false for failure
     // BlockCypher
     if(source=='blockcypher'){
         var net = (FWUE.WALLET_NETWORK==2) ? 'test3' : 'main';
-        $.getJSON('https://api.blockcypher.com/v1/btc/' + net + '/addrs/' + addr + '/balance', function( o ){
+        $.getJSON('https://api.blockcypher.com/v1/uno/' + net + '/addrs/' + addr + '/balance', function( o ){
             if(typeof o.balance === 'number')
                 bal = o.balance + o.unconfirmed_balance;
         }).always(function(){
@@ -1145,7 +1145,7 @@ function getBTCBalance(address, source, callback){
         });
     // Chain.so
     } else if(source=='chain.so'){
-        var net = (FWUE.WALLET_NETWORK==2) ? 'BTCTEST' : 'BTC';
+        var net = (FWUE.WALLET_NETWORK==2) ? 'UNOTEST' : 'UNO';
         $.getJSON('https://chain.so/api/v2/get_address_balance/' + net + '/' + addr, function( o ){
             if(o.status=='success')
                 bal = (parseFloat(o.data.confirmed_balance) + parseFloat(o.data.unconfirmed_balance)) * 100000000;
@@ -1172,9 +1172,9 @@ function updateWalletBalances( address, force ){
         info  = getAddressBalance(addr) || {},
         last  = info.lastUpdated || 0,
         ms    = 300000, // 5 minutes
-        btc   = false,  // Flag to indicate if BTC update is done
-        xcp   = false;  // Flag to indicate if XCP update is done
-    // Handle updating BTC and XCP asset balances
+        btc   = false,  // Flag to indicate if UNO update is done
+        xcp   = false;  // Flag to indicate if XUP update is done
+    // Handle updating UNO and XUP asset balances
     if((parseInt(last) + ms)  <= Date.now() || force){
         // console.log('updating wallet balances');
         // Callback to handle saving data when we are entirely done
@@ -1182,7 +1182,7 @@ function updateWalletBalances( address, force ){
             var info = FWUE.TEMP_BALANCES;
             if(btc && xcp){
                 // Sort array to show items in the following order
-                // BTC & XCP 1st and second
+                // UNO & XUP 1st and second
                 // Alphabetical order for asset name
                 info.data.sort(function(a,b){
                     if(a.asset.length==3 && b.asset.length>3)
@@ -1220,33 +1220,33 @@ function updateWalletBalances( address, force ){
             data: [],
             lastUpdated: Date.now()
         }
-        // Get BTC/XCP currency info
-        var btc_info = getAssetPrice('BTC',true),
-            xcp_info = getAssetPrice('XCP',true);
+        // Get UNO/XUP currency info
+        var uno_info = getAssetPrice('UNO',true),
+            xup_info = getAssetPrice('XUP',true);
         // Update asset balances
         updateBalances(address, 1, true, function(){
-            xcp = true; // Flag to indicate we are done with XCP update
+            xcp = true; // Flag to indicate we are done with XUP update
             doneCb();
         });
-        // Update BTC Balance
+        // Update UNO Balance
         updateBTCBalance(address, function(sat){
             var qty = numeral(sat * 0.00000001).format('0,0.00000000');
             FWUE.TEMP_BALANCES.data.push({
                 asset: "BTC",
                 estimated_value: {
                     btc: numeral(qty).format('0,0.00000000'),
-                    usd: numeral(parseFloat(btc_info.price_usd) * qty).format('0.00'),
-                    xcp: numeral(qty / parseFloat(xcp_info.price_btc)).format('0.00000000'),
+                    usd: numeral(parseFloat(uno_info.price_usd) * qty).format('0.00'),
+                    xcp: numeral(qty / parseFloat(xup_info.price_btc)).format('0.00000000'),
                 },
                 quantity: qty
             });
-            btc = true; // Flag to indicate we are done with BTC update
+            btc = true; // Flag to indicate we are done with UNO update
             doneCb();
         });
     }
 }
 
-// Handle updating BTC history from external source with multiple failovers
+// Handle updating UNO history from external source with multiple failovers
 function updateBTCHistory(address, callback){
     // Main API - Blockcypher
     getBTCHistory(address, 'blockcypher', function(txs){
@@ -1272,14 +1272,14 @@ function updateBTCHistory(address, callback){
     });
 }
 
-// Handle getting BTC transaction history from various sources
+// Handle getting UNO transaction history from various sources
 function getBTCHistory(address, source, callback){
     var addr = (address) ? address : FWUE.WALLET_ADDRESS,
         data = false; // Array of history transactions
     // BlockCypher - Last 50 transactions
     if(source=='blockcypher'){
         var net = (FWUE.WALLET_NETWORK==2) ? 'test3' : 'main';
-        $.getJSON('https://api.blockcypher.com/v1/btc/' + net + '/addrs/' + addr + '/full?limit=50', function( o ){
+        $.getJSON('https://api.blockcypher.com/v1/uno/' + net + '/addrs/' + addr + '/full?limit=50', function( o ){
             if(o.txs){
                 data = [];
                 o.txs.forEach(function(tx){
@@ -1341,7 +1341,7 @@ function getBTCHistory(address, source, callback){
     }
     // Chain.so - uses FIFO and requires multiple calls, so not really helpful, but useful as a last resort
     if(source=='chain.so'){
-        var net = (FWUE.WALLET_NETWORK==2) ? 'BTCTEST' : 'BTC';
+        var net = (FWUE.WALLET_NETWORK==2) ? 'UNOTEST' : 'UNO';
         $.getJSON('https://chain.so/api/v2/get_tx_received/' + net + '/' + addr, function( o ){
             if(o.status=='success'){
                 data = [];
@@ -1375,16 +1375,16 @@ function getBTCHistory(address, source, callback){
 function updateWalletHistory( address, force ){
     // console.log('updateWalletHistory address, force=',address, force);
     var addr  = (address) ? address : FWUE.WALLET_ADDRESS,
-        net   = (FWUE.WALLET_NETWORK==2) ? 'tbtc' : 'btc',
+        net   = (FWUE.WALLET_NETWORK==2) ? 'tuno' : 'uno',
         info  = getAddressHistory(addr) || {},
         last  = info.lastUpdated || 0,
         ms    = 300000; // 5 minutes
     var status = {
-        btc: false,    // Flag to indicate if BTC update is done
-        xcp: false,    // Flag to indicate if XCP update is done
+        btc: false,    // Flag to indicate if UNO update is done
+        xcp: false,    // Flag to indicate if XUP update is done
         mempool: false // Flag to indicate if mempool update is done
     }
-    // Handle updating BTC and XCP transaction history
+    // Handle updating UNO and XUP transaction history
     if((parseInt(last) + ms)  <= Date.now() || force){
         // console.log('updating wallet history');
         // Callback to handle saving data when we are entirely done
@@ -1427,31 +1427,31 @@ function updateWalletHistory( address, force ){
                 else
                     arr.push(item);
             });
-            // Bail out if this is already a known BTC transaction
-            if(data.asset=='BTC' && typeof record.tx!== 'undefined')
+            // Bail out if this is already a known UNO transaction
+            if(data.asset=='UNO' && typeof record.tx!== 'undefined')
                 return;
             // Add the data to the array and save arr to info.data
             arr.push(data);
             info.data = arr;
         }
-        // Handle updating BTC history
+        // Handle updating UNO history
         updateBTCHistory(addr, function(txs){
             if(txs instanceof Array){
                 txs.forEach(function(tx){
                     addTransaction({
                         type: 'send',
                         tx: tx.hash,
-                        asset: 'BTC',
+                        asset: 'UNO',
                         asset_longname: '',
                         quantity: tx.quantity,
                         timestamp: tx.timestamp
                     });
                 });
             }
-            status.btc = true; // Flag to indicate we are done with BTC update
+            status.btc = true; // Flag to indicate we are done with UNO update
             doneCb();
         });
-        // Handle updating XCP Transactions
+        // Handle updating XUP Transactions
         $.each(['/api/history/', '/api/mempool/'], function(idx, endpoint){
             $.getJSON(FWUE.XCHAIN_API + endpoint + addr, function( data ){
                 data.data.forEach(function(item){
@@ -1461,10 +1461,10 @@ function updateWalletHistory( address, force ){
                         tx_type  = String(item.tx_type).toLowerCase(),
                         longname = item.asset_longname;
                     if(tx_type=='bet'){
-                        asset    = 'XCP';
+                        asset    = 'XUP';
                         quantity = item.wager_quantity;
                     } else if(tx_type=='burn'){
-                        asset    = 'BTC';
+                        asset    = 'UNO';
                         quantity = item.burned;
                     } else if(tx_type=='order'){
                         asset    = item.get_asset,
@@ -1490,7 +1490,7 @@ function updateWalletHistory( address, force ){
                     });
                 });
                 if(idx==0)
-                    status.xcp = true;     // Flag to indicate we are done with XCP update
+                    status.xcp = true;     // Flag to indicate we are done with XUP update
                 if(idx==1)
                     status.mempool = true; // Flag to indicate we are done with mempool update
                 doneCb();
@@ -1536,12 +1536,12 @@ function getAddressHistory(address, asset=''){
     return info;
 }
 
-// Handle updating basic wallet information via a call to xchain.io/api/network
+// Handle updating basic wallet information via a call to unoparty.xchain.io/api/network
 function updateNetworkInfo( force ){
     var last = ls.getItem('networkInfoLastUpdated') || 0,
         ms   = 300000; // 5 minutes
     if((parseInt(last) + ms)  <= Date.now() || force ){
-        // BTC/USD Price
+        // UNO/USD Price
         $.getJSON( FWUE.XCHAIN_API + '/api/network', function( data ){
             if(data){
                 FWUE.NETWORK_INFO = data;
@@ -1604,7 +1604,7 @@ function getPrivateKey(network, address, prepend=false){
                 a = bc.Address(d.publicKey, bc.Networks[net]).toString();
             // Handle generating the bech32 address
             if(a!=address){
-                var netname = (network=='testnet') ? 'testnet' : 'bitcoin';
+                var netname = (network=='testnet') ? 'testnet' : 'unobtanium';
                 a = bitcoinjs.payments.p2wpkh({ pubkey: d.publicKey.toBuffer(), network: bitcoinjs.networks[netname] }).address;
                 if(a==address){
                     priv = d.privateKey.toWIF();
@@ -1623,13 +1623,13 @@ function getPrivateKey(network, address, prepend=false){
 function updateBalancesList(){
     var html    = '',
         cnt     = 0,
-        active  = 'BTC', // default to BTC being active
+        active  = 'UNO', // default to UNO being active
         addr    = FWUE.WALLET_ADDRESS,
         search  = $('.balances-list-search'),
         filter  = search.val(),
         info    = getAddressBalance(addr),
-        btc     = getAddressBalance(addr, 'BTC'),
-        xcp     = getAddressBalance(addr, 'XCP'),
+        btc     = getAddressBalance(addr, 'UNO'),
+        xcp     = getAddressBalance(addr, 'XUP'),
         btc_amt = (btc) ? btc.quantity : 0,
         xcp_amt = (xcp) ? xcp.quantity : 0,
         btc_val = (btc) ? btc.estimated_value.usd : 0,
@@ -1638,19 +1638,19 @@ function updateBalancesList(){
         fmt_usd = '0,0.00',
         display = [];
     if(info && info.data.length){
-        // Always display BTC balance
+        // Always display UNO balance
         display.push({
-            asset: 'BTC',
-            icon: 'BTC',
+            asset: 'UNO',
+            icon: 'UNO',
             quantity: numeral(btc_amt).format(fmt),
             value: numeral(btc_val).format(fmt_usd),
             cls: 'active'
         });
-        // Display XCP balance if we have one
+        // Display XUP balance if we have one
         if(xcp_amt)
             display.push({
-                asset: 'XCP',
-                icon: 'XCP',
+                asset: 'XUP',
+                icon: 'XUP',
                 quantity: numeral(xcp_amt).format(fmt),
                 value: numeral(xcp_val).format(fmt_usd),
                 cls: ''
@@ -1718,7 +1718,7 @@ function getBalanceHtml(data){
 function updateHistoryList(){
     var html    = '',
         cnt     = 0,
-        active  = 'BTC', // default to BTC being active
+        active  = 'UNO', // default to UNO being active
         addr    = FWUE.WALLET_ADDRESS,
         search  = $('.history-list-search'),
         filter  = search.val(),
@@ -1779,16 +1779,16 @@ function updateHistoryList(){
 function getHistoryHtml(data){
     // Determine the correct icon to display based on type
     var type = data.type,
-        src  = 'images/icons/btc.png';
+        src  = 'images/icons/uno.png';
     if(type=='bet'){
-        src = 'images/icons/xcp.png';
+        src = 'images/icons/xup.png';
     } else if(type=='broadcast'){
         src = 'images/icons/broadcast.png';
     } else if(type=='dividend'){
         src = 'images/icons/dividend.png';
     } else if(type=='cancel'){
         src = 'images/icons/cancel.png';
-    } else if((type=='send'||type=='order'||type=='issuance'||type=='destruction') && data.asset!='BTC'){
+    } else if((type=='send'||type=='order'||type=='issuance'||type=='destruction') && data.asset!='UNO'){
         src = FWUE.XCHAIN_API + '/icon/'  + String(data.icon).toUpperCase() + '.png';
     } else if(type=='sweep'){
         src = 'images/icons/sweep.png';
@@ -1849,8 +1849,8 @@ function getHistoryHtml(data){
 // Handle resetting the asset information to a fresh/new state
 function resetAssetInfo(asset){
     $('#asset-name').text(' ');
-    $('#asset-value-btc').text(' ');
-    $('#asset-value-xcp').text(' ');
+    $('#asset-value-uno').text(' ');
+    $('#asset-value-xup').text(' ');
     $('#asset-value-usd').text(' ');
     $('#asset-total-supply').text(' ');
     $('#asset-marketcap').text(' ');
@@ -1879,8 +1879,8 @@ function loadAssetInfo(asset){
         $('#asset-info-more').attr('href', FWUE.XCHAIN_API + '/asset/' + asset);
         // Estimated Value
         var val = balance.estimated_value;
-        $('#asset-value-btc').text(numeral(val.btc).format('0,0.00000000'));
-        $('#asset-value-xcp').text(numeral(val.xcp).format('0,0.00000000'));
+        $('#asset-value-uno').text(numeral(val.btc).format('0,0.00000000'));
+        $('#asset-value-xup').text(numeral(val.xcp).format('0,0.00000000'));
         $('#asset-value-usd').text('$' + numeral(val.usd).format('0,0.00'));
         var bal = balance.quantity,
             fmt = (balance.quantity.indexOf('.')==-1) ? '0,0' : '0,0.00000000';
@@ -1892,7 +1892,7 @@ function loadAssetInfo(asset){
                 var fmt = (String(o.supply).indexOf('.')==-1) ? '0,0' : '0,0.00000000';
                 $('#asset-total-supply').text(numeral(o.supply).format(fmt));
                 // console.log('xcp,supply,usd',o.estimated_value.xcp, o.supply, xcp_usd);
-                var xcp_usd = getAssetPrice('XCP'),
+                var xcp_usd = getAssetPrice('XUP'),
                     mcap    = numeral((o.estimated_value.xcp * o.supply) * xcp_usd).format('0,0.00'),
                     last    = numeral(o.estimated_value.xcp).format('0,0.00000000'),
                     lock    = $('#asset-locked-status');
@@ -1900,18 +1900,18 @@ function loadAssetInfo(asset){
                 $('#asset-last-price').text(last);
                 $('#asset-description').text(o.description);
                 // Force locked on certain items
-                if(['BTC','XCP'].indexOf(asset)!=-1)
+                if(['UNO','XUP'].indexOf(asset)!=-1)
                     o.locked = true;
                 if(o.locked){
                     lock.removeClass('fa-unlock').addClass('fa-lock');
                 } else {
                     lock.removeClass('fa-lock').addClass('fa-unlock');
                 }
-                // Only allow feedback on XCP and assets, not BTC
-                if(asset=='BTC'){
+                // Only allow feedback on XUP and assets, not UNO
+                if(asset=='UNO'){
                     feedback.hide();
                 } else {
-                    feedback.attr('href','https://reputation.coindaddy.io/xcp/asset/' + asset);
+                    feedback.attr('href','https://reputation.coindaddy.io/xup/asset/' + asset);
                     feedback.show();
                 }
                 // Display the description info if we have it
@@ -1935,16 +1935,16 @@ function loadAssetInfo(asset){
                 // Handle loading enhanced asset info
                 if(re1.test(desc)){
                     loadExtendedInfo();
-                } else if(asset=='BTC'){
+                } else if(asset=='UNO'){
                     loadExtendedInfo({
-                        name: 'Bitcoin (BTC)',
-                        description: 'Bitcoin is digital money',
-                        website: 'https://bitcoin.org'
+                        name: 'Unobtanium (UNO)',
+                        description: 'Unobtanium is digital money',
+                        website: 'https://unobtanium.uno'
                     });
-                } else if(asset=='XCP'){
+                } else if(asset=='XUP'){
                     loadExtendedInfo({
-                        name: 'Counterparty (XCP)',
-                        description: 'Counterparty is a free and open platform that puts powerful financial tools in the hands of everyone with an Internet connection. Counterparty creates a robust and secure marketplace directly on the Bitcoin blockchain, extending Bitcoin\'s functionality into a full fledged peer-to-peer financial platform.',
+                        name: 'Unoparty (XUP)',
+                        description: 'Counterparty is a free and open platform that puts powerful financial tools in the hands of everyone with an Internet connection. Counterparty creates a robust and secure marketplace directly on the Unobtanium blockchain, extending Unobtanium\'s functionality into a full fledged peer-to-peer financial platform.',
                         website: 'https://counterparty.io'
                     });
                 } else {
@@ -1962,22 +1962,22 @@ function loadAssetInfo(asset){
                 arr.forEach(function(name){
                     var rating = o['rating_' + name],
                         text   = (rating>0) ? rating : 'NA';
-                    $('#rating_' + name).html('<a href="https://reputation.coindaddy.io/xcp/asset/' + asset + '" target="_blank"><div class="rateit" data-rateit-readonly="true" data-rateit-value="' + rating + '" data-rateit-ispreset="true"></div></a> <span class="rateit-score">' + text + '</span>')
+                    $('#rating_' + name).html('<a href="https://reputation.coindaddy.io/xup/asset/' + asset + '" target="_blank"><div class="rateit" data-rateit-readonly="true" data-rateit-value="' + rating + '" data-rateit-ispreset="true"></div></a> <span class="rateit-score">' + text + '</span>')
                 });
                 $('.rateit').rateit();
             }
         }
-        // Hardcode the BTC values.. otherwise request the asset details
-        if(asset=='BTC'){
-            var btc = getAssetPrice('BTC',true),
-                xcp = getAssetPrice('XCP',true);
+        // Hardcode the UNO values.. otherwise request the asset details
+        if(asset=='UNO'){
+            var btc = getAssetPrice('UNO',true),
+                xcp = getAssetPrice('XUP',true);
             cb({
-                asset: 'BTC',
-                description: "Bitcoin is digital money",
+                asset: 'UNO',
+                description: "Unobtanium is digital money",
                 estimated_value: {
                     btc: 1,
                     usd: btc.market_cap_usd,
-                    xcp: 1/xcp.price_btc
+                    xcp: 1/xup.price_btc
                 },
                 supply: btc.total_supply
             });
@@ -2076,8 +2076,8 @@ function updateAddressList(){
                     label   = label.replace(filter,'<span class="highlight-search-term">' + filter + '</span>');
                     address = address.replace(filter,'<span class="highlight-search-term">' + filter + '</span>');
                 }
-                var btc = getAddressBalance(address, 'BTC'),
-                    xcp = getAddressBalance(address, 'XCP'),
+                var btc = getAddressBalance(address, 'UNO'),
+                    xcp = getAddressBalance(address, 'XUP'),
                     btc_amt = (btc) ? btc.quantity : 0,
                     xcp_amt = (xcp) ? xcp.quantity : 0,
                     fmt = '0,0.00000000';
@@ -2085,8 +2085,8 @@ function updateAddressList(){
                 html += '    <div class="address-list-info">';
                 html += '        <div class="address-list-label">' + label + '</div>';
                 html += '        <div class="address-list-address">' + address + '</div>';
-                html += '        <div class="address-list-amount"><div class="FWUE-icon-20 FWUE-icon-btc pull-left margin-right-5"></div> ' + numeral(btc_amt).format(fmt) + '</div>';
-                html += '        <div class="address-list-amount"><div class="FWUE-icon-20 FWUE-icon-xcp pull-left margin-right-5"></div> ' + numeral(xcp_amt).format(fmt) + '</div>';
+                html += '        <div class="address-list-amount"><div class="FWUE-icon-20 FWUE-icon-uno pull-left margin-right-5"></div> ' + numeral(btc_amt).format(fmt) + '</div>';
+                html += '        <div class="address-list-amount"><div class="FWUE-icon-20 FWUE-icon-xup pull-left margin-right-5"></div> ' + numeral(xcp_amt).format(fmt) + '</div>';
                 html += '    </div>';
                 html += '</li>';
             }
@@ -2158,8 +2158,8 @@ var getFormType = function(){
         type = 'add-market';
     else if($('#create-order-form').length)
         type = 'create-order';
-    else if($('#btcpay-form').length)
-        type = 'btcpay';
+    else if($('#unopay-form').length)
+        type = 'unopay';
     else if($('#burn-form').length)
         type = 'burn';
     else if($('#destroy-form').length)
@@ -2465,12 +2465,12 @@ function cpCancel(network, source, tx_hash, fee, callback){
     });
 }
 
-// Handle creating/signing/broadcasting an 'BTCpay' transaction
-function cpBtcpay(network, source, order_match_id, fee, callback){
+// Handle creating/signing/broadcasting an 'UNOpay' transaction
+function cpUnopay(network, source, order_match_id, fee, callback){
     var cb  = (typeof callback === 'function') ? callback : false;
     updateTransactionStatus('pending', 'Generating counterparty transaction...');
     // Create unsigned send transaction
-    createBtcpay(network, source, order_match_id, fee, function(o){
+    createUnopay(network, source, order_match_id, fee, function(o){
         if(o && o.result){
             updateTransactionStatus('pending', 'Signing counterparty transaction...');
             // Sign the transaction
@@ -2491,12 +2491,12 @@ function cpBtcpay(network, source, order_match_id, fee, callback){
                     });
                 } else {
                     updateTransactionStatus('error', 'Error signing transaction!');
-                    cbError('Error while trying to sign btcpay transaction. Please try again.',cb);
+                    cbError('Error while trying to sign unopay transaction. Please try again.',cb);
                 }
             });
         } else {
             updateTransactionStatus('error', 'Error generating transaction!');
-            var msg = (o.error && o.error.message) ? o.error.message : 'Error while trying to create a btcpay transaction';
+            var msg = (o.error && o.error.message) ? o.error.message : 'Error while trying to create a unopay transaction';
             cbError(msg, cb);
         }
     });
@@ -2863,7 +2863,7 @@ function createOrder(network, source, get_asset, give_asset, get_quantity, give_
             give_asset: give_asset,
             give_quantity: give_quantity,
             expiration: expiration,
-            // Temp fix for bug in API (https://github.com/CounterpartyXCP/counterparty-lib/issues/1025)
+            // Temp fix for bug in API (https://github.com/terhnt/unoparty-lib/issues/1025)
             fee_required: 0,
             fee_provided: 0,
             fee: parseInt(fee),
@@ -2878,11 +2878,11 @@ function createOrder(network, source, get_asset, give_asset, get_quantity, give_
     });
 }
 
-// Handle creating btcpay transaction
-function createBtcpay(network, source, order_match_id, fee, callback){
-    // console.log('createBtcpay=', network, source, order_match_id, fee, callback);
+// Handle creating unopay transaction
+function createUnopay(network, source, order_match_id, fee, callback){
+    // console.log('createUnopay=', network, source, order_match_id, fee, callback);
     var data = {
-       method: "create_btcpay",
+       method: "create_unopay",
        params: {
             source: source,
             order_match_id: order_match_id,
@@ -3001,14 +3001,14 @@ function signHardwareWalletTransaction(network, source, unsignedTx, callback){
     console.log('signHardwareWalletTransaction network, source, unsignedTx=',network, source, unsignedTx);
     var info = getWalletAddressInfo(source),
         type = info.type,
-        url  = 'https://freewallet.io/hardware/',
+        url  = 'https://freewalletuno.io/hardware/',
         data = 'network=' + network + '&address=' + source + '&path=' + encodeURIComponent(info.path) + '&tx=' + unsignedTx;
     if(type==4) url += 'trezor'
     if(type==5) url += 'ledger'
     if(type==6) url += 'keepkey'
     url += '/sign.html?' + data;
     // Display message
-    dialogConfirm('Sign with Hardware wallet', 'You will now be taken to freewallet.io to sign this transaction using your hardware device.', false, false, function(confirm){
+    dialogConfirm('Sign with Hardware wallet', 'You will now be taken to freewalletuno.io to sign this transaction using your hardware device.', false, false, function(confirm){
         if(confirm){
             console.log('sending user to url:', url);
             // Close all open dialog boxes
@@ -3063,7 +3063,7 @@ function signTransaction(network, source, destination, unsignedTx, callback){
         if(hasAnyBech32){
             // Use bitcoinjs implementation
             var tx      = bitcoinjs.Transaction.fromHex(unsignedTx),
-                netName = (net=='testnet') ? 'testnet' : 'bitcoin', // bitcoinjs
+                netName = (net=='testnet') ? 'testnet' : 'unobtanium', // bitcoinjs
                 network = bitcoinjs.networks[netName],
                 txb     = new bitcoinjs.TransactionBuilder(network),
                 keypair = bitcoinjs.ECPair.fromWIF(cwKey.getWIF(), network);
@@ -3131,7 +3131,7 @@ function signTransaction(network, source, destination, unsignedTx, callback){
 // Handle signing a transaction based on what type of address it is
 function signP2SHTransaction(network, source, destination, unsignedTx, callback){
     var net        = (network=='testnet') ? 'testnet' : 'mainnet',
-        netName    = (network=='testnet') ? 'testnet' : 'bitcoin', // bitcoinjs-lib
+        netName    = (network=='testnet') ? 'testnet' : 'unobtanium', // bitcoinjs-lib
         network    = bitcoinjs.networks[netName],
         callback   = (typeof callback === 'function') ? callback : false,
         privKey    = getPrivateKey(net, source),
@@ -3198,7 +3198,7 @@ function broadcastTransaction(network, tx, callback){
         }, 5000);
     }
     console.log('signed transaction=', tx);
-    var net  = (network=='testnet') ? 'BTCTEST' : 'BTC';
+    var net  = (network=='testnet') ? 'UNOTEST' : 'UNO';
     // First try to broadcast using the XChain API
     $.ajax({
         type: "POST",
@@ -3320,7 +3320,7 @@ function dialogComingSoon(){
 function dialogAbout(){
     BootstrapDialog.show({
         type: 'type-default',
-        title: '<i class="fa fa-lg fa-fw fa-info-circle"></i> About FreeWallet',
+        title: '<i class="fa fa-lg fa-fw fa-info-circle"></i> About FreeWalletUno,
         id: 'dialog-about',
         closeByBackdrop: false,
         message: $('<div></div>').load('html/about.html')
@@ -3332,7 +3332,7 @@ function dialogAbout(){
 function dialogDonate(){
     BootstrapDialog.show({
         type: 'type-default',
-        title: '<i class="fa fa-lg fa-fw fa-btc"></i> Donate',
+        title: '<i class="fa fa-lg fa-fw fa-uno"></i> Donate',
         id: 'dialog-donate',
         closeByBackdrop: false,
         message: $('<div></div>').load('html/donate.html')
@@ -3343,14 +3343,14 @@ function dialogDonate(){
 function dialogViewAddress(address){
     BootstrapDialog.show({
         type: 'type-default',
-        cssClass: 'btc-wallet-address',
+        cssClass: 'uno-wallet-address',
         closeByBackdrop: false,
         title: '<i class="fa fa-lg fa-fw fa-qrcode"></i> View Address',
         message: function(dialog){
             var msg = $('<div class="text-center"></div>');
             addr = (address) ? address : getWalletAddress();
             msg.qrcode({ text: addr });
-            msg.append('<div style="margin-top:10px" class="btc-wallet-blackbox" id="viewAddress">' + addr + '</div>');
+            msg.append('<div style="margin-top:10px" class="uno-wallet-blackbox" id="viewAddress">' + addr + '</div>');
             return msg;
         },
         buttons:[{
@@ -3413,7 +3413,7 @@ function dialogViewPrivateKey(address){
                 net  = (FWUE.WALLET_NETWORK==2) ? 'testnet' : 'mainnet';
                 addr = (address) ? address : FWUE.WALLET_ADDRESS,
                 key  = getPrivateKey(net, addr, true);
-            msg.append('<div style="margin-top:10px" class="btc-wallet-blackbox">' + key + '</div>');
+            msg.append('<div style="margin-top:10px" class="uno-wallet-blackbox">' + key + '</div>');
             msg.append('<div class="alert alert-danger fade in center bold">' +
                             '<h3>Write this private key down and keep it safe!</h3>' +
                             '<ul>' +
@@ -3449,7 +3449,7 @@ function dialogChangeAddress(){
         id: 'dialog-change-address',
         cssClass: 'dialog-change-address',
         closeByBackdrop: false,
-        title: '<i class="fa fa-lg fa-fw fa-bitcoin"></i> Change Wallet Address',
+        title: '<i class="fa fa-lg fa-fw fa-unobtanium"></i> Change Wallet Address',
         message: $('<div></div>').load('html/addresses.html'),
     });
 }
@@ -3460,7 +3460,7 @@ function dialogPassword( enable, callback ){
     BootstrapDialog.show({
         type: 'type-default',
         title: '<i class="fa fa-lg fa-fw fa-lock"></i> ' + title,
-        cssClass: 'btc-wallet-password',
+        cssClass: 'uno-wallet-password',
         closable: false,
         closeByBackdrop: false,
         message: function(dialog){
@@ -3551,7 +3551,7 @@ function dialogPassphrase(){
         message: function(dialog){
             var msg = $('<div></div>');
             msg.append('<p>Your twelve-word wallet passphrase is shown in the black box below.</p>');
-            msg.append('<div class="btc-wallet-passphrase">' + getWalletPassphrase() + '</div>');
+            msg.append('<div class="uno-wallet-passphrase">' + getWalletPassphrase() + '</div>');
             msg.append('<div class="alert alert-danger fade in center bold">' +
                             '<h3>Write your passphrase down and keep it safe!</h3>' +
                             '<ul>' +
@@ -3608,7 +3608,7 @@ function dialogImportPrivateKey(){
         message: function(dialog){
             var msg = $('<div class="center"></div>');
             msg.append('<p>Please enter your unencrypted private key and click \'Ok\'</p>');
-            msg.append('<input type="text" class="btc-wallet-blackbox" id="importPrivateKey">');
+            msg.append('<input type="text" class="uno-wallet-blackbox" id="importPrivateKey">');
             return msg;
         },
         onshown: function(dialog){
@@ -3650,7 +3650,7 @@ function dialogImportWatchAddress(){
         message: function(dialog){
             var msg = $('<div class="center"></div>');
             msg.append('<p>Please enter the address you would like to add and click \'Ok\'</p>');
-            msg.append('<input type="text" class="btc-wallet-blackbox" id="importWatchOnlyAddress">');
+            msg.append('<input type="text" class="uno-wallet-blackbox" id="importWatchOnlyAddress">');
             return msg;
         },
         onshown: function(dialog){
@@ -3718,7 +3718,7 @@ function dialogUpdateAvailable(version){
         title: '<i class="fa fa-lg fa-fw fa-upload"></i> New version available!',
         message: function(dialog){
             var msg = $('<div class="center"></div>');
-            msg.append('<p>A new version of FreeWallet (' + version + ') is now available for download!</p>');
+            msg.append('<p>A new version of FreeWalletUno (' + version + ') is now available for download!</p>');
             return msg;
         },
         buttons:[{
@@ -3739,8 +3739,8 @@ function dialogUpdateAvailable(version){
                         os   = require('os'),
                         plat = os.platform(),
                         arch = os.arch(),
-                        file = 'FreeWallet.',
-                        url  = 'https://github.com/jdogresorg/freewallet-desktop/releases/download/v' + version + '/';
+                        file = 'FreeWalletUno.',
+                        url  = 'https://github.com/jdogresorg/freewalletuno-desktop/releases/download/v' + version + '/';
                     // Determine the correct file to download based off platform and architecture
                     if(plat=='darwin'){
                         file += 'osx64.dmg';
@@ -3754,7 +3754,7 @@ function dialogUpdateAvailable(version){
                     url += file;
                     nw.Shell.openExternal(url);
                 } else {
-                    var url = 'https://github.com/jdogresorg/freewallet/releases/tag/v' + version;
+                    var url = 'https://github.com/jdogresorg/freewalletuno/releases/tag/v' + version;
                     window.open(url);
                 }
             }
@@ -3939,7 +3939,7 @@ function dialogSignTransaction(){
 // 'Burn' dialog box
 function dialogBurn(){
     // Make sure wallet is unlocked
-    if(dialogCheckLocked('burn BTC for XCP'))
+    if(dialogCheckLocked('burn UNO for XUP'))
         return;
     BootstrapDialog.show({
         type: 'type-default',
@@ -3986,7 +3986,7 @@ function dialogDispenserBuy(){
         type: 'type-default',
         id: 'dialog-dispenser-buy',
         closeByBackdrop: false,
-        title: '<i class="fa fa-fw fa-btc"></i> Buy ' + FWUE.DIALOG_DATA.name,
+        title: '<i class="fa fa-fw fa-uno"></i> Buy ' + FWUE.DIALOG_DATA.name,
         message: $('<div></div>').load('html/dispensers/dispenser-buy.html'),
     });
 }
@@ -4006,18 +4006,18 @@ function dialogSweep(){
 }
 
 
-// 'BTCpay' dialog box
-function dialogBTCpay(closable=true){
+// 'UNOpay' dialog box
+function dialogUNOpay(closable=true){
     // Make sure wallet is unlocked
     if(dialogCheckLocked('make a payment'))
         return;
     BootstrapDialog.show({
         type: 'type-default',
-        id: 'dialog-btcpay',
+        id: 'dialog-unopay',
         closable: closable,
         closeByBackdrop: false,
-        title: '<i class="fa fa-fw fa-bitcoin"></i> Confirm BTCpay?',
-        message: $('<div></div>').load('html/btcpay.html')
+        title: '<i class="fa fa-fw fa-unobtanium"></i> Confirm UNOpay?',
+        message: $('<div></div>').load('html/unopay.html')
     });
 }
 
@@ -4085,7 +4085,7 @@ function dialogLogout(){
         title: '<i class="fa fa-lg fa-fw fa-power-off"></i> Logout?',
         message: function(dialog){
             var msg = $('<div class="center"></div>');
-            msg.append('<p>Are you sure you want to logout of Freewallet?</p>');
+            msg.append('<p>Are you sure you want to logout of FreewalletUno?</p>');
             msg.append('<p>This action will remove all of your wallet information from this device.');
             msg.append('<p><div class="alert alert-danger fade in center bold">Please make sure your 12-word passphrase is written down before you logout!</p>');
             msg.append('<div class="checkbox" id="dialog-logout-confirm"><label><input type="checkbox" id="dialog-logout-confirm-checkbox"> I have <u>written down</u> or otherwise <u>securely stored</u> my passphrase before logging out.</label></div>');
@@ -4118,12 +4118,12 @@ function dialogLogout(){
     });
 }
 
-// 'Enable BTCpay' dialog box
-function dialogEnableBtcpay(){
+// 'Enable UNOpay' dialog box
+function dialogEnableUnopay(){
     BootstrapDialog.show({
         type: 'type-default',
-        title: '<i class="fa fa-lg fa-fw fa-question-circle"></i> Enable Auto-BTCpay?',
-        cssClass: 'btc-wallet-password',
+        title: '<i class="fa fa-lg fa-fw fa-question-circle"></i> Enable Auto-UNOpay?',
+        cssClass: 'uno-wallet-password',
         closable: false,
         closeByBackdrop: false,
         message: function(dialog){
@@ -4140,8 +4140,8 @@ function dialogEnableBtcpay(){
             icon: 'fa fa-lg fa-fw fa-thumbs-down',
             cssClass: 'btn-danger',
             action: function(dialog){
-                // Confirm with user that auto-btcpay will be disabled
-                dialogConfirm('Disable Auto-BTCpay?','<div class="alert alert-danger text-center"><b>Notice</b>: Any order matches for BTC will need to be paid manually!</div>', false, false, function(){
+                // Confirm with user that auto-unopay will be disabled
+                dialogConfirm('Disable Auto-UNOpay?','<div class="alert alert-danger text-center"><b>Notice</b>: Any order matches for UNO will need to be paid manually!</div>', false, false, function(){
                     dialog.close();
                 });
             }
@@ -4164,15 +4164,15 @@ function dialogEnableBtcpay(){
                 } else {
                     // Validate wallet password
                     if(isValidWalletPassword(pass)){
-                        // Decrypt wallet and save to btcpayWallet
+                        // Decrypt wallet and save to unopayWallet
                         decryptWallet(pass);
                         var w = ss.getItem('wallet');
                         if(w)
-                            ss.setItem('btcpayWallet',w);
+                            ss.setItem('unopayWallet',w);
                         ss.removeItem('wallet');
                         ss.removeItem('walletPassword');
                         dialog.close();
-                        dialogMessage('<i class="fa fa-lg fa-fw fa-unlock"></i> Auto-BTCpay Enabled', 'Auto-BTCpay is now enabled and any order matches for BTC will be automatically paid');
+                        dialogMessage('<i class="fa fa-lg fa-fw fa-unlock"></i> Auto-UNOpay Enabled', 'Auto-UNOpay is now enabled and any order matches for UNO will be automatically paid');
                     } else {
                         dialogMessage(null, 'Invalid password', true);
                     }
@@ -4215,20 +4215,20 @@ function dialogWelcome(){
         cssClass: 'dialog-welcome',
         closable: false,
         closeByBackdrop: false,
-        title: '<i class="fa fa-lg fa-fw fa-info-circle"></i> Welcome to FreeWallet',
+        title: '<i class="fa fa-lg fa-fw fa-info-circle"></i> Welcome to FreeWalletUno,
         message: function(dialog){
             var msg = $('<div class="text-center"></div>');
             msg.append('<img src="images/logo.png" style="width:200px;margin-bottom:20px;">');
-            msg.append('<p>FreeWallet is a free wallet for Bitcoin and Counterparty, the world’s first protocol for decentralized financial tools.</p>')
+            msg.append('<p>FreeWalletUno is a free wallet for Unobtanium and Counterparty, the world’s first protocol for decentralized financial tools.</p>')
             msg.append( '<div class="row">' +
                             '<div class="col-xs-12 col-sm-6">' +
                                 '<h3><i class="fa fa-lock"></i> Secure</h3>'+
                                 '<p>All encryption is handled client-side. Neither your passphrase nor any of your private information ever leaves your browser, workstation, or mobile device.</p>' +
-                                '<p>FreeWallet passphrases are highly secure, and protect your wallet from any brute force attacks. They are also rather easy to learn and hard to mistype.</p>' +
+                                '<p>FreeWalletUno passphrases are highly secure, and protect your wallet from any brute force attacks. They are also rather easy to learn and hard to mistype.</p>' +
                             '</div>' +
                             '<div class="col-xs-12 col-sm-6">' +
                                 '<h3><i class="fa fa-cloud"></i> Simple</h3>'+
-                                '<p>With FreeWallet, your passphrase is literally your wallet, and all of your addresses and keys are generated on-the-fly when you log in.</p>' +
+                                '<p>With FreeWalletUno, your passphrase is literally your wallet, and all of your addresses and keys are generated on-the-fly when you log in.</p>' +
                                 '<p>There are no wallet files to backup or secure, and using your passphrase you can access your wallet from any trusted machine with a web browser.</p>' +
                             '</div>' +
                        '</div>');
@@ -4265,39 +4265,39 @@ function dialogLicenseAgreement(){
         title: '<i class="fa fa-lg fa-fw fa-info-circle"></i> License Agreement',
         message: function(dialog){
             var msg = $('<div></div>');
-            msg.append('<p>You must read and accept the following agreement in order to use FreeWallet:</p>')
+            msg.append('<p>You must read and accept the following agreement in order to use FreeWalletUno:</p>')
             msg.append( '<div class="well">' +
                             '<h3>1. GRANT OF LICENSE</h3>' +
-                            '<p><b>1.1.</b> Subject to the terms and conditions contained within this end user agreement (the “Agreement“), Freewallet.io grants the “User” (or “you”) a non-exclusive, personal, non-transferable right to use the Services on your personal computer or other device that accesses the Internet, namely freewallet.io, FreeWallet Mobile, FreeWallet Desktop, and Counterparty federated nodes (together, the “Services“). By clicking the “I Agree“ button if and where provided and/or using the Service, you consent to the terms and conditions set forth in this Agreement.</p>' +
-                            '<p><b>1.2.</b> The Services are not for use by (i) individuals under 18 years of age, (ii) individuals under the legal age of majority in their jurisdiction and (iii) individuals accessing the Services from jurisdictions from which it is illegal to do so. Counterwallet.io and Counterwallet federated nodes are unable to verify the legality of the Services in each jurisdiction and it is the User\'s responsibility to ensure that their use of the Services is lawful. Freewallet.io, FreeWallet Mobile, and FreeWallet Desktop are neither banks nor regulated financial services. Operators do not have access to the Bitcoins stored on the platform, instead Freewallet.io, FreeWallet Mobile, and FreeWallet Desktop simply provide a means to access Bitcoins, Counterparty (XCP), and other digital assets recorded on the Bitcoin blockchain. Bitcoin private keys are encrypted using the BIP32 Hierarchical Deterministic Wallet algorithm such that Freewallet.io, FreeWallet Mobile, and FreeWallet Desktop cannot access or recover Bitcoins, Counterparty (XCP), or other digital assets in the event of lost or stolen password. </p>' +
+                            '<p><b>1.1.</b> Subject to the terms and conditions contained within this end user agreement (the “Agreement“), FreewalletUno.io grants the “User” (or “you”) a non-exclusive, personal, non-transferable right to use the Services on your personal computer or other device that accesses the Internet, namely freewalletuno.io, FreeWalletUno Mobile, FreeWalletUno Desktop, and Counterparty federated nodes (together, the “Services“). By clicking the “I Agree“ button if and where provided and/or using the Service, you consent to the terms and conditions set forth in this Agreement.</p>' +
+                            '<p><b>1.2.</b> The Services are not for use by (i) individuals under 18 years of age, (ii) individuals under the legal age of majority in their jurisdiction and (iii) individuals accessing the Services from jurisdictions from which it is illegal to do so. Unowallet.io and Unowallet federated nodes are unable to verify the legality of the Services in each jurisdiction and it is the User\'s responsibility to ensure that their use of the Services is lawful. FreewalletUno.io, FreeWalletUno Mobile, and FreeWalletUno Desktop are neither banks nor regulated financial services. Operators do not have access to the Unobtaniums stored on the platform, instead FreewalletUno.io, FreeWalletUno Mobile, and FreeWalletUno Desktop simply provide a means to access Unobtaniums, Unoparty (XUP), and other digital assets recorded on the Unobtanium blockchain. Unobtanium private keys are encrypted using the BIP32 Hierarchical Deterministic Wallet algorithm such that FreewalletUno.io, FreeWalletUno Mobile, and FreeWalletUno Desktop cannot access or recover Unobtaniums, Unoparty (XUP), or other digital assets in the event of lost or stolen password. </p>' +
                             '<h3>2. NO WARRANTIES.</h3>' +
-                            '<p><b>2.1.</b> COUNTERPARTY, FREEWALLET.IO, AND COUNTERPARTY FEDERATED NODES DISCLAIM ANY AND ALL WARRANTIES, EXPRESSED OR IMPLIED, IN CONNECTION WITH THE SERVICES WHICH ARE PROVIDED TO THE USER “AS IS“ AND NO WARRANTY OR REPRESENTATION IS PROVIDED WHATSOEVER REGARDING ITS QUALITY, FITNESS FOR PURPOSE, COMPLETENESS OR ACCURACY.</p>' +
+                            '<p><b>2.1.</b> UNOPARTY, FREEWALLETUNO.IO, AND COUNTERPARTY FEDERATED NODES DISCLAIM ANY AND ALL WARRANTIES, EXPRESSED OR IMPLIED, IN CONNECTION WITH THE SERVICES WHICH ARE PROVIDED TO THE USER “AS IS“ AND NO WARRANTY OR REPRESENTATION IS PROVIDED WHATSOEVER REGARDING ITS QUALITY, FITNESS FOR PURPOSE, COMPLETENESS OR ACCURACY.</p>' +
                             '<p><b>2.2.</b> REGARDLESS OF BEST EFFORTS, WE MAKE NO WARRANTY THAT THE SERVICES WILL BE UNINTERRUPTED, TIMELY OR ERROR-FREE, OR THAT DEFECTS WILL BE CORRECTED.</p>' +
                             '<h3>3. YOUR REPRESENTATIONS AND WARRANTIES</h3>' +
                             '<p>Prior to your use of the Services and on an ongoing basis you represent, warrant, covenant and agree that:</p>' +
-                            '<p><b>3.1.</b> your use of the Services is at your sole option, discretion and risk, as neither Freewallet.io, Counterparty federated nodes, nor any individuals affiliated with the Freewallet or Counterparty teams can be held responsible for lost or stolen funds;</p>' +
+                            '<p><b>3.1.</b> your use of the Services is at your sole option, discretion and risk, as neither FreewalletUno.io, Counterparty federated nodes, nor any individuals affiliated with the FreewalletUno or Counterparty teams can be held responsible for lost or stolen funds;</p>' +
                             '<p><b>3.2.</b> you are solely responsible for satisfying any and all applicable legal rules and/or obligations, to include the requirements of your local tax authorities, arising from your use of the Services in a given jurisdiction; </p>' +
-                            '<p><b>3.3.</b> the telecommunications networks and Internet access services required for you to access and use the Services are entirely beyond the control of the Services and neither FreeWallet nor the Services shall bear any liability whatsoever for any outages, slowness, capacity constraints or other deficiencies affecting the same; and</p>' +
+                            '<p><b>3.3.</b> the telecommunications networks and Internet access services required for you to access and use the Services are entirely beyond the control of the Services and neither FreeWalletUno nor the Services shall bear any liability whatsoever for any outages, slowness, capacity constraints or other deficiencies affecting the same; and</p>' +
                             '<p><b>3.4.</b> you are at least 18 years of age.</p>' +
                             '<h3>4. PROHIBITED USES</h3>' +
                             '<p><b>4.1</b> A user must not use the Services in any way that causes, or may cause, damage to the website or impairment of the availability or accessibility of the website; or in any way which is unlawful, illegal, fraudulent or harmful, or in connection with any unlawful, illegal, fraudulent or harmful purpose or activity. </p>' +
                             '<h3>5. BREACH</h3>' +
-                            '<p><b>5.1.</b> Without prejudice to any other rights, if a User breaches in whole or in part any provision contained herein, FreeWallet and/or the Services reserve the right to take such action as they deem fit, including terminating this Agreement or any other agreement in place with the User and/or taking legal action against such User.</p>' +
+                            '<p><b>5.1.</b> Without prejudice to any other rights, if a User breaches in whole or in part any provision contained herein, FreeWalletUno and/or the Services reserve the right to take such action as they deem fit, including terminating this Agreement or any other agreement in place with the User and/or taking legal action against such User.</p>' +
                             '<p><b>5.2.</b> You agree to fully indemnify, defend and hold harmless the Services and their operators and agents from and against all claims, demands, liabilities, damages, losses, costs and expenses, including legal fees and any other charges whatsoever, irrespective of cause, that may arise as a result of: (i) your breach of this Agreement, in whole or in part; (ii) violation by you of any law or any third party rights; and (iii) use by you of the Services.</p>' +
                             '<h3>6. LIMITATION OF LIABILITY</h3>' +
-                            '<p><b>6.1.</b> Under no circumstances, including negligence, shall FreeWallet nor the Services be liable for any special, incidental, direct, indirect or consequential damages whatsoever (including, without limitation, damages for loss of business profits, business interruption, loss of business information, or any other pecuniary loss) arising out of the use (or misuse) of the Services even if FreeWallet and/or the Services had prior knowledge of the possibility of such damages.</p>' +
+                            '<p><b>6.1.</b> Under no circumstances, including negligence, shall FreeWalletUno nor the Services be liable for any special, incidental, direct, indirect or consequential damages whatsoever (including, without limitation, damages for loss of business profits, business interruption, loss of business information, or any other pecuniary loss) arising out of the use (or misuse) of the Services even if FreeWalletUno and/or the Services had prior knowledge of the possibility of such damages.</p>' +
                             '<h3>7. AMENDMENT</h3>' +
-                            '<p>FreeWallet and the Services reserve the right to update or modify this Agreement or any part thereof at any time or otherwise change the Services without notice and you will be bound by such amended Agreement upon publication. Therefore, we encourage you check the terms and conditions contained in the version of the Agreement in force at such time. Your continued use of the Service shall be deemed to attest to your agreement to any amendments to the Agreement.</p>' +
+                            '<p>FreeWalletUno and the Services reserve the right to update or modify this Agreement or any part thereof at any time or otherwise change the Services without notice and you will be bound by such amended Agreement upon publication. Therefore, we encourage you check the terms and conditions contained in the version of the Agreement in force at such time. Your continued use of the Service shall be deemed to attest to your agreement to any amendments to the Agreement.</p>' +
                             '<h3>8. GOVERNING LAW</h3>' +
                             '<p>The Agreement and any matters relating hereto shall be governed by, and construed in accordance with, the laws of the state of California and the United States. You irrevocably agree that, subject as provided below, the courts of California shall have exclusive jurisdiction in relation to any claim, dispute or difference concerning the Agreement and any matter arising therefrom and irrevocably waive any right that it may have to object to an action being brought in those courts, or to claim that the action has been brought in an inconvenient forum, or that those courts do not have jurisdiction. Nothing in this clause shall limit the right of the Services to take proceedings against you in any other court of competent jurisdiction, nor shall the taking of proceedings in any one or more jurisdictions preclude the taking of proceedings in any other jurisdictions, whether concurrently or not, to the extent permitted by the law of such other jurisdiction.</p>' +
                             '<h3>9. SEVERABILITY</h3>' +
                             '<p>If a provision of this Agreement is or becomes illegal, invalid or unenforceable in any jurisdiction, that shall not affect the validity or enforceability in that jurisdiction of any other provision hereof or the validity or enforceability in other jurisdictions of that or any other provision hereof.</p>' +
                             '<h3>10. ASSIGNMENT</h3>' +
-                            '<p>FreeWallet and the Services reserve the right to assign this agreement, in whole or in part, at any time without notice. The User may not assign any of his/her rights or obligations under this Agreement.</p>' +
+                            '<p>FreeWalletUno and the Services reserve the right to assign this agreement, in whole or in part, at any time without notice. The User may not assign any of his/her rights or obligations under this Agreement.</p>' +
                             '<h3>11. MISCELLANEOUS</h3>' +
-                            '<p><b>11.1.</b> No waiver by FreeWallet nor by the Services of any breach of any provision of this Agreement (including the failure of FreeWallet and/or the Services to require strict and literal performance of or compliance with any provision of this Agreement) shall in any way be construed as a waiver of any subsequent breach of such provision or of any breach of any other provision of this Agreement.</p>' +
-                            '<p><b>11.2.</b> Nothing in this Agreement shall create or be deemed to create a partnership, agency, trust arrangement, fiduciary relationship or joint venture between you the User and FreeWallet, nor between you the User and the Services, to any extent.</p>' +
-                            '<p><b>11.3.</b> This Agreement constitutes the entire understanding and agreement between you the User and FreeWallet and the Services regarding the Services and supersedes any prior agreement, understanding, or arrangement between the same.</p>' +
+                            '<p><b>11.1.</b> No waiver by FreeWalletUno nor by the Services of any breach of any provision of this Agreement (including the failure of FreeWalletUno and/or the Services to require strict and literal performance of or compliance with any provision of this Agreement) shall in any way be construed as a waiver of any subsequent breach of such provision or of any breach of any other provision of this Agreement.</p>' +
+                            '<p><b>11.2.</b> Nothing in this Agreement shall create or be deemed to create a partnership, agency, trust arrangement, fiduciary relationship or joint venture between you the User and FreeWalletUno, nor between you the User and the Services, to any extent.</p>' +
+                            '<p><b>11.3.</b> This Agreement constitutes the entire understanding and agreement between you the User and FreeWalletUno and the Services regarding the Services and supersedes any prior agreement, understanding, or arrangement between the same.</p>' +
                 '</div>');
             msg.append('<div class="checkbox" id="dialog-license-agreement-confirm"><label><input type="checkbox" id="dialog-license-agreement-checkbox"> I have <u><i><b>read and accept</b></i></u> the above License Agreement.</label></div>');
             return msg;
@@ -4341,7 +4341,7 @@ function displayContextMenu(event){
                 loadPage('exchange');
             }
         }));
-        if(asset!='BTC'){
+        if(asset!='UNO'){
             mnu.append(new nw.MenuItem({
                 label: 'View ' + asset + ' Dispensers',
                 click: function(){
@@ -4354,27 +4354,27 @@ function displayContextMenu(event){
             label: 'Send ' + asset + ' to...',
             click: function(){ dialogSend(); }
         }));
-        if(asset=='BTC'){
+        if(asset=='UNO'){
             mnu.append(new nw.MenuItem({
-                label: 'Burn BTC for XCP...',
+                label: 'Burn UNO for XUP...',
                 click: function(){ dialogBurn(); }
             }));
         }
-        if(asset!='BTC'){
+        if(asset!='UNO'){
             mnu.append(new nw.MenuItem({
                 label: 'Create ' + asset + ' Dispenser...',
                 click: function(){ dialogDispenser(); }
             }));
         }
-        if(asset!='BTC' && asset!='XCP'){
+        if(asset!='UNO' && asset!='XUP'){
             mnu.append(new nw.MenuItem({
                 label: 'Pay Dividends on ' + asset,
                 click: function(){ dialogPayDividend(); }
             }));
         }
-        if(asset!='BTC'){
+        if(asset!='UNO'){
             mnu.append(new nw.MenuItem({ type: 'separator' }));
-            if(asset!='XCP'){
+            if(asset!='XUP'){
                 mnu.append(new nw.MenuItem({
                     label: 'Issue ' + asset + ' Supply',
                     click: function(){ dialogIssueSupply(); }
@@ -4388,7 +4388,7 @@ function displayContextMenu(event){
                 label: 'Destroy ' + asset + ' Supply',
                 click: function(){ dialogDestroy(); }
             }));
-            if(asset!='XCP'){
+            if(asset!='XUP'){
                 mnu.append(new nw.MenuItem({
                     label: 'Change ' + asset + ' Description',
                     click: function(){ dialogChangeDescription(); }
@@ -4431,7 +4431,7 @@ function displayContextMenu(event){
         mnu.append(new nw.MenuItem({
             label: 'View on Blocktrail.com',
             click: function(){
-                var net = (FWUE.WALLET_NETWORK==2) ? 'tBTC' : 'BTC',
+                var net = (FWUE.WALLET_NETWORK==2) ? 'tUNO' : 'UNO',
                     url  = 'https://www.blocktrail.com/' + net + '/tx/' + tx;
                 nw.Shell.openExternal(url);
             }
@@ -4439,7 +4439,7 @@ function displayContextMenu(event){
         mnu.append(new nw.MenuItem({
             label: 'View on Chain.so',
             click: function(){
-                var net = (FWUE.WALLET_NETWORK==2) ? 'BTCTEST' : 'BTC',
+                var net = (FWUE.WALLET_NETWORK==2) ? 'UNOTEST' : 'UNO',
                     url  = 'https://chain.so/tx/' + net + '/' + tx;
                 nw.Shell.openExternal(url);
             }
@@ -4498,7 +4498,7 @@ function displayContextMenu(event){
     if(el.length!=0){
         var mnu    = new nw.Menu(),
             market = el.attr('data-market');
-        if(market!='XCP' && market!='BTC'){
+        if(market!='XUP' && market!='UNO'){
             mnu.append(new nw.MenuItem({
                 label: 'Open ' + market + ' market',
                 click: function(){
@@ -4573,10 +4573,10 @@ function processURIData(data){
     if(data){
         console.log('processURIData data=',data);
         var addr = data,
-            btc  = /^(bitcoin|counterparty|freewallet):/i,
+            btc  = /^(unobtanium|counterparty|freewalletuno):/i,
             url  = /^(http|https):/i,
             o    = { valid: false };
-        // Handle parsing in bitcoin and counterparty URI data
+        // Handle parsing in Unobtanium and unoparty URI data
         if(btc.test(data)){
             // Extract data into object
             var x    = data.replace(btc,'').split('?'),
@@ -4587,7 +4587,7 @@ function processURIData(data){
                 o[decodeURIComponent(z[0])] = decodeURIComponent(z[1]).replace(/\+/g,' ').trim();
             }
         }
-        // Use message since bitcoin already uses that name
+        // Use message since Unobtanium already uses that name
         if(o.memo)
             o.message = o.memo;
         // Handle validating that the provided address is valid
@@ -4687,7 +4687,7 @@ function processURIData(data){
                     });
                 }
                 ls.setItem('walletAddresses', JSON.stringify(FWUE.WALLET_ADDRESSES));
-                dialogMessage('<i class="fa fa-lg fa-fw fa-info-circle"></i> Import Successful', 'The following addresses have been added to Freewallet: <br/>' + txt);
+                dialogMessage('<i class="fa fa-lg fa-fw fa-info-circle"></i> Import Successful', 'The following addresses have been added to FreewalletUno: <br/>' + txt);
             }
         } else if(o.address){
             // Check if wallet is locked... if so, notify user that they have to unlock wallet
@@ -4696,7 +4696,7 @@ function processURIData(data){
             // Show 'Send' tool and pass forward scanned
             FWUE.DIALOG_DATA = {
                 destination: o.address,
-                token: o.asset || 'BTC',
+                token: o.asset || 'UNO',
                 amount: o.amount || '',
                 message: o.message || ''
             }
@@ -4837,7 +4837,7 @@ function removeMarket(market){
     // Remove tab and tab content
     $("li.tab[data-market='" + market + "']").remove();
     $('#' + market).remove();
-    // Switch back to BTC tab
+    // Switch back to UNO tab
     $('#markets-tabs a[href="#BTC"]').tab('show');
     // Handle removing from base pairs
     if(FWUE.BASE_MARKETS.indexOf(market)!=-1){
@@ -5172,7 +5172,7 @@ function updateMarketAssetInfo(market){
                     more   = $(sel + ' .more-info'),
                     supply = $(sel + ' .supply-total'),
                     usd    = $(sel + ' .last-price-usd'),
-                    xcp    = $(sel + ' .last-price-xcp');
+                    xcp    = $(sel + ' .last-price-xup');
                 supply.text(numeral(o.supply).format(fmt));
                 if(o.locked){
                     lock.removeClass('fa-unlock').addClass('fa-lock');
@@ -5190,7 +5190,7 @@ function updateMarketAssetInfo(market){
             if(!o.error){
                 var rating = o['rating_current'],
                     text   = (rating>0) ? rating : 'NA',
-                    html   = '<a href="https://reputation.coindaddy.io/xcp/asset/' + asset + '" data-toggle="tooltip" data-placement="bottom" title="View Feedback" target="_blank"><div class="rateit" data-rateit-readonly="true" data-rateit-value="' + rating + '" data-rateit-ispreset="true"></div></a> <span class="rateit-score">' + text + '</span>';
+                    html   = '<a href="https://reputation.coindaddy.io/xup/asset/' + asset + '" data-toggle="tooltip" data-placement="bottom" title="View Feedback" target="_blank"><div class="rateit" data-rateit-readonly="true" data-rateit-value="' + rating + '" data-rateit-ispreset="true"></div></a> <span class="rateit-score">' + text + '</span>';
                 html += '<a href="#" class="btn btn-xs btn-success pull-right" data-toggle="tooltip" data-placement="left" title="Leave Feedback" target="_blank"><i class="fa fa-lg fa-bullhorn auto-width"></i></a>'
                 $(sel + ' .reputation').html(html);
                 $('.rateit').rateit();
@@ -5360,7 +5360,7 @@ function addDispenserWatchlist(asset){
                   '                <th>Escrowed</th>' +
                   '                <th>Give Amount</th>' +
                   '                <th>Give Remaining</th>' +
-                  '                <th>BTC Price</th>' +
+                  '                <th>UNO Price</th>' +
                   '                <th>Status</th>' +
                   '                <th></th>' +
                   '            </tr>' +
@@ -5379,7 +5379,7 @@ function removeDispenserWatchlist(asset){
     // Remove tab and tab content
     $("li.tab[data-asset='" + asset + "']").remove();
     $('#' + asset).remove();
-    // Switch back to BTC tab
+    // Switch back to UNO tab
     $('#dispensers-tabs a[href="#my-dispensers"]').tab('show');
     // Handle removing from base pairs
     if(FWUE.BASE_DISPENSERS.indexOf(asset)!=-1){

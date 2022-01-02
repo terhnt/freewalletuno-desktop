@@ -7,7 +7,7 @@
     <!-- Order Information -->
     <div class="form-group">
         <label class="col-sm-3 control-label text-left order-type">
-            Buy 
+            Buy
         </label>
         <div class="col-sm-9">
             <table width="100%">
@@ -18,7 +18,7 @@
                         <td><img src="images/icons/blank.png" class="margin-right-5" id="assetA-icon"></td>
                         <td id="infoA" class="bold"></td>
                     </tr>
-                    </table>                
+                    </table>
                 </td>
                 <td width="*%" class="text-center">for</td>
                 <td width="180">
@@ -39,28 +39,28 @@
     <div class="form-group" id="tx-fee-field">
         <!-- Transaction Fee Field -->
     </div>
-    <!-- Auto-Sign BTCPay Information -->
-    <div class="form-group" id="btcpay" style="display: none">
+    <!-- Auto-Sign UNOPay Information -->
+    <div class="form-group" id="unopay" style="display: none">
         <label class="col-sm-3 control-label text-left">
-            Auto-BTCPay 
-            <a href="#" data-toggle="tooltip" title='This indicates if you would like to automatically sign and broadcast BTCPay transactions when matches for this order are detected' class="pull-right"><i class="fa fa-lg fa-question-circle-o margin-top-5"></i></a>
+            Auto-BTCPay
+            <a href="#" data-toggle="tooltip" title='This indicates if you would like to automatically sign and broadcast UNOPay transactions when matches for this order are detected' class="pull-right"><i class="fa fa-lg fa-question-circle-o margin-top-5"></i></a>
         </label>
         <div class="col-sm-9">
             <select id="autopay" class="selectpicker" name="autopay" data-width="100%">
-                <option value="Y">Yes - Automatically sign &amp; broadcast BTCpay transactions</option>
-                <option value="N">No - Manually sign &amp; broadcast BTCpay transactions</option>
+                <option value="Y">Yes - Automatically sign &amp; broadcast UNOpay transactions</option>
+                <option value="N">No - Manually sign &amp; broadcast UNOpay transactions</option>
             </select>
         </div>
-        <div class="col-xs-12" class="dialog-autobtcpay">
-            <div class="checkbox dialog-autobtcpay-confirm" style="display: none" id="dialog-autobtcpay-yes">
+        <div class="col-xs-12" class="dialog-autounopay">
+            <div class="checkbox dialog-autounopay-confirm" style="display: none" id="dialog-autounopay-yes">
                 <label>
-                    <input type="checkbox" name="autopay-confirm" value="Y"> 
-                    I understand that I need to  <u><i><b>keep FreeWallet open</b></i></u> in order for Auto-BTCPay to work.
+                    <input type="checkbox" name="autopay-confirm" value="Y">
+                    I understand that I need to  <u><i><b>keep FreeWalletUno open</b></i></u> in order for Auto-BTCPay to work.
                 </label>
             </div>
-            <div class="checkbox dialog-autobtcpay-confirm" style="display: none" id="dialog-autobtcpay-no">
+            <div class="checkbox dialog-autounopay-confirm" style="display: none" id="dialog-autounopay-no">
                 <label>
-                    <input type="checkbox" name="autopay-confirm" value="Y"> 
+                    <input type="checkbox" name="autopay-confirm" value="Y">
                     I understand that I need to <u><i><b>pay within 20 blocks of a match</b></i></u> or the match will fail.
                 </label>
             </div>
@@ -78,8 +78,8 @@
 // Handle updating the confirmation text based off selected value
 var updateAutopayConfirm = function(){
     var val = $('#autopay').val(),
-        yes = $('#dialog-autobtcpay-yes'),
-        no  = $('#dialog-autobtcpay-no');
+        yes = $('#dialog-autounopay-yes'),
+        no  = $('#dialog-autounopay-no');
     if(val=='Y'){
         yes.show();
         no.hide();
@@ -123,26 +123,26 @@ $(document).ready(function(){
             $('#assetA-icon').attr('src', FWUE.XCHAIN_API + '/icon/' + assetA + '.png');
             $('#assetB-icon').attr('src', FWUE.XCHAIN_API + '/icon/' + assetB + '.png');
             $('.order-type').html(data.type.charAt(0).toUpperCase() + data.type.slice(1));
-            // Display additional options for auto-signing the BTCpay transaction
-            if(data.give_asset=='BTC')
-                $('#btcpay').show();
+            // Display additional options for auto-signing the UNOpay transaction
+            if(data.give_asset=='UNO')
+                $('#unopay').show();
         }
 
         // Reset dialog data so we don't reuse data on form in the future
         FWUE.DIALOG_DATA = {};
 
         // Initialize any tooltips
-        $('[data-toggle="tooltip"]').tooltip({ 
+        $('[data-toggle="tooltip"]').tooltip({
             html: true,
             placement: 'bottom'
-        }); 
+        });
 
     },100);
 
     // Display the correct confirmation option
     updateAutopayConfirm();
 
-    // Update confirmation option if user changes auto-btcpay option
+    // Update confirmation option if user changes auto-unopay option
     $('#autopay').change(function(){
         updateAutopayConfirm();
     });
@@ -160,28 +160,28 @@ $(document).ready(function(){
     // Handle form validation and displaying any errors
     $('#create-order-form').validator().on('submit', function(e){
         // prevent form submission
-        e.preventDefault(); 
+        e.preventDefault();
         // Get object with form values
         var vals   = array2Object($(this).serializeArray()),
             errors = [];
         console.log('vals=',vals);
-        // Remove error indicators from any fields 
+        // Remove error indicators from any fields
         $('.form-group').removeClass('has-error has-danger');
-        // Verify we have valid fee amount 
+        // Verify we have valid fee amount
         if(numeral(vals['fee-amount']).value()==0){
             errors.push('You must enter a fee which is greater than 0.00000000!');
             $('#fee-amount').closest('.form-group').addClass('has-error has-danger');
         }
         // Verify we have valid expiration number
         var expire = numeral(vals['expires']).value();
-        if(expire<=0||expire>8064){
-            errors.push('You must enter a expiration number between 1 and 8064!');
+        if(expire<=0||expire>24192){
+            errors.push('You must enter a expiration number between 1 and 24192!');
             $('#expires').closest('.form-group').addClass('has-error has-danger');
         }
-        // Handle BTCpay valdidation
-        if(vals.give_asset=='BTC' && vals['autopay-confirm']!='Y'){
-            errors.push('You must confirm that you understand the BTCPay requirements!');
-            $('.dialog-autobtcpay-confirm').effect( "shake", { times: 3, direction: 'up' }, 1000);
+        // Handle UNOpay valdidation
+        if(vals.give_asset=='UNO' && vals['autopay-confirm']!='Y'){
+            errors.push('You must confirm that you understand the UNOPay requirements!');
+            $('.dialog-autounopay-confirm').effect( "shake", { times: 3, direction: 'up' }, 1000);
         }
         // Display any error message
         if(errors.length){
@@ -199,21 +199,21 @@ $(document).ready(function(){
                     dialogClose('dialog-create-order');
                     dialogMessage('<i class="fa fa-lg fa-check"></i> Order Creation Successful', '<center>Your order has been broadcast to the network and should be placed shortly.' +
                                   '<br/><br/><a class="btn btn-success" href="' + FWUE.XCHAIN_API + '/tx/' + tx + '" target="_blank">View Transaction</a></center>');
-                    // Add transaction to BTCpay monitoring list
-                    if(vals.give_asset=='BTC'){
-                        if(!FWUE.BTCPAY_ORDERS[network])
-                            FWUE.BTCPAY_ORDERS[network] = {};
-                        if(!FWUE.BTCPAY_ORDERS[network][vals.source])
-                            FWUE.BTCPAY_ORDERS[network][vals.source] = {};
-                        // Save transaction hash and autopay preference 
-                        FWUE.BTCPAY_ORDERS[network][vals.source][tx] = autopay;
+                    // Add transaction to UNOpay monitoring list
+                    if(vals.give_asset=='UNO'){
+                        if(!FWUE.UNOPAY_ORDERS[network])
+                            FWUE.UNOPAY_ORDERS[network] = {};
+                        if(!FWUE.UNOPAY_ORDERS[network][vals.source])
+                            FWUE.UNOPAY_ORDERS[network][vals.source] = {};
+                        // Save transaction hash and autopay preference
+                        FWUE.UNOPAY_ORDERS[network][vals.source][tx] = autopay;
                         // Save data to disk
-                        ls.setItem('btcpayOrders',JSON.stringify(FWUE.BTCPAY_ORDERS));
-                        // Save wallet to btcpayWallet (if user locks wallet, we can still sign transactions)
+                        ls.setItem('unopayOrders',JSON.stringify(FWUE.UNOPAY_ORDERS));
+                        // Save wallet to unopayWallet (if user locks wallet, we can still sign transactions)
                         var a = ss.getItem('wallet'),
-                            b = ss.getItem('btcpayWallet');
+                            b = ss.getItem('unopayWallet');
                         if(b==null)
-                            ss.setItem('btcpayWallet',a);
+                            ss.setItem('unopayWallet',a);
                     }
                 }
             }

@@ -71,8 +71,8 @@ $(document).ready(function(){
         var type = $(this).val();
         var val = $('#token-name-select').val(),
             el  = $('#memo');
-        // If this is BTC, hardcode the values and skip getting asset info
-        if(type=='single' && val=='BTC'){
+        // If this is UNO, hardcode the values and skip getting asset info
+        if(type=='single' && val=='UNO'){
             // Disable the memo
             el.attr('disabled', true);
             el.val('');

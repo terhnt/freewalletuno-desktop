@@ -1,10 +1,10 @@
-<form class="form-horizontal" id="btcpay-form" data-toggle="validator" role="form">
+<form class="form-horizontal" id="unopay-form" data-toggle="validator" role="form">
     <input type="hidden" name="source"      id="source">
     <input type="hidden" name="network"     id="network">
     <input type="hidden" name="tx0_hash"    id="tx0_hash">
     <input type="hidden" name="tx1_hash"    id="tx1_hash">
     <div class="alert alert-info text-center">
-        A BTC order has matched and BTC payment is required before block <span id="expire_block"></span>
+        A UNO order has matched and UNO payment is required before block <span id="expire_block"></span>
     </div>
     <!-- Order Information -->
     <div class="form-group">
@@ -17,7 +17,7 @@
                 <td width="180">
                     <table border=0>
                     <tr>
-                        <td><img src="images/icons/btc.png" class="margin-right-5" id="assetA-icon"></td>
+                        <td><img src="images/icons/uno.png" class="margin-right-5" id="assetA-icon"></td>
                         <td id="infoA" class="bold"></td>
                     </tr>
                     </table>                
@@ -57,11 +57,11 @@ $(document).ready(function(){
         // Handle loading any data from FWUE.DIALOG_DATA
         var data = FWUE.DIALOG_DATA;
         if(data){
-            var asset   = (data.forward_asset=='BTC') ? data.backward_asset : data.forward_asset,
-                amountA = (data.forward_asset=='BTC') ? data.forward_quantity : data.backward_quantity,
-                amountB = (data.forward_asset=='BTC') ? data.backward_quantity : data.forward_quantity,
+            var asset   = (data.forward_asset=='UNO') ? data.backward_asset : data.forward_asset,
+                amountA = (data.forward_asset=='UNO') ? data.forward_quantity : data.backward_quantity,
+                amountB = (data.forward_asset=='UNO') ? data.backward_quantity : data.forward_quantity,
                 format  = '0,0.00000000';
-            $('#infoA').html(numeral(amountA).format(format) + '<br>BTC');
+            $('#infoA').html(numeral(amountA).format(format) + '<br>UNO');
             $('#infoB').html(numeral(amountB).format(format) + '<br>' + asset);
             $('#assetB-icon').attr('src', FWUE.XCHAIN_API + '/icon/' + asset + '.png');
             // Request info on the non-BTC asset and set the asset amount properly (divisible or not)
@@ -91,20 +91,20 @@ $(document).ready(function(){
 
     // Submit form if user clicks 'Yes' button
     $('#btn-submit').click($.debounce(100,function(e){
-        $('#btcpay-form').submit();
+        $('#unopay-form').submit();
     }));
 
     // Hide the form if users clicks 'No' button, and remove match from queue
     $('#btn-cancel').click($.debounce(100,function(e){
-        var vals   = array2Object($('#btcpay-form').serializeArray());
-        dialogClose('dialog-btcpay');
+        var vals   = array2Object($('#unopay-form').serializeArray());
+        dialogClose('dialog-unopay');
         // Remove the order match from the queue and check the queue again after a brief delay to let the previous dialog box close 
-        removeFromBtcpayQueue(vals.tx0_hash, vals.tx1_hash);
-        setTimeout(function(){ processBtcpayQueue(); },1000);
+        removeFromUnopayQueue(vals.tx0_hash, vals.tx1_hash);
+        setTimeout(function(){ processUnopayQueue(); },1000);
     }));
 
     // Handle form validation and displaying any errors
-    $('#btcpay-form').validator().on('submit', function(e){
+    $('#unopay-form').validator().on('submit', function(e){
         // prevent form submission
         e.preventDefault(); 
         // Get object with form values
@@ -127,15 +127,15 @@ $(document).ready(function(){
             // Callback to run after broadcasting tx
             var doneCb = function(tx){
                 if(tx){
-                    dialogClose('dialog-btcpay');
-                    dialogMessage('<i class="fa fa-lg fa-check"></i> BTCPay Successful', '<center>Your BTC payment has been broadcast to the network and your order should complete shortly.' +
+                    dialogClose('dialog-unopay');
+                    dialogMessage('<i class="fa fa-lg fa-check"></i> UNOPay Successful', '<center>Your UNO payment has been broadcast to the network and your order should complete shortly.' +
                                   '<br/><br/><a class="btn btn-success" href="' + FWUE.XCHAIN_API + '/tx/' + tx + '" target="_blank">View Transaction</a></center>');
                     // Remove the order match from the queue and check the queue again after a brief delay to let the previous dialog box close 
-                    removeFromBtcpayQueue(vals.tx0_hash, vals.tx1_hash);
-                    setTimeout(function(){ processBtcpayQueue(); },1000);
+                    removeFromUnopayQueue(vals.tx0_hash, vals.tx1_hash);
+                    setTimeout(function(){ processUnopayQueue(); },1000);
                 }
             }
-            cpBtcpay(vals.network, vals.source, match_id, fee_sat, doneCb);
+            cpUnopay(vals.network, vals.source, match_id, fee_sat, doneCb);
         }
     })
 

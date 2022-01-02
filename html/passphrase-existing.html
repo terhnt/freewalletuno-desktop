@@ -1,6 +1,6 @@
 <div id="existing-passphrase" class="center">
     <p>Please enter your existing 12-word wallet passphrase and click 'Ok'</p>
-    <input type="password" class="btc-wallet-passphrase" id="manualPassphrase" autocomplete="off" >
+    <input type="password" class="uno-wallet-passphrase" id="manualPassphrase" autocomplete="off" >
     <div id="passphrase-icon-wrapper">
         <i id="passphase-icon" class="fa fa-2x fa-inverse fa-eye-slash"></i>
     </div>
@@ -10,7 +10,7 @@
     <div class="input-group pull-left" style="width:180px" id="amount-value-wrapper">
         <label class="input-group-addon">Format</label>
         <select id="format-select" name="format" class="selectpicker">
-            <option data-content="Counterwallet">Counterwallet</option>
+            <option data-content="Unowallet">Unowallet</option>
             <option data-content="BIP39">BIP39</option>
         </select>
     </div>
@@ -29,7 +29,7 @@ $(document).ready(function(){
     // Focus the passphrase after 1/2 a second to let things initialize
     setTimeout(function(){ $('#manualPassphrase').focus(); }, 500);
 
-    // Initialize the passphrase format picker and default to counterwallet's funky format
+    // Initialize the passphrase format picker and default to unowallet's funky format
     $('#format-select').selectpicker({ width: '100%' }).selectpicker("refresh");
 
     // Update isBip39 status

@@ -1,19 +1,19 @@
 {
   "main": "index.html",
-  "name": "FreeWallet",
-  "description": "Freewallet is a free open source desktop wallet that supports Bitcoin and Counterparty",
+  "name": "FreeWalletUno",
+  "description": "FreewalletUno is a free open source desktop wallet that supports Unobtanium and Counterparty",
   "version": "0.9.19",
   "author": "Jeremy Johnson <j-dog@j-dog.net>",
   "license": "MIT",
   "user-agent": "%name %ver (%osinfo)",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jdogresorg/freewallet-desktop.git"
+    "url": "https://github.com/terhnt/freewalletuno-desktop.git"
   },
   "single-instance": true,
   "window": {
-    "title": "FreeWallet",
-    "icon": "images/freewallet-icon-180.png",
+    "title": "FreeWalletUno",
+    "icon": "images/freewalletuno-icon-180.png",
     "toolbar": false,
     "min_width": 1024,
     "min_height": 768,

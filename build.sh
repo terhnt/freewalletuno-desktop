@@ -20,7 +20,7 @@ if [ "$OSTYPE" != "darwin" ] ; then
     exit
 fi
 
-# Extract path to freewallet-desktop source code
+# Extract path to freewalletuno-desktop source code
 base_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # Extract app name and version from package.json
@@ -93,15 +93,15 @@ while true; do
         [Yy]* ) yn="Y"
                 plist=$base_dir/builds/$app_name/osx64/$app_name.app/Contents/Info.plist
                 echo "### Editing Plist file at $plist..."
-                /usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes:3:CFBundleURLName string Bitcoin" $plist
+                /usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes:3:CFBundleURLName string Unobtanium" $plist
                 /usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes:3:CFBundleURLSchemes array" $plist
-                /usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes:3:CFBundleURLSchemes:0 string bitcoin" $plist
+                /usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes:3:CFBundleURLSchemes:0 string unobtanium" $plist
                 /usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes:4:CFBundleURLName string Counterparty" $plist
                 /usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes:4:CFBundleURLSchemes array" $plist
                 /usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes:4:CFBundleURLSchemes:0 string counterparty" $plist
-                /usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes:5:CFBundleURLName string FreeWallet" $plist
+                /usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes:5:CFBundleURLName string FreeWalletUno" $plist
                 /usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes:5:CFBundleURLSchemes array" $plist
-                /usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes:5:CFBundleURLSchemes:0 string freewallet" $plist
+                /usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes:5:CFBundleURLSchemes:0 string freewalletuno" $plist
                 break;;
         [Nn]* ) break;;
         * ) echo "Please answer yes or no.";;
@@ -249,7 +249,7 @@ while true; do
                     cp -a * /tmp/$app_name/
                     echo "### Copying additional files to install directory..."
                     cd $base_dir/misc/
-                    cp FreeWallet.png install.sh FreeWallet.desktop /tmp/$app_name/
+                    cp FreeWalletUno.png install.sh FreeWalletUno.desktop /tmp/$app_name/
                     cd /tmp
                     tar -cvzf $app_name.x$bits.tgz $app_name
                     cp $app_name.x$bits.tgz $base_dir/builds/$app_name/linux$bits/

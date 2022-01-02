@@ -64,7 +64,7 @@
         // Update 'more info' link to point to transaction url
         $('#history-info-more').attr('href', FWUE.XCHAIN_API + '/tx/' + tx);
 
-        // Request transaction information from xchain.io
+        // Request transaction information from unoparty.xchain.io
         $.getJSON(FWUE.XCHAIN_API + '/api/tx/' + tx, function( o ){
             if(!o.error){
                 $('#source').html(o.source);
@@ -74,7 +74,7 @@
                 $('#memo').text(o.memo);
                 $('#flags').text(o.flags);
                 $('#status').text(o.status);
-                $('#fee').text(o.fee + ' XCP');
+                $('#fee').text(o.fee + ' XUP');
                 $('#timestamp').html('<span data-livestamp='  + o.timestamp + ' class="nowrap"></span> (' + moment.unix(o.timestamp).utcOffset(0).format() + ' GMT)');
                 if(o.tx_index){
                     $('#block').html(numeral(o.block_index).format('0,0'));

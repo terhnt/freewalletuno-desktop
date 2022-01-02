@@ -1,17 +1,17 @@
 /*
  * Custom functions used to communicate with the wallet
- * 
+ *
  * browserify index.js --standalone trezor > app.js
  *
- * TODO: Figure out why signing testnet transactions is not working correctly (change address is different) 
+ * TODO: Figure out why signing testnet transactions is not working correctly (change address is different)
  */
 
 let bitcoin = require('bitcoinjs-lib');
 
 
-// Handle setting the currency network 
+// Handle setting the currency network
 function setCurrency(net='mainnet'){
-    var network = (net=='testnet') ? 'Testnet' : 'Bitcoin';
+    var network = (net=='testnet') ? 'Testnet' : 'Unobtanium';
     console.log('setCurrency network=',network);
     TrezorConnect.setCurrency(network);
 }
@@ -22,13 +22,13 @@ function getXpubkey(net='mainnet', callback){
     TrezorConnect.getXPubKey(null, function(response){
         if(typeof callback === 'function')
             callback(response);
-    });    
+    });
 }
 
-// Handle requesting a list of addresses 
+// Handle requesting a list of addresses
 function getAddressesFromXpub(net='mainnet', xpubkey,  limit=10, start=0){
     var network = (net=='testnet') ? 'testnet' : 'mainnet';
-    const node = bitcoin.HDNode.fromBase58(xpubkey, bitcoin.networks[network]).neutered();
+    const node = xitcoin.HDNode.fromBase58(xpubkey, xitcoin.networks[network]).neutered();
     addresses = [];
     var stop = start + limit;
     for(var i = start; i < stop; i++) {
@@ -40,13 +40,13 @@ function getAddressesFromXpub(net='mainnet', xpubkey,  limit=10, start=0){
 
 // Handle validating that a signed tx outputs match the unsigned tx outputs
 function isValidTransaction(unsignedTx, signedTx){
-    var u = bitcoin.Transaction.fromHex(unsignedTx), // Unsigned
-        s = bitcoin.Transaction.fromHex(signedTx);   // Signed
+    var u = xitcoin.Transaction.fromHex(unsignedTx), // Unsigned
+        s = xitcoin.Transaction.fromHex(signedTx);   // Signed
         v = true; // valid (true/false)
     // make sure outputs and values matches unsigned transaction
     s.outs.forEach(function(out, n){
-        var a = bitcoin.script.toASM(u.outs[n].script),
-            b = bitcoin.script.toASM(s.outs[n].script);
+        var a = xitcoin.script.toASM(u.outs[n].script),
+            b = xitcoin.script.toASM(s.outs[n].script);
         console.log('Unsigned output, value=', a, u.outs[n].value);
         console.log('Signed   output, value=', b, s.outs[n].value);
         // Error if outputs or values do not match
@@ -59,7 +59,7 @@ function isValidTransaction(unsignedTx, signedTx){
 // Handle signing a transaction
 // @net        = Network (mainnet, testnet)
 // @source     = Source Address
-// @path       = BIP44 Path (https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki)
+// @path       = BIP44 Path (https://github.com/unobtanium/bips/blob/master/bip-0044.mediawiki)
 // @unsignedTx = Unsigned Transaction in hex format
 // @callback   = Callback function
 function signTx(net='mainnet', source, path, unsignedTx, callback){
@@ -67,8 +67,8 @@ function signTx(net='mainnet', source, path, unsignedTx, callback){
     var inputs  = [],
         outputs = [],
         network = (net=='testnet') ? '0x80000001' : '0x80000000', // default to mainnet
-        api_net = (net=='testnet') ? 'tbtc' : 'btc',
-        tx      = bitcoin.Transaction.fromHex(unsignedTx),
+        api_net = (net=='testnet') ? 'tuno' : 'uno',
+        tx      = xitcoin.Transaction.fromHex(unsignedTx),
         utxos   = {}; // object containing utxo hashes and specific output indexes to use
     // Convert BIP44 path into usable Trezor address_n
     var bip44   = path.split("'/"); // m / purpose' / coin_type' / account' / change / address_index
@@ -78,7 +78,7 @@ function signTx(net='mainnet', source, path, unsignedTx, callback){
         var tx_hash = input.hash.reverse().toString('hex');
         utxos[tx_hash] = -1; // set to -1 so we can determine which ones have been processed and which have not
     });
-    // Define callback to run when done with API calls 
+    // Define callback to run when done with API calls
     var doneCb = function(){
         // Check if we are truly done
         var done = true;
@@ -91,14 +91,14 @@ function signTx(net='mainnet', source, path, unsignedTx, callback){
             tx.ins.forEach(function(input, n){
                 var tx_hash = input.hash.toString('hex'); // no need to reverse since it was already done above
                 inputs.push({
-                    address_n: address,         // Address 
+                    address_n: address,         // Address
                     prev_hash: tx_hash,         // Previous transaction hash
                     prev_index: utxos[tx_hash]  // output to use from previous transaction
                 })
             });
             // Build out a list of outputs
             tx.outs.forEach(function(out, n){
-                var asm = bitcoin.script.toASM(out.script),
+                var asm = xitcoin.script.toASM(out.script),
                     output = {};
                 if(/^OP_RETURN/.test(asm)){
                     output = {
@@ -155,14 +155,14 @@ function signTx(net='mainnet', source, path, unsignedTx, callback){
 // @signedTx = Signed Transaction in hex format
 // @callback = Callback function
 function broadcastTx(network, signedTx, callback){
-    var net  = (network=='testnet') ? 'BTCTEST' : 'BTC',
-        host = (network=='testnet') ? 'testnet.xchain.io' : 'xchain.io';
+    var net  = (network=='testnet') ? 'UNOTEST' : 'UNO',
+        host = (network=='testnet') ? 'unoparty-testnet.unoparty.xchain.io' : 'unoparty.xchain.io';
     // First try to broadcast using the XChain API
     $.ajax({
         type: "POST",
         url: 'https://' + host +  '/api/send_tx',
-        data: { 
-            tx_hex: signedTx 
+        data: {
+            tx_hex: signedTx
         },
         complete: function(o){
             // console.log('o=',o);
@@ -178,8 +178,8 @@ function broadcastTx(network, signedTx, callback){
                 $.ajax({
                     type: "POST",
                     url: 'https://chain.so/api/v2/send_tx/' + net,
-                    data: { 
-                        tx_hex: signedTx 
+                    data: {
+                        tx_hex: signedTx
                     },
                     dataType: 'json',
                     complete: function(o){
@@ -194,7 +194,7 @@ function broadcastTx(network, signedTx, callback){
                             cbError('Error while trying to broadcast signed transaction',callback);
                         }
                     }
-                });                
+                });
             }
         }
     });

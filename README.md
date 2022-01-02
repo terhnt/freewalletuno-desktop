@@ -1,6 +1,6 @@
-FreeWallet - Desktop Wallet
+FreeWalletUno - Desktop Wallet
 ---
-FreeWallet is a free wallet which supports Bitcoin and Counterparty.
+FreeWalletUno is a free wallet which supports Unobtanium and Counterparty.
 
 Build Notes
 ---
@@ -17,7 +17,7 @@ Run `build.sh` to handle generating builds on Mac/OSX
 Installation Instructions
 ---
 ```
-Windows : Download FreeWallet.exe, run it, complete the installer.
-Mac/OSX : Download FreeWallet.dmg, mount, and drag FreeWallet app to 'Applications' folder
-Linux   : Download FreeWallet.tgz, extract it, run FreeWallet/install.sh
+Windows : Download FreeWalletUno.exe, run it, complete the installer.
+Mac/OSX : Download FreeWalletUno.dmg, mount, and drag FreeWalletUno app to 'Applications' folder
+Linux   : Download FreeWalletUno.tgz, extract it, run FreeWalletUno/install.sh
 ```

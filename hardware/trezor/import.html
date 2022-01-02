@@ -22,7 +22,7 @@
                     </div>
                     <div class="panel-body">
                         <center>
-                            <p class="text-justify">FreeWallet would now like you to select an account on your Trezor device and export the public key for that account. This public key will be used to generate a list of addresses which you can then choose to import into FreeWallet.</p>
+                            <p class="text-justify">FreeWalletUno would now like you to select an account on your Trezor device and export the public key for that account. This public key will be used to generate a list of addresses which you can then choose to import into FreeWalletUno.</p>
                             <div class="alert alert-info" id="trezor-status">Please click the button below to get started</div>
                             <button class="btn btn-success" id="connect">Connect to Trezor</button>
                             <!-- Network Selector -->
@@ -44,7 +44,7 @@
                         <div class="pull-right">Step 2 of 3</div>
                     </div>
                     <div class="panel-body">
-                        <center>Please select the addresses that you want to add to Freewallet and click 'Import'</center>
+                        <center>Please select the addresses that you want to add to FreewalletUno and click 'Import'</center>
                     </div>
                     <form id="import-addresses">
                     <table class="table table-condensed table-striped" id="addresslist">
@@ -72,7 +72,7 @@
                     </div>
                     <div class="panel-body">
                         <center>
-                            <div class="alert alert-success" style="margin-bottom: 0px !important;">Your Trezor hardware wallet addresses have been imported to FreeWallet.</div>
+                            <div class="alert alert-success" style="margin-bottom: 0px !important;">Your Trezor hardware wallet addresses have been imported to FreeWalletUno.</div>
                         </center>
                     </div>
                 </div>
@@ -166,8 +166,8 @@ $(document).ready(function(){
                 path = $(this).attr('data-path');
             obj[path] = addr;
         });
-        // Pass address data to Freewallet via URI 
-        var url = 'freewallet:?action=import&device=trezor&network=' + network + '&data=' + encodeURI(JSON.stringify(obj));
+        // Pass address data to FreewalletUno via URI 
+        var url = 'freewalletuno:?action=import&device=trezor&network=' + network + '&data=' + encodeURI(JSON.stringify(obj));
         console.log('throwing user to ', url);
         window.location = url;
         $('#step2').hide();

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>FreeWallet</title>
+    <title>FreeWalletUno</title>
     <meta name="robots"      content="index, follow">
     <meta name="viewport"    content="width=device-width, initial-scale=1.0">
     <link type="image/ico" rel="icon"       href="images/favicon.ico">
@@ -17,15 +17,15 @@
     <link type="text/css"  rel="stylesheet" href="node_modules/jquery-ui-dist/jquery-ui.css">
     <link type="text/css"  rel="stylesheet" href="node_modules/jquery.rateit/scripts/rateit.css">
     <link type="text/css"  rel="stylesheet" href="css/jquery.dataTables.min.css">
-    <link type="text/css"  rel="stylesheet" href="css/freewallet-desktop.css">
-    <link type="text/css"  rel="stylesheet" href="css/freewallet-themes.css">
+    <link type="text/css"  rel="stylesheet" href="css/freewalletuno-desktop.css">
+    <link type="text/css"  rel="stylesheet" href="css/freewalletuno-themes.css">
 </head> 
 <body>
     <div class="header navbar-default navbar-fixed-top" role="navigation">
         <div class="container-fluid">
             <div class="navbar-header">
                 <div class="navbar-brand">
-                    <a href="#" id="action-about"><img src="images/header-logo.png" alt="FreeWallet" border="0"/></a>
+                    <a href="#" id="action-about"><img src="images/header-logo.png" alt="FreeWalletUno" border="0"/></a>
                 </div>
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
@@ -98,7 +98,7 @@
                     &nbsp;
                 </div>
                 <div class="col-xs-4">
-                    <div class="pull-right">1 XCP = <span class="footer-current-price">NA</span></div>
+                    <div class="pull-right">1 XUP = <span class="footer-current-price">NA</span></div>
                 </div>
             </div>
         </div>
@@ -161,7 +161,7 @@
     <script type="text/javascript" src="js/util.generic.js"></script>
 
     <!-- Include this last so that bitcore is already defined -->
-    <script type="text/javascript" src="js/freewallet-desktop.js"></script>
+    <script type="text/javascript" src="js/freewalletuno-desktop.js"></script>
 
     <!-- Include this last so that bitcore is already defined -->
     <script>
@@ -304,14 +304,14 @@
             }
 
             // Test strings to verify functionality
-            // var str = 'bitcoin:1Donatet2LrNpuWByAnH8gc9Wh9zSzZuLC?amount=1.23456789';
-            // var str = 'counterparty:1Donatet2LrNpuWByAnH8gc9Wh9zSzZuLC?amount=1.23456789&asset=XCP&memo=test';
+            // var str = 'unobtanium:1Donatet2LrNpuWByAnH8gc9Wh9zSzZuLC?amount=1.23456789';
+            // var str = 'unoparty:1Donatet2LrNpuWByAnH8gc9Wh9zSzZuLC?amount=1.23456789&asset=XUP&memo=test';
             // var str = 'https://coindaddy.io';
-            // var str = 'counterparty:?action=sign&message=test&icon=https%3A%2F%2Fcounterpartychain.io%2Fcontent%2Fimages%2Ficons%2Fstopthenuke.png&callback=http%3A%2F%2Fdev.authparty.io%2Fapi%2Fv1%2Fauthorize_login%3Fprovider%3D005f15c462fe3eb536c4bec5fef42c%26modal_id%3DbemghXSwNXxhqzd';
-            // var str = 'counterparty:?action=sign&message=Authparty%20Login%20BOhuLIDqbJjBMzh';
-            // var str = 'counterparty:?action=broadcast&message=Some%20Message';
-            // var str = 'counterparty:?action=signtx&tx=your-unsigned-transaction-here';
-            // var str = "freewallet:?action=import&device=trezor&network=mainnet&data=%7B%2244'/0'/0'/0'/0%22:%221EMV8Xz6odQrjzRExPiTZrLcFDZ3fr3Viu%22,%2244'/0'/0'/0'/1%22:%221PMRoTp11MLPmayCDSkpdhD9JqCp85ZLug%22,%2244'/0'/0'/0'/2%22:%221KV364dENq1j8ZjStevytHjzihAxkUQbwG%22,%2244'/0'/0'/0'/3%22:%221LSgyGwf6Tbj1GfgnbcaLMQ2K1sJ14hS5f%22%7D"
+            // var str = 'unoparty:?action=sign&message=test&icon=https%3A%2F%2Fcounterpartychain.io%2Fcontent%2Fimages%2Ficons%2Fstopthenuke.png&callback=http%3A%2F%2Fdev.authparty.io%2Fapi%2Fv1%2Fauthorize_login%3Fprovider%3D005f15c462fe3eb536c4bec5fef42c%26modal_id%3DbemghXSwNXxhqzd';
+            // var str = 'unoparty:?action=sign&message=Authparty%20Login%20BOhuLIDqbJjBMzh';
+            // var str = 'unoparty:?action=broadcast&message=Some%20Message';
+            // var str = 'unoparty:?action=signtx&tx=your-unsigned-transaction-here';
+            // var str = "freewalletuno:?action=import&device=trezor&network=mainnet&data=%7B%2244'/5C'/0'/0'/0%22:%221EMV8Xz6odQrjzRExPiTZrLcFDZ3fr3Viu%22,%2244'/5C'/0'/0'/1%22:%221PMRoTp11MLPmayCDSkpdhD9JqCp85ZLug%22,%2244'/5C'/0'/0'/2%22:%221KV364dENq1j8ZjStevytHjzihAxkUQbwG%22,%2244'/5C'/0'/0'/3%22:%221LSgyGwf6Tbj1GfgnbcaLMQ2K1sJ14hS5f%22%7D"
             // processURIData(str);
         });
     </script>

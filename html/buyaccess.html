@@ -10,26 +10,26 @@
     </tr>
 </thead>
 <tr>
-    <td rowspan="2"><img src="https://xchain.io/icon/FULLACCESS.png" class="margin-right-5"></td>
-    <td><a href="https://xchain.io/market/FULLACCESS/BTC" target="_blank">FULLACCESS / BTC</a></td>
-    <td id="fullaccess-btc-price">-</td>
-    <td><a href="#" class="btn btn-sm btn-success pull-right" id="fullaccess-btc-buy">Buy Now</a></td>
+    <td rowspan="2"><img src="https://unoparty.xchain.io/icon/FULLACCESS.png" class="margin-right-5"></td>
+    <td><a href="https://unoparty.xchain.io/market/FULLACCESS/UNO" target="_blank">FULLACCESS / UNO</a></td>
+    <td id="fullaccess-uno-price">-</td>
+    <td><a href="#" class="btn btn-sm btn-success pull-right" id="fullaccess-uno-buy">Buy Now</a></td>
 </tr>
 <tr>
-    <td><a href="https://xchain.io/market/FULLACCESS/XCP" target="_blank">FULLACCESS / XCP</a></td>
-    <td id="fullaccess-xcp-price">-</td>
-    <td><a href="#" class="btn btn-sm btn-success pull-right" id="fullaccess-xcp-buy">Buy Now</a></td>
+    <td><a href="https://unoparty.xchain.io/market/FULLACCESS/XUP" target="_blank">FULLACCESS / XUP</a></td>
+    <td id="fullaccess-xup-price">-</td>
+    <td><a href="#" class="btn btn-sm btn-success pull-right" id="fullaccess-xup-buy">Buy Now</a></td>
 </tr>
 <tr>
-    <td rowspan="2"><img src="https://xchain.io/icon/XCHAINPEPE.png" class="margin-right-5"></td>
-    <td><a href="https://xchain.io/market/XCHAINPEPE/BTC" target="_blank">XCHAINPEPE / BTC</a></td>
-    <td id="xchainpepe-btc-price">-</td>
-    <td><a href="#" class="btn btn-sm btn-success pull-right" id="xchainpepe-btc-buy">Buy Now</a></td>
+    <td rowspan="2"><img src="https://unoparty.xchain.io/icon/XCHAINPEPE.png" class="margin-right-5"></td>
+    <td><a href="https://unoparty.xchain.io/market/XCHAINPEPE/UNO" target="_blank">XCHAINPEPE / UNO</a></td>
+    <td id="xchainpepe-uno-price">-</td>
+    <td><a href="#" class="btn btn-sm btn-success pull-right" id="xchainpepe-uno-buy">Buy Now</a></td>
 </tr>
 <tr>
-    <td><a href="https://xchain.io/market/XCHAINPEPE/XCP" target="_blank">XCHAINPEPE / XCP</a></td>
-    <td id="xchainpepe-xcp-price">-</td>
-    <td><a href="#" class="btn btn-sm btn-success pull-right" id="xchainpepe-xcp-buy">Buy Now</a></td>
+    <td><a href="https://unoparty.xchain.io/market/XCHAINPEPE/XUP" target="_blank">XCHAINPEPE / XUP</a></td>
+    <td id="xchainpepe-xup-price">-</td>
+    <td><a href="#" class="btn btn-sm btn-success pull-right" id="xchainpepe-xup-buy">Buy Now</a></td>
 </tr>
 <tr>
     <td colspan="4"></td>
@@ -44,111 +44,111 @@ $(document).ready(function(){
         fmt_sat = '0,0.00000000',
         fmt_raw = '0.00000000',
         price = {
-            btc: getAssetPrice('BTC'),
-            xcp: getAssetPrice('XCP')
+            btc: getAssetPrice('UNO'),
+            xcp: getAssetPrice('XUP')
         };
 
     // Set the asset divisibility for the assets
     FWUE.ASSET_DIVISIBLE = {};
-    FWUE.ASSET_DIVISIBLE['BTC'] = true;
-    FWUE.ASSET_DIVISIBLE['XCP'] = true;
+    FWUE.ASSET_DIVISIBLE['UNO'] = true;
+    FWUE.ASSET_DIVISIBLE['XUP'] = true;
     FWUE.ASSET_DIVISIBLE['FULLACCESS'] = false;
     FWUE.ASSET_DIVISIBLE['XCHAINPEPE'] = false;
 
-    // Get FULLACCESS/BTC Price info
-    $.getJSON('https://xchain.io/api/market/FULLACCESS/BTC/orderbook', function(o){
+    // Get FULLACCESS/UNO Price info
+    $.getJSON('https://unoparty.xchain.io/api/market/FULLACCESS/UNO/orderbook', function(o){
         var txt = '-';
         if(o.asks && o.asks.length>0){
             var ask = numeral(o.asks[0][0]).format(fmt_sat),
                 usd = numeral(o.asks[0][0] * price.btc).format(fmt_usd);
         }
-        $('#fullaccess-btc-price').text(ask + ' BTC ($' + usd + ')');
-        $('#fullaccess-btc-buy').attr('price',ask);
+        $('#fullaccess-uno-price').text(ask + ' UNO ($' + usd + ')');
+        $('#fullaccess-uno-buy').attr('price',ask);
     });
 
-    // Get FULLACCESS/XCP Price info
-    $.getJSON('https://xchain.io/api/market/FULLACCESS/XCP/orderbook', function(o){
+    // Get FULLACCESS/XUP Price info
+    $.getJSON('https://unoparty.xchain.io/api/market/FULLACCESS/XUP/orderbook', function(o){
         var txt = '-';
         if(o.asks && o.asks.length>0){
             var ask = numeral(o.asks[0][0]).format(fmt_sat),
                 usd = numeral(o.asks[0][0] * price.xcp).format(fmt_usd);
         }
-        $('#fullaccess-xcp-price').text(ask + ' XCP ($' + usd + ')');
-        $('#fullaccess-xcp-buy').attr('price',ask);
+        $('#fullaccess-xup-price').text(ask + ' XUP ($' + usd + ')');
+        $('#fullaccess-xup-buy').attr('price',ask);
     });
 
-    // Get XCHAINPEPE/BTC Price info
-    $.getJSON('https://xchain.io/api/market/XCHAINPEPE/BTC/orderbook', function(o){
+    // Get XCHAINPEPE/UNO Price info
+    $.getJSON('https://unoparty.xchain.io/api/market/XCHAINPEPE/UNO/orderbook', function(o){
         var txt = '-';
         if(o.asks && o.asks.length>0){
             var ask = numeral(o.asks[0][0]).format(fmt_sat),
                 usd = numeral(o.asks[0][0] * price.btc).format(fmt_usd);
         }
-        $('#xchainpepe-btc-price').text(ask + ' BTC ($' + usd + ')');
-        $('#xchainpepe-btc-buy').attr('price',ask);
+        $('#xchainpepe-uno-price').text(ask + ' UNO ($' + usd + ')');
+        $('#xchainpepe-uno-buy').attr('price',ask);
     });
 
-    // Get XCHAINPEPE/XCP Price info
-    $.getJSON('https://xchain.io/api/market/XCHAINPEPE/XCP/orderbook', function(o){
+    // Get XCHAINPEPE/XUP Price info
+    $.getJSON('https://unoparty.xchain.io/api/market/XCHAINPEPE/XUP/orderbook', function(o){
         var txt = '-';
         if(o.asks && o.asks.length>0){
             var ask = numeral(o.asks[0][0]).format(fmt_sat),
                 usd = numeral(o.asks[0][0] * price.xcp).format(fmt_usd);
         }
-        $('#xchainpepe-xcp-price').text(ask + ' XCP ($' + usd + ')');
-        $('#xchainpepe-xcp-buy').attr('price',ask);
+        $('#xchainpepe-xup-price').text(ask + ' XUP ($' + usd + ')');
+        $('#xchainpepe-xup-buy').attr('price',ask);
     });
 
-    // Setup FULLACCESS/BTC Order info
-    $('#fullaccess-btc-buy').click($.debounce(100, function(e){
+    // Setup FULLACCESS/UNO Order info
+    $('#fullaccess-uno-buy').click($.debounce(100, function(e){
         var cost = $(this).attr('price');
         FWUE.DIALOG_DATA = {
-            market: 'FULLACCESS/BTC',
+            market: 'FULLACCESS/UNO',
             type: 'buy',
             get_asset:   'FULLACCESS',
-            give_asset:  'BTC',
+            give_asset:  'UNO',
             get_amount:  1,
             give_amount: numeral(cost).format(fmt_raw)
         };
         dialogOrder();
     }));
 
-    // Setup FULLACCESS/XCP Order info
-    $('#fullaccess-xcp-buy').click($.debounce(100, function(e){
+    // Setup FULLACCESS/XUP Order info
+    $('#fullaccess-xup-buy').click($.debounce(100, function(e){
         var cost = $(this).attr('price');
         FWUE.DIALOG_DATA = {
-            market: 'FULLACCESS/XCP',
+            market: 'FULLACCESS/XUP',
             type: 'buy',
             get_asset:   'FULLACCESS',
-            give_asset:  'XCP',
+            give_asset:  'XUP',
             get_amount:  1,
             give_amount: numeral(cost).format(fmt_raw)
         };
         dialogOrder();
     }));
 
-    // Setup XCHAINPEPE/BTC Order info
-    $('#xchainpepe-btc-buy').click($.debounce(100, function(e){
+    // Setup XCHAINPEPE/UNO Order info
+    $('#xchainpepe-uno-buy').click($.debounce(100, function(e){
         var cost = $(this).attr('price');
         FWUE.DIALOG_DATA = {
-            market: 'XCHAINPEPE/BTC',
+            market: 'XCHAINPEPE/UNO',
             type: 'buy',
             get_asset:   'XCHAINPEPE',
-            give_asset:  'BTC',
+            give_asset:  'UNO',
             get_amount:  1,
             give_amount: numeral(cost).format(fmt_raw)
         };
         dialogOrder();
     }));
 
-    // Setup XCHAINPEPE/BTC Order info
-    $('#xchainpepe-xcp-buy').click($.debounce(100, function(e){
+    // Setup XCHAINPEPE/UNO Order info
+    $('#xchainpepe-xup-buy').click($.debounce(100, function(e){
         var cost = $(this).attr('price');
         FWUE.DIALOG_DATA = {
-            market: 'XCHAINPEPE/XCP',
+            market: 'XCHAINPEPE/XUP',
             type: 'buy',
             get_asset:   'XCHAINPEPE',
-            give_asset:  'XCP',
+            give_asset:  'XUP',
             get_amount:  1,
             give_amount: numeral(cost).format(fmt_raw)
         };

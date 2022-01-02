@@ -10,8 +10,8 @@
         </label>
         <div class="col-sm-9">
             <select id="token-type" name="type" class="selectpicker">
-                <option data-content="<i class='fa fa-lg fa-sort-alpha-asc'></i> Named (0.5 XCP)">Named</option>
-                <option data-content="<i class='fa fa-lg fa-sitemap'></i> Subasset (0.25 XCP)">Subasset</option>
+                <option data-content="<i class='fa fa-lg fa-sort-alpha-asc'></i> Named (0.5 XUP)">Named</option>
+                <option data-content="<i class='fa fa-lg fa-sitemap'></i> Subasset (0.25 XUP)">Subasset</option>
                 <option data-content="<i class='fa fa-lg fa-sort-numeric-asc'></i> Numeric (free)">Numeric</option>
             </select>
         </div>
@@ -63,9 +63,9 @@ $(document).ready(function(){
     $('#source-address-field').load('html/fields/source-address.html');
     $('#token-description-field').load('html/fields/token-description.html');
 
-    // Stash current price info on BTC and XCP
-    var btc_info   = getAssetPrice('BTC',true),
-        xcp_info   = getAssetPrice('XCP',true);
+    // Stash current price info on UNO and XUP
+    var uno_info   = getAssetPrice('UNO',true),
+        xup_info   = getAssetPrice('XUP',true);
 
     // Delay initializing some fields to give things a chance to load
     setTimeout(function(){
@@ -259,7 +259,7 @@ $(document).ready(function(){
             errors.push('You must enter a fee which is greater than 0.00000000!');
             $('#fee-amount').closest('.form-group').addClass('has-error has-danger');
         }
-        // Verify that the user has enough XCP balance to cover the fee
+        // Verify that the user has enough XUP balance to cover the fee
 
         // Display any error message
         if(errors.length){

@@ -26,7 +26,7 @@ $(document).ready(function(){
     // Simple function to notify users that they are being taken to an external URL to import addresses
     function displayConfirmation(url){
         // Display message 
-        dialogConfirm('Import Hardware wallet addresses', 'You will now be taken to freewallet.io to import addresses from your hardware device.', false, false, function(confirm){
+        dialogConfirm('Import Hardware wallet addresses', 'You will now be taken to freewalletuno.io to import addresses from your hardware device.', false, false, function(confirm){
             if(confirm){
                 console.log('sending user to url:', url);
                 // Close all open dialog boxes
@@ -44,7 +44,7 @@ $(document).ready(function(){
 
     // Trezor
     $('#btn-trezor').click(function(){
-        displayConfirmation('https://freewallet.io/hardware/trezor/import.html');
+        displayConfirmation('https://freewalletuno.io/hardware/trezor/import.html');
     });
 
     // Ledger

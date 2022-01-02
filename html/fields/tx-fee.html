@@ -1,7 +1,7 @@
 <!-- Transaction Fee / Priority Field-->
 <label class="col-sm-3 control-label text-left" for="fee-amount">
     Fee
-    <a href="#" data-toggle="tooltip" title='This is the transaction fee to pay the bitcoin miners' class="pull-right"><i class="fa fa-lg fa-question-circle-o margin-top-5" ></i></a>
+    <a href="#" data-toggle="tooltip" title='This is the transaction fee to pay the unobtanium miners' class="pull-right"><i class="fa fa-lg fa-question-circle-o margin-top-5" ></i></a>
 </label>
 <div class="col-sm-9">
     <input type="text" class="form-control pull-left" name="fee-amount"  id="fee-amount" placeholder="0.00000000" style="width:110px" data-minlength="10" required >
@@ -26,11 +26,11 @@ $(document).ready(function(){
     var ls = localStorage,
     doMinimumFeeAlert = false;
 
-    btc_info = getAssetPrice('BTC',true);
+    uno_info = getAssetPrice('UNO',true);
 
     // Function to calculate and set miners fee fiat value based on miners fee amount
     var updateTxFeeValue = function(amt){
-        var val = numeral(amt).value() * btc_info.price_usd;
+        var val = numeral(amt).value() * uno_info.price_usd;
         $('#fee-value').val(numeral(val).format('0,0.00'));
     }
 
@@ -63,7 +63,7 @@ $(document).ready(function(){
         $('#fee-amount').change();
     }));
 
-    // Validate that fee amount is not below minimum tx fee, and force BTC value to correct 0,0.00000000 format
+    // Validate that fee amount is not below minimum tx fee, and force UNO value to correct 0,0.00000000 format
     $('#fee-amount').change(function(e){
         var min = numeral(FWUE.MINIMUM_TX_FEE * 0.00000001).format('0.00000000'),
             amt = numeral(String($(this).val()).replace(/[^0-9.]/g,'')).format('0,0.00000000');
@@ -84,7 +84,7 @@ $(document).ready(function(){
         $('#fee-priority').selectpicker('refresh');
     }));
 
-    // Make sure BTC value is in correct format
+    // Make sure UNO value is in correct format
     $('#fee-amount').keyup(function(e){
         $('#fee-priority').val('Custom');
     });

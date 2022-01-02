@@ -77,7 +77,7 @@
                 var fmt = (o.quantity_per_unit.indexOf('.')==-1) ? '0,0' : '0,0.00000000';
                 $('#quantity').text(numeral(o.quantity_per_unit).format(fmt));
                 $('#distributed').text(numeral(o.total_distributed).format(fmt));
-                $('#fee').text(o.fee + ' XCP');
+                $('#fee').text(o.fee + ' XUP');
                 $('#status').text(o.status);
                 $('#timestamp').html('<span data-livestamp='  + o.timestamp + ' class="nowrap"></span>');
                 if(o.tx_index){

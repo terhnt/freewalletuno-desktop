@@ -1,6 +1,6 @@
 <!-- Token Name Field (auto-suggest) -->
 <label class="col-sm-3 control-label text-left" for="token-name">
-    Token Name 
+    Token Name
     <a href="#" data-toggle="tooltip" title='This is the name of a token or asset' class="pull-right" id="token-name-tooltip"><i class="fa fa-lg fa-question-circle-o margin-top-5" ></i></a>
 </label>
 <div class="col-sm-9">
@@ -27,7 +27,7 @@ $(document).ready(function(){
     // Wait a brief moment to allow things to initialize
     setTimeout(function(){
 
-        // Change toolip text based on form type 
+        // Change toolip text based on form type
         var txt = false;
         if(type=='change-description')
             txt = 'This is the name of the token you would like to change the description of';
@@ -49,16 +49,8 @@ $(document).ready(function(){
 
     // Define a list of popular assets
     var popular = [
-        'BTC',
-        'BITCRYSTALS',
-        'COVALC',
-        'DATABITS',
-        'FLDC',
-        'MAFIACASH',
-        'BITCORN',
-        'PEPECASH',
-        'SCOTCOIN',
-        'XCP',
+        'UNO',
+        'XUP',
     ];
 
     // Handle offering asset name suggestions
@@ -90,7 +82,7 @@ $(document).ready(function(){
             }
         }));
 
-       
+
         // Handle validating token name on 'Change Description' form
         $('#token-name').change($.debounce(100,function(e){
             var name = $(this).val();
@@ -127,12 +119,12 @@ $(document).ready(function(){
                                     found = true;
                             });
                             if(found){
-                                // Notify user that they need to switch 
+                                // Notify user that they need to switch
                                 dialogMessage('Notice', '<center>The name <b><i>' + name + '</i></b> is registered to another address in your wallet ' + o.owner + '</center>', true);
                             } else {
                                 // Notify user asset is registered to another address
                                 dialogMessage('Notice', '<center><p>The name <b><i>' + name + '</i></b> is registered to address ' + o.owner + '</p>' +
-                                              '<p>You may still purchase this token from the current owner if they have listed it for sale.</p>' + 
+                                              '<p>You may still purchase this token from the current owner if they have listed it for sale.</p>' +
                                               '<a href="https://coindaddy.io/search?network=xcp&q=' + name + '" class="btn btn-success" target="_blank"><i class="fa FWUE-coindaddy pull-left" style="top:0px"></i> Check if ' + name + ' is for sale on CoinDaddy</a></center>', true);
                             }
                         }
@@ -157,8 +149,8 @@ $(document).ready(function(){
         }
     }
 
-    // Initialize the list with the popular currencies listed 
-    setupTokenNameField(popular);    
+    // Initialize the list with the popular currencies listed
+    setupTokenNameField(popular);
 
 });
 </script>

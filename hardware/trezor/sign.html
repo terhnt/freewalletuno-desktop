@@ -21,13 +21,13 @@
                     </div>
                     <div class="panel-body">
                         <center>
-                            <div id="intro"><p>FreeWallet would now like you to sign a send transaction using your Trezor.</p></div>
+                            <div id="intro"><p>FreeWalletUno would now like you to sign a send transaction using your Trezor.</p></div>
                             <div class="alert alert-info" id="trezor-status">
                                 Please click the button below to get started
                             
                             </div>
                             <button class="btn btn-success margin-bottom-10" id="connect">Connect to Trezor</button>
-                            <div class="alert alert-warning no-bottom-margin" id="popups"><b>Note:</b> You need to allow popups from freewallet.io to sign transactions</div>
+                            <div class="alert alert-warning no-bottom-margin" id="popups"><b>Note:</b> You need to allow popups from freewalletuno.io to sign transactions</div>
                             <a href="#" target="_blank" class="btn btn-success" id="view" style="display:none;">View Transaction</a>
                         </center>
                     </div>
@@ -48,7 +48,7 @@ $(document).ready(function(){
     var qs     = parseQueryString(),
         tx     = (qs.tx) ? qs.tx : false,
         status = $('#trezor-status');
-        host   = (qs.network=='testnet') ? 'testnet.xchain.io' : 'xchain.io';
+        host   = (qs.network=='testnet') ? 'unoparty-testnet.unoparty.xchain.io' : 'unoparty.xchain.io';
 
     // Connect to trezor device when user clicks 'Connect' button
     $('#connect').click(function(){

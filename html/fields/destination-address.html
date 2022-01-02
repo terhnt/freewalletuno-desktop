@@ -54,9 +54,9 @@ $(document).ready(function(){
         // If a valid address was not entered, try to lookup destination using username or asset name
         if(!isValidAddress(addr) && addr.length >= 4){
             var asset = addr.toUpperCase();
-            // Detect USER.BTC usernames and translate to BTCTAG.USER asset name
-            if(addr.toUpperCase().endsWith('.BTC'))
-                asset = 'BTCTAG.' + addr.toUpperCase().replace(/\.BTC/i,'');
+            // Detect USER.BTC usernames and translate to UNOTAG.USER asset name
+            if(addr.toUpperCase().endsWith('.UNO'))
+                asset = 'UNOTAG.' + addr.toUpperCase().replace(/\.BTC/i,'');
             // Try to lookup asset and then use owner address as destination address
             $.getJSON(FWUE.XCHAIN_API + '/api/asset/' + asset, function(o){
                 if(o.owner)

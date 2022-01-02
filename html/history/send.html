@@ -57,7 +57,7 @@
 
     $(document).ready(function(){
 
-        if(FWUE.CURRENT_TRANSACTION.asset=='BTC'){
+        if(FWUE.CURRENT_TRANSACTION.asset=='UNO'){
             var net = (FWUE.WALLET_NETWORK==2) ? '/testnet' : '';
 
             // Update 'more info' link to point to transaction url
@@ -68,7 +68,7 @@
                 if(o.txid){
                     $('#source').html(o.vin[0].prevout.scriptpubkey_address);
                     $('#destination').html(o.vout[0].scriptpubkey_address);
-                    $('#asset').html('<img src="images/icons/btc.png" class="asset-icon-sm pull-left">BTC');
+                    $('#asset').html('<img src="images/icons/uno.png" class="asset-icon-sm pull-left">UNO');
                     $('#tx-hash').html(o.txid);
                     $('#quantity').text(numeral(o.vout[0].value).multiply(0.00000001).format('0,0.00000000'));
                     $('#status').text((o.status.block_height) ? 'Valid' : 'Pending');
@@ -79,12 +79,12 @@
             }).fail(function(){
                 // Request transaction info from blockcypher
                 var net = (FWUE.WALLET_NETWORK==2) ? 'test3' : 'main',
-                    net2 = (FWUE.WALLET_NETWORK==2) ? 'btc-testnet' : 'btc';
-                $.getJSON('https://api.blockcypher.com/v1/btc/' + net + '/txs/' + tx, function(o){
+                    net2 = (FWUE.WALLET_NETWORK==2) ? 'uno-testnet' : 'uno';
+                $.getJSON('https://api.blockcypher.com/v1/uno/' + net + '/txs/' + tx, function(o){
                     if(o.hash){
                         $('#source').html(o.inputs[0].addresses[0]);
                         $('#destination').html(FWUE.WALLET_ADDRESS);
-                        $('#asset').html('<img src="images/icons/btc.png" class="asset-icon-sm pull-left">BTC');
+                        $('#asset').html('<img src="images/icons/uno.png" class="asset-icon-sm pull-left">UNO');
                         $('#tx-hash').html(o.hash);
                         $('#quantity').text(numeral(o.outputs[0].value).multiply(0.00000001).format('0,0.00000000'));
                         $('#status').text((o.block_height) ? 'Valid' : 'Pending');
@@ -99,13 +99,13 @@
             // Update 'more info' link to point to transaction url
             $('#history-info-more').attr('href', FWUE.XCHAIN_API + '/tx/' + tx);
 
-            // Request transaction information from xchain.io
+            // Request transaction information from unoparty.xchain.io
             $.getJSON(FWUE.XCHAIN_API + '/api/tx/' + tx, function( o ){
                 if(!o.error){
                     var asset = (o.asset_longname && o.asset_longname!='') ? o.asset_longname : o.asset;
                     $('#source').html(o.source);
                     $('#destination').html(o.destination);
-                    $('#asset').html('<img src="https://xchain.io/icon/' + o.asset + '.png" class="asset-icon-sm pull-left">' + asset);
+                    $('#asset').html('<img src="https://unoparty.xchain.io/icon/' + o.asset + '.png" class="asset-icon-sm pull-left">' + asset);
                     $('#tx-hash').html(o.tx_hash);
                     var fmt = (String(o.quantity).indexOf('.')==-1) ? '0,0' : '0,0.00000000';
                     $('#quantity').text(numeral(o.quantity).format(fmt));
