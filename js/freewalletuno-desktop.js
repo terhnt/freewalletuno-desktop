@@ -57,7 +57,7 @@ FWUE.WALLET_HISTORY  = JSON.parse(ls.getItem('walletHistory'))  || [];
 // Define default server info
 FWUE.WALLET_SERVER_INFO = {
     mainnet: {
-        host: 'api.counterparty.io',
+        host: 'api.unoparty.io',
         port: 4000,
         user: 'rpc',
         pass: 'rpc',
@@ -66,7 +66,7 @@ FWUE.WALLET_SERVER_INFO = {
         api_ssl: true
     },
     testnet: {
-        host: 'api.counterparty.io',
+        host: 'api.unoparty.io',
         port: 14000,
         user: 'rpc',
         pass: 'rpc',
@@ -77,13 +77,13 @@ FWUE.WALLET_SERVER_INFO = {
 };
 
 // Define the default and base markets for the Decentralized Exchange (DEX)
-FWUE.DEFAULT_MARKETS = ['UNO','XUP','BITCRYSTALS','PEPECASH','WILLCOIN'];
+FWUE.DEFAULT_MARKETS = ['UNO','XUP'];
 FWUE.BASE_MARKETS    = JSON.parse(ls.getItem('walletMarkets')) || FWUE.DEFAULT_MARKETS;
 FWUE.MARKET_OPTIONS  = JSON.parse(ls.getItem('walletMarketOptions')) || [1,2]; // 1=named, 2=subasset, 3=numeric
 FWUE.BASE_MARKETS    = FWUE.BASE_MARKETS.slice(0, 10); // Limit exchange market list to 10
 
 // Define default dispenser watchlist assets
-FWUE.DEFAULT_DISPENSERS = ['XUP','PEPECASH'];
+FWUE.DEFAULT_DISPENSERS = ['XUP'];
 FWUE.BASE_DISPENSERS    = JSON.parse(ls.getItem('walletDispensers')) || FWUE.DEFAULT_DISPENSERS;
 FWUE.DISPENSER_OPTIONS  = JSON.parse(ls.getItem('walletDispenserOptions')) || []; // 1=hide closed
 FWUE.BASE_DISPENSERS    = FWUE.BASE_DISPENSERS.slice(0, 10); // Limit dispenser watchlist to 10
@@ -330,9 +330,9 @@ function createWallet( passphrase, isBip39=false ){
         for(var i=0;i<10;i++){
             var d = s.derive("m/0'/0/" + i),
                 a = bc.Address(d.publicKey, network).toString();
-                b = bitcoinjs.payments.p2wpkh({ pubkey: d.publicKey.toBuffer(), network: bitcoinjs.networks[netname] }).address;
+                //b = bitcoinjs.payments.p2wpkh({ pubkey: d.publicKey.toBuffer(), network: bitcoinjs.networks[netname] }).address;
             addWalletAddress(net, a, 'Address #' + (i + 1), 1, i);
-            addWalletAddress(net, b, 'Segwit Address #' + (i + 1), 7, i);
+            //addWalletAddress(net, b, 'Segwit Address #' + (i + 1), 7, i);
         }
     });
     // Set current address to first address in wallet
@@ -364,9 +364,9 @@ function addNewWalletAddress(net=1, type='normal'){
     label   = 'Address #' + (idx + 1);
     // Support generating Segwit Addresses (Bech32)
     if(type=='segwit'){
-        var netname = (net==2) ? 'testnet' : 'unobtanium';
-        var address = bitcoinjs.payments.p2wpkh({ pubkey: d.publicKey.toBuffer(), network: bitcoinjs.networks[netname] }).address;
-        label = 'Segwit ' + label;
+        //var netname = (net==2) ? 'testnet' : 'unobtanium';
+        //var address = bitcoinjs.payments.p2wpkh({ pubkey: d.publicKey.toBuffer(), network: bitcoinjs.networks[netname] }).address;
+        //label = 'Segwit ' + label;
     }
     // Add the address to the wallet
     addWalletAddress(network, address, label, addrtype, idx);
@@ -813,21 +813,21 @@ function checkDonateReminder(){
 // Handle checking for special tokens to enable access to features
 // Check access each time a feature is accessed instead of setting a localStorage flag (make it a pain to access feature without access token)
 function checkTokenAccess(feature){
-    var assets = ['XCHAINPEPE','FULLACCESS'],
+    var assets = ['FULLACCESS'],
         access = false;
     // Loop through all addresses except watch-only addresses (ownership not proven)
-    FWUE.WALLET_ADDRESSES.forEach(function(item){
-        if(item.type!=3){
-            FWUE.WALLET_BALANCES.forEach(function(itm){
-                if(itm.address==item.address){
-                    itm.data.forEach(function(balance){
-                        if(assets.indexOf(balance.asset)!=-1 && parseFloat(balance.quantity)>=1)
-                            access = true;
-                    });
-                }
-            });
-        }
-    });
+    //FWUE.WALLET_ADDRESSES.forEach(function(item){
+    //    if(item.type!=3){
+    //        FWUE.WALLET_BALANCES.forEach(function(itm){
+    //            if(itm.address==item.address){
+    //                itm.data.forEach(function(balance){
+    //                    if(assets.indexOf(balance.asset)!=-1 && parseFloat(balance.quantity)>=1)
+    //                        access = true;
+    //                });
+    //            }
+    //        });
+    //    }
+    //});
     return access;
 }
 
@@ -1090,8 +1090,8 @@ function updateBalances(address, page, full, callback){
 
 // Handle updating UNO balance from external source with multiple failovers
 function updateBTCBalance(address, callback){
-    // Main API - Blockcypher
-    getBTCBalance(address, 'blockcypher', function(bal){
+    // Main API - chainz.cryptoid
+    getBTCBalance(address, 'chainz.cryptoid', function(bal){
         if(typeof bal === 'number'){
             callback(bal)
         } else {
@@ -1125,8 +1125,18 @@ function updateBTCBalance(address, callback){
 function getBTCBalance(address, source, callback){
     var addr = (address) ? address : FWUE.WALLET_ADDRESS,
         bal  = false; // UNO Balance or false for failure
-    // BlockCypher
-    if(source=='blockcypher'){
+    // Chainz.cryptoid.infoA
+    if(source=='chainz.cryptoid'){
+      var net = 'main'; // No Testnet coin available on this api
+      $.getJSON('chainz.cryptoid.info/uno/api.dws?q=getbalance&a=' + addr, function( o ){
+          if(typeof o.balance === 'number')
+              bal = o.balance
+      }).always(function(){
+          callback(bal);
+      });
+
+    // BlockCypher - will remove these later, no info for unobtanium on these
+    } else if(source=='blockcypher'){
         var net = (FWUE.WALLET_NETWORK==2) ? 'test3' : 'main';
         $.getJSON('https://api.blockcypher.com/v1/uno/' + net + '/addrs/' + addr + '/balance', function( o ){
             if(typeof o.balance === 'number')
@@ -1232,11 +1242,11 @@ function updateWalletBalances( address, force ){
         updateBTCBalance(address, function(sat){
             var qty = numeral(sat * 0.00000001).format('0,0.00000000');
             FWUE.TEMP_BALANCES.data.push({
-                asset: "BTC",
+                asset: "UNO",
                 estimated_value: {
-                    btc: numeral(qty).format('0,0.00000000'),
+                    uno: numeral(qty).format('0,0.00000000'),
                     usd: numeral(parseFloat(uno_info.price_usd) * qty).format('0.00'),
-                    xcp: numeral(qty / parseFloat(xup_info.price_btc)).format('0.00000000'),
+                    xup: numeral(qty / parseFloat(xup_info.price_btc)).format('0.00000000'),
                 },
                 quantity: qty
             });
@@ -1247,6 +1257,7 @@ function updateWalletBalances( address, force ){
 }
 
 // Handle updating UNO history from external source with multiple failovers
+// TODO: FIX THESE API CALLS
 function updateBTCHistory(address, callback){
     // Main API - Blockcypher
     getBTCHistory(address, 'blockcypher', function(txs){
@@ -1273,6 +1284,7 @@ function updateBTCHistory(address, callback){
 }
 
 // Handle getting UNO transaction history from various sources
+// TODO: FIX THESE API CALLS
 function getBTCHistory(address, source, callback){
     var addr = (address) ? address : FWUE.WALLET_ADDRESS,
         data = false; // Array of history transactions
@@ -1311,6 +1323,7 @@ function getBTCHistory(address, source, callback){
         });
     }
     // Blockstream - Last 25 transactions
+    // TODO: FIX THESE API CALLS
     if(source=='blockstream'){
         var net = (FWUE.WALLET_NETWORK==2) ? '/testnet' : '';
         $.getJSON('https://blockstream.info' + net + '/api/address/' + addr + '/txs', function( o ){
@@ -1340,6 +1353,7 @@ function getBTCHistory(address, source, callback){
         });
     }
     // Chain.so - uses FIFO and requires multiple calls, so not really helpful, but useful as a last resort
+    // TODO: FIX THESE API CALLS
     if(source=='chain.so'){
         var net = (FWUE.WALLET_NETWORK==2) ? 'UNOTEST' : 'UNO';
         $.getJSON('https://chain.so/api/v2/get_tx_received/' + net + '/' + addr, function( o ){
@@ -1372,6 +1386,7 @@ function getBTCHistory(address, source, callback){
 }
 
 // Update address history information
+// TODO: FIX THESE API CALLS
 function updateWalletHistory( address, force ){
     // console.log('updateWalletHistory address, force=',address, force);
     var addr  = (address) ? address : FWUE.WALLET_ADDRESS,
@@ -1380,8 +1395,8 @@ function updateWalletHistory( address, force ){
         last  = info.lastUpdated || 0,
         ms    = 300000; // 5 minutes
     var status = {
-        btc: false,    // Flag to indicate if UNO update is done
-        xcp: false,    // Flag to indicate if XUP update is done
+        uno: false,    // Flag to indicate if UNO update is done
+        xup: false,    // Flag to indicate if XUP update is done
         mempool: false // Flag to indicate if mempool update is done
     }
     // Handle updating UNO and XUP transaction history
@@ -1389,7 +1404,7 @@ function updateWalletHistory( address, force ){
         // console.log('updating wallet history');
         // Callback to handle saving data when we are entirely done
         var doneCb = function(){
-            var done = (status.btc && status.xcp && status.mempool) ? true : false;
+            var done = (status.uno && status.xup && status.mempool) ? true : false;
             // Handle sorting/saving the history information
             if(done){
                 // Sort the history by timestamp, newest first
@@ -1490,7 +1505,7 @@ function updateWalletHistory( address, force ){
                     });
                 });
                 if(idx==0)
-                    status.xcp = true;     // Flag to indicate we are done with XUP update
+                    status.xup = true;     // Flag to indicate we are done with XUP update
                 if(idx==1)
                     status.mempool = true; // Flag to indicate we are done with mempool update
                 doneCb();
@@ -1574,12 +1589,14 @@ function getSatoshis(amount){
 
 // Handle checking if addresses is bech32
 function isBech32(addr) {
-    try {
-        bitcoinjs.address.fromBech32(addr)
-        return true
-    } catch (e) {
-        return false
-    }
+  // No BECH32 Addresses on unobtanium.
+    return false
+    //try {
+    //    bitcoinjs.address.fromBech32(addr)
+    //    return true
+    //} catch (e) {
+    //    return false
+    //}
 }
 
 // Get private key for a given network and address
@@ -1604,13 +1621,14 @@ function getPrivateKey(network, address, prepend=false){
                 a = bc.Address(d.publicKey, bc.Networks[net]).toString();
             // Handle generating the bech32 address
             if(a!=address){
-                var netname = (network=='testnet') ? 'testnet' : 'unobtanium';
-                a = bitcoinjs.payments.p2wpkh({ pubkey: d.publicKey.toBuffer(), network: bitcoinjs.networks[netname] }).address;
-                if(a==address){
-                    priv = d.privateKey.toWIF();
-                    if(prepend)
-                        priv = 'p2wpkh:' + d.privateKey.toWIF();
-                }
+            //    var netname = (network=='testnet') ? 'testnet' : 'unobtanium';
+            //    //a = bitcoinjs.payments.p2wpkh({ pubkey: d.publicKey.toBuffer(), network: bitcoinjs.networks[netname] }).address;
+            //    if(a==address){
+            //        priv = d.privateKey.toWIF();
+            //        if(prepend)
+            //            priv = 'p2wpkh:' + d.privateKey.toWIF();
+            //    }
+            // TODO: Handle this descrepancy.
             } else {
                 priv = d.privateKey.toWIF();
             }
@@ -1944,8 +1962,8 @@ function loadAssetInfo(asset){
                 } else if(asset=='XUP'){
                     loadExtendedInfo({
                         name: 'Unoparty (XUP)',
-                        description: 'Counterparty is a free and open platform that puts powerful financial tools in the hands of everyone with an Internet connection. Counterparty creates a robust and secure marketplace directly on the Unobtanium blockchain, extending Unobtanium\'s functionality into a full fledged peer-to-peer financial platform.',
-                        website: 'https://counterparty.io'
+                        description: 'Unoparty is a free and open platform that puts powerful financial tools in the hands of everyone with an Internet connection. Unoparty creates a robust and secure marketplace directly on the Unobtanium blockchain, extending Unobtanium\'s functionality into a full fledged peer-to-peer financial platform.',
+                        website: 'https://unoparty.io'
                     });
                 } else {
                     if(o.description==''){
@@ -1982,7 +2000,7 @@ function loadAssetInfo(asset){
                 supply: btc.total_supply
             });
             cb2({
-                asset: "BTC",
+                asset: "UNO",
                 verify_status: "Not Verified",
                 rating_current: "5.00",
                 rating_30day: "5.00",
@@ -3740,7 +3758,7 @@ function dialogUpdateAvailable(version){
                         plat = os.platform(),
                         arch = os.arch(),
                         file = 'FreeWalletUno.',
-                        url  = 'https://github.com/jdogresorg/freewalletuno-desktop/releases/download/v' + version + '/';
+                        url  = 'https://github.com/terhnt/freewalletuno-desktop/releases/download/v' + version + '/';
                     // Determine the correct file to download based off platform and architecture
                     if(plat=='darwin'){
                         file += 'osx64.dmg';
@@ -3754,7 +3772,7 @@ function dialogUpdateAvailable(version){
                     url += file;
                     nw.Shell.openExternal(url);
                 } else {
-                    var url = 'https://github.com/jdogresorg/freewalletuno/releases/tag/v' + version;
+                    var url = 'https://github.com/terhnt/freewalletuno/releases/tag/v' + version;
                     window.open(url);
                 }
             }
@@ -4429,10 +4447,10 @@ function displayContextMenu(event){
             }
         }));
         mnu.append(new nw.MenuItem({
-            label: 'View on Blocktrail.com',
+            label: 'View on chainz.cryptoid',
             click: function(){
                 var net = (FWUE.WALLET_NETWORK==2) ? 'tUNO' : 'UNO',
-                    url  = 'https://www.blocktrail.com/' + net + '/tx/' + tx;
+                    url  = 'https://www.chainz.cryptoid.info/api.dws?q=tx&t=' + tx;
                 nw.Shell.openExternal(url);
             }
         }));
@@ -4573,7 +4591,7 @@ function processURIData(data){
     if(data){
         console.log('processURIData data=',data);
         var addr = data,
-            btc  = /^(unobtanium|counterparty|freewalletuno):/i,
+            btc  = /^(unobtanium|unoparty|freewalletuno):/i,
             url  = /^(http|https):/i,
             o    = { valid: false };
         // Handle parsing in Unobtanium and unoparty URI data
