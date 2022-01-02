@@ -6,7 +6,7 @@
 <div class="col-sm-9">
     <div class="input-group">
         <input type="text" class="form-control" id="token-description" name="description" placeholder="Token Description" >
-        <a href="#" class="input-group-addon" id="token-description-coindaddy" data-toggle="tooltip" title="Point token description at CoinDaddy.io"><i class="fa fa-lg fw-coindaddy" style="top: 0px"></i></a>
+        <a href="#" class="input-group-addon" id="token-description-coindaddy" data-toggle="tooltip" title="Point token description at CoinDaddy.io"><i class="fa fa-lg FWUE-coindaddy" style="top: 0px"></i></a>
     </div>
 </div>
 
@@ -17,8 +17,8 @@ $(document).ready(function(){
     $('#token-description-coindaddy').click(function(e){
         var name = $('#token-name').val(),
             type = $('#token-type').val();
-        if(FW.ASSET_INFO && type=='')
-            name = FW.ASSET_INFO.asset;
+        if(FWUE.ASSET_INFO && type=='')
+            name = FWUE.ASSET_INFO.asset;
         desc = 'xcp.coindaddy.io/' + name + '.json';
         $('#token-description').val(desc);
     }); 

@@ -35,7 +35,7 @@ $(document).ready(function(){
         version = (is_nwjs()) ? 'Version ' + nw.App.manifest.version : 'Development Build';
 
     // Display current version number
-    $('#fw_version').html(version);
+    $('#FWUE_version').html(version);
 
     // Handle showing/hiding the debug button
     if(is_nwjs()){
@@ -49,7 +49,7 @@ $(document).ready(function(){
 
     // When a user clicks the donate now button, save bounty address and launch 'Send Funds' window
     $('#btn-donate').click($.debounce(100, function(e){
-        FW.DIALOG_DATA = {
+        FWUE.DIALOG_DATA = {
             destination: address,
             token: 'BTC'
         };
@@ -59,7 +59,7 @@ $(document).ready(function(){
 
     // When a user clicks the donate now button, save bounty address and launch 'Send Funds' window
     $('#btn-buy').click($.debounce(100, function(e){
-        FW.DIALOG_DATA = {
+        FWUE.DIALOG_DATA = {
             token: 'FULLACCESS'
         };
         loadPage('dispensers');

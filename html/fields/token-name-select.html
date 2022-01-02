@@ -21,15 +21,15 @@ $(document).ready(function(){
     xcp_info = getAssetPrice('XCP',true);
 
     // Populate the token name / asset list
-    var balances = getAddressBalance(FW.WALLET_ADDRESS),
+    var balances = getAddressBalance(FWUE.WALLET_ADDRESS),
         html     = '',
         el       = $('#token-name-select');
     // Force "BTC" to be the only option for burning
     if(type=='burn'){
-        html += '<option data-content="<img src=\'' + FW.XCHAIN_API + '/icon/BTC.png\' class=\'fw-icon-20 margin-right-5\'>BTC">BTC</option>';
+        html += '<option data-content="<img src=\'' + FWUE.XCHAIN_API + '/icon/BTC.png\' class=\'FWUE-icon-20 margin-right-5\'>BTC">BTC</option>';
     } else if(type=='dispenser-buy'){
-        var o = FW.DIALOG_DATA;
-        html += '<option data-content="<img src=\'' + FW.XCHAIN_API + '/icon/' + o.asset + '.png\' class=\'fw-icon-20 margin-right-5\'>' + o.name +'">' + o.name + '</option>';
+        var o = FWUE.DIALOG_DATA;
+        html += '<option data-content="<img src=\'' + FWUE.XCHAIN_API + '/icon/' + o.asset + '.png\' class=\'FWUE-icon-20 margin-right-5\'>' + o.name +'">' + o.name + '</option>';
     } else {
         if(balances && balances.data){
             balances.data.forEach(function(item){
@@ -37,7 +37,7 @@ $(document).ready(function(){
                 if(item.asset=='BTC' && (type=='destroy'||type=='dispenser'))
                     return;
                 var asset = (item.asset_longname && item.asset_longname!='') ? item.asset_longname : item.asset;
-                html += '<option data-content="<img src=\'' + FW.XCHAIN_API + '/icon/' + item.asset + '.png\' class=\'fw-icon-20 margin-right-5\'>' + asset + '">' + asset + '</option>';
+                html += '<option data-content="<img src=\'' + FWUE.XCHAIN_API + '/icon/' + item.asset + '.png\' class=\'FWUE-icon-20 margin-right-5\'>' + asset + '">' + asset + '</option>';
             });
         }
 
@@ -88,7 +88,7 @@ $(document).ready(function(){
             updateAvailableQuantity();
         // Callback function to handle saving current asset information
         var cb = function(o){
-            FW.ASSET_INFO = o;
+            FWUE.ASSET_INFO = o;
             btc_info = getAssetPrice('BTC',true);
             xcp_info = getAssetPrice('XCP',true);
             // Handle enabling/disabling the fiat field based on if we detect some estimated BTC value

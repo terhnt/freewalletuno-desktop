@@ -2,7 +2,7 @@
 <center>
     <p>FreeWallet is a free wallet which supports Bitcoin and Counterparty.</p>
     <a href="https://freewallet.io"><img src="images/logo.png" height="100" style="margin-bottom: 5px"></a>
-    <div id="fw_version"></div>
+    <div id="FWUE_version"></div>
     <hr size=1 class="spacer">
     <p>Freewallet uses public APIs available from the following providers:</p>
     <div>
@@ -47,7 +47,7 @@ $(document).ready(function(){
         version = (is_nwjs()) ? 'Version ' + nw.App.manifest.version : 'Development Build';
 
     // Display current version number
-    $('#fw_version').html(version);
+    $('#FWUE_version').html(version);
 
     // Handle showing/hiding the debug button
     if(is_nwjs()){
@@ -64,7 +64,7 @@ $(document).ready(function(){
 
     // When a user clicks the donate now button, save bounty address and launch 'Send Funds' window
     $('#btn-donate').click($.debounce(100, function(e){
-        FW.DIALOG_DATA = {
+        FWUE.DIALOG_DATA = {
             destination: address
         };
         dialogSend();
@@ -73,7 +73,7 @@ $(document).ready(function(){
 
     // When a user clicks 'Buy FULLACCESS' button, throw dispenser buy dialog to purchase from official dispenser
     $('#btn-buy').click($.debounce(100, function(e){
-        FW.DIALOG_DATA = {
+        FWUE.DIALOG_DATA = {
             name: 'FULLACCESS',
             asset: 'FULLACCESS',
             give_quantity: '1',

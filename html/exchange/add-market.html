@@ -51,7 +51,7 @@ $(document).ready(function(){
             $('#token-name').closest('.form-group').addClass('has-error has-danger');
         }
         // Limit exchange market list to 10
-        var cnt = FW.BASE_MARKETS.length;
+        var cnt = FWUE.BASE_MARKETS.length;
         if(cnt>=10)
             errors.push('You can only create 10 exchange pair watchlists!');
         // Display any error message
@@ -60,7 +60,7 @@ $(document).ready(function(){
         } else {
             var market = vals.name,
                 found  = false;
-            FW.BASE_MARKETS.forEach(function(item){
+            FWUE.BASE_MARKETS.forEach(function(item){
                 if(item==market)
                     found = true;
             });
@@ -80,8 +80,8 @@ $(document).ready(function(){
                 updateMarkets(market, 1, true, function(o){ updateMarketsView(market); });
 
                 // Add the market to the base markets array and save to disk
-                FW.BASE_MARKETS.push(market);
-                ls.setItem('walletMarkets', JSON.stringify(FW.BASE_MARKETS));
+                FWUE.BASE_MARKETS.push(market);
+                ls.setItem('walletMarkets', JSON.stringify(FWUE.BASE_MARKETS));
             }
 
             // Close the dialog box

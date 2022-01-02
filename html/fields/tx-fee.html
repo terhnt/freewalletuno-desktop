@@ -47,7 +47,7 @@ $(document).ready(function(){
     // When user changes priority, set fee amount based on priority selected
     $('#fee-priority').change($.debounce(100,function(e){
         var val = $(this).val(),
-            o   = FW.NETWORK_INFO.fee_info,
+            o   = FWUE.NETWORK_INFO.fee_info,
             avg = 265,       // Average send is 265 bytes (come back in future and base on actual tx size, not average)
             fee = o.optimal; // default to high priority
         if(val=='Low')
@@ -58,14 +58,14 @@ $(document).ready(function(){
         var cost = numeral(((fee / 1000) * avg) * 0.00000001).format('0.00000000');
         // Set fee to minimum if user selects Custom
         if(val=='Custom')
-            cost = numeral(FW.MINIMUM_TX_FEE * 0.00000001).format('0.00000000');
+            cost = numeral(FWUE.MINIMUM_TX_FEE * 0.00000001).format('0.00000000');
         $('#fee-amount').val(cost);
         $('#fee-amount').change();
     }));
 
     // Validate that fee amount is not below minimum tx fee, and force BTC value to correct 0,0.00000000 format
     $('#fee-amount').change(function(e){
-        var min = numeral(FW.MINIMUM_TX_FEE * 0.00000001).format('0.00000000'),
+        var min = numeral(FWUE.MINIMUM_TX_FEE * 0.00000001).format('0.00000000'),
             amt = numeral(String($(this).val()).replace(/[^0-9.]/g,'')).format('0,0.00000000');
         if(amt < min){
             amt = min;

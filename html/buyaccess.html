@@ -49,11 +49,11 @@ $(document).ready(function(){
         };
 
     // Set the asset divisibility for the assets
-    FW.ASSET_DIVISIBLE = {};
-    FW.ASSET_DIVISIBLE['BTC'] = true;
-    FW.ASSET_DIVISIBLE['XCP'] = true;
-    FW.ASSET_DIVISIBLE['FULLACCESS'] = false;
-    FW.ASSET_DIVISIBLE['XCHAINPEPE'] = false;
+    FWUE.ASSET_DIVISIBLE = {};
+    FWUE.ASSET_DIVISIBLE['BTC'] = true;
+    FWUE.ASSET_DIVISIBLE['XCP'] = true;
+    FWUE.ASSET_DIVISIBLE['FULLACCESS'] = false;
+    FWUE.ASSET_DIVISIBLE['XCHAINPEPE'] = false;
 
     // Get FULLACCESS/BTC Price info
     $.getJSON('https://xchain.io/api/market/FULLACCESS/BTC/orderbook', function(o){
@@ -102,7 +102,7 @@ $(document).ready(function(){
     // Setup FULLACCESS/BTC Order info
     $('#fullaccess-btc-buy').click($.debounce(100, function(e){
         var cost = $(this).attr('price');
-        FW.DIALOG_DATA = {
+        FWUE.DIALOG_DATA = {
             market: 'FULLACCESS/BTC',
             type: 'buy',
             get_asset:   'FULLACCESS',
@@ -116,7 +116,7 @@ $(document).ready(function(){
     // Setup FULLACCESS/XCP Order info
     $('#fullaccess-xcp-buy').click($.debounce(100, function(e){
         var cost = $(this).attr('price');
-        FW.DIALOG_DATA = {
+        FWUE.DIALOG_DATA = {
             market: 'FULLACCESS/XCP',
             type: 'buy',
             get_asset:   'FULLACCESS',
@@ -130,7 +130,7 @@ $(document).ready(function(){
     // Setup XCHAINPEPE/BTC Order info
     $('#xchainpepe-btc-buy').click($.debounce(100, function(e){
         var cost = $(this).attr('price');
-        FW.DIALOG_DATA = {
+        FWUE.DIALOG_DATA = {
             market: 'XCHAINPEPE/BTC',
             type: 'buy',
             get_asset:   'XCHAINPEPE',
@@ -144,7 +144,7 @@ $(document).ready(function(){
     // Setup XCHAINPEPE/BTC Order info
     $('#xchainpepe-xcp-buy').click($.debounce(100, function(e){
         var cost = $(this).attr('price');
-        FW.DIALOG_DATA = {
+        FWUE.DIALOG_DATA = {
             market: 'XCHAINPEPE/XCP',
             type: 'buy',
             get_asset:   'XCHAINPEPE',

@@ -80,8 +80,8 @@ $(document).ready(function(){
     // Delay initializing some fields to give things a chance to load
     setTimeout(function(){
 
-        // Handle loading any data from FW.DIALOG_DATA
-        var data = FW.DIALOG_DATA;
+        // Handle loading any data from FWUE.DIALOG_DATA
+        var data = FWUE.DIALOG_DATA;
         if(data.destination)
             $('#destination-address').val(data.destination);
         if(data.token){
@@ -94,7 +94,7 @@ $(document).ready(function(){
             $('#amount').val(data.amount);
 
         // Reset dialog data so we don't reuse data on form in the future
-        FW.DIALOG_DATA = {};
+        FWUE.DIALOG_DATA = {};
 
         // Initialize any tooltips
         $('[data-toggle="tooltip"]').tooltip({ 
@@ -180,7 +180,7 @@ $(document).ready(function(){
         if(errors.length){
             dialogMessage('<i class="fa fa-lg fa-fw fa-exclamation-circle"></i> Error(s)', errors.join('<br/>') );
         } else {
-            var network = (FW.WALLET_NETWORK==2) ? 'testnet' : 'mainnet',
+            var network = (FWUE.WALLET_NETWORK==2) ? 'testnet' : 'mainnet',
                 fee_sat = parseInt(numeral(vals['fee-amount']).multiply(100000000).value()),
                 is_data = (vals['memo-type']=='data') ? true : false;
             // Callback to run after broadcasting send
@@ -188,7 +188,7 @@ $(document).ready(function(){
                 if(tx){
                     dialogClose('dialog-send');
                     dialogMessage('<i class="fa fa-lg fa-send"></i> Send Successful', '<center>Your send has been broadcast to the network and should complete shortly.' +
-                                  '<br/><br/><a class="btn btn-success" href="' + FW.XCHAIN_API +'/tx/' + tx + '" target="_blank">View Transaction</a></center>');
+                                  '<br/><br/><a class="btn btn-success" href="' + FWUE.XCHAIN_API +'/tx/' + tx + '" target="_blank">View Transaction</a></center>');
                 }
             }
             // Handle processing a single send
@@ -199,7 +199,7 @@ $(document).ready(function(){
                     cpSend(network, vals.source, vals.destination, vals.memo, is_data, vals.name, amt_sat, fee_sat, doneCb);
                 }
                 // Confirm the action with the user
-                var title = '<img src="' + FW.XCHAIN_API + '/icon/' + FW.ASSET_INFO.asset + '.png" class="fw-icon-20 margin-right-5"> Confirm ' + vals.name + ' Send?';
+                var title = '<img src="' + FWUE.XCHAIN_API + '/icon/' + FWUE.ASSET_INFO.asset + '.png" class="FWUE-icon-20 margin-right-5"> Confirm ' + vals.name + ' Send?';
                 var msg  = 'Send <b>' + vals.amount + ' ' + vals.name + '</b>';
                     msg += ' <br/>to <b>' + vals.destination + '</b>';
                 dialogConfirm(title, '<center>' + msg + '</center>', false, true, confirmCb);

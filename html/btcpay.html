@@ -54,8 +54,8 @@ $(document).ready(function(){
     // Delay initializing some fields to give things a chance to load
     setTimeout(function(){
 
-        // Handle loading any data from FW.DIALOG_DATA
-        var data = FW.DIALOG_DATA;
+        // Handle loading any data from FWUE.DIALOG_DATA
+        var data = FWUE.DIALOG_DATA;
         if(data){
             var asset   = (data.forward_asset=='BTC') ? data.backward_asset : data.forward_asset,
                 amountA = (data.forward_asset=='BTC') ? data.forward_quantity : data.backward_quantity,
@@ -63,7 +63,7 @@ $(document).ready(function(){
                 format  = '0,0.00000000';
             $('#infoA').html(numeral(amountA).format(format) + '<br>BTC');
             $('#infoB').html(numeral(amountB).format(format) + '<br>' + asset);
-            $('#assetB-icon').attr('src', FW.XCHAIN_API + '/icon/' + asset + '.png');
+            $('#assetB-icon').attr('src', FWUE.XCHAIN_API + '/icon/' + asset + '.png');
             // Request info on the non-BTC asset and set the asset amount properly (divisible or not)
             getAssetInfo(asset, function(o){
                 var format = (o.divisible) ? '0,0.00000000' : '0,0';
@@ -79,7 +79,7 @@ $(document).ready(function(){
         }
 
         // Reset dialog data so we don't reuse data on form in the future
-        FW.DIALOG_DATA = {};
+        FWUE.DIALOG_DATA = {};
 
         // Initialize any tooltips
         $('[data-toggle="tooltip"]').tooltip({ 
@@ -129,7 +129,7 @@ $(document).ready(function(){
                 if(tx){
                     dialogClose('dialog-btcpay');
                     dialogMessage('<i class="fa fa-lg fa-check"></i> BTCPay Successful', '<center>Your BTC payment has been broadcast to the network and your order should complete shortly.' +
-                                  '<br/><br/><a class="btn btn-success" href="' + FW.XCHAIN_API + '/tx/' + tx + '" target="_blank">View Transaction</a></center>');
+                                  '<br/><br/><a class="btn btn-success" href="' + FWUE.XCHAIN_API + '/tx/' + tx + '" target="_blank">View Transaction</a></center>');
                     // Remove the order match from the queue and check the queue again after a brief delay to let the previous dialog box close 
                     removeFromBtcpayQueue(vals.tx0_hash, vals.tx1_hash);
                     setTimeout(function(){ processBtcpayQueue(); },1000);

@@ -231,26 +231,26 @@ body:before {
  * Custom Icons
  */
 
-.fw-icon-20 {
+.FWUE-icon-20 {
     width: 20px;
     height: 20px;
     background-size: 100%;
 }
-.fw-icon-48 {
+.FWUE-icon-48 {
     width: 48px;
     height: 48px;
     background-size: 100%;
 }
-.fw-icon-btc {
+.FWUE-icon-btc {
     background-image: url(../images/icons/btc.png);
 }
-.fw-icon-tbtc {
+.FWUE-icon-tbtc {
     background-image: url(../images/icons/btc.png);
 }
-.fw-icon-xcp {
+.FWUE-icon-xcp {
     background-image: url(../images/icons/xcp.png);
 }
-.fw-coindaddy {
+.FWUE-coindaddy {
   background-image: url('../images/icons/coindaddy-coin-20.png');
   background-repeat: no-repeat;
   width: 20px;
@@ -258,7 +258,7 @@ body:before {
   position: relative;
   top: -4px;  
 }
-.fw-xchain {
+.FWUE-xchain {
   background-image: url('../images/icons/xchain-20.png');
   background-repeat: no-repeat;
   width: 20px;
@@ -668,19 +668,19 @@ form .tooltip {
     margin-top: 10px;
 }
 
-.fw-callback-protocol {
+.FWUE-callback-protocol {
     font-size: 1.0em;
     line-height: 0.8em;
     font-style: italic;
     font-weight: bold;
 }
 
-.fw-callback-hostname {
+.FWUE-callback-hostname {
     font-size: 1.5em;
     font-weight: bold;    
 }
 
-.fw-callback-icon {
+.FWUE-callback-icon {
     width: 48px;
     height: 48px;
     margin-right: 10px;

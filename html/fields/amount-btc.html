@@ -40,7 +40,7 @@ $(document).ready(function(){
 
     // Set initial value 
     if(type=='dispenser-buy'){
-        $('#btc-amount').val(FW.DIALOG_DATA.satoshirate);
+        $('#btc-amount').val(FWUE.DIALOG_DATA.satoshirate);
     }
 
     // Wait a brief moment to allow things to initialize
@@ -62,7 +62,7 @@ $(document).ready(function(){
     // Detect any amount change and format as valid number
     $('#btc-amount').change(function(e){
         var amt = String($(this).val()).replace(/[^0-9.]/g,''),
-            o   = FW.DIALOG_DATA;
+            o   = FWUE.DIALOG_DATA;
         // Force the amount to an increment of what the dispenser is selling
         if(type=='dispenser-buy'){
             var amt = numeral(amt).value(),

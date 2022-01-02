@@ -97,7 +97,7 @@ $(document).ready(function(){
             if(name!='' && name!=null && name!=last_asset){
                 last_asset = name;
                 // Lookup if this asset is already registered to another address... send to coindaddy to make purchase offer
-                $.getJSON( FW.XCHAIN_API + '/api/asset/' + name, function(o){
+                $.getJSON( FWUE.XCHAIN_API + '/api/asset/' + name, function(o){
                     var type = getFormType();
                     // An error indicates asset is not registered
                     if(o.error){
@@ -115,14 +115,14 @@ $(document).ready(function(){
                             action = 'add a watchlist for ';
                         dialogMessage('Notice', '<center>Before you can ' + action + ' <b><i>' + name + '</i></b>, you must first register the name', true);
                     } else {
-                        // If this is a dividend payment, then bail out and DO NOT update FW.ASSET_INFO as it overwrites the dividend asset data
+                        // If this is a dividend payment, then bail out and DO NOT update FWUE.ASSET_INFO as it overwrites the dividend asset data
                         if(type=='dividend'||type=='add-market'||type=='dispenser-watchlist-add')
                             return;
-                        FW.ASSET_INFO = o;
+                        FWUE.ASSET_INFO = o;
                         // Error if asset is owned by another address
-                        if(o.owner!=FW.WALLET_ADDRESS){
+                        if(o.owner!=FWUE.WALLET_ADDRESS){
                             var found = false;
-                            FW.WALLET_ADDRESSES.forEach(function(item){
+                            FWUE.WALLET_ADDRESSES.forEach(function(item){
                                 if(item.address==o.owner)
                                     found = true;
                             });
@@ -133,7 +133,7 @@ $(document).ready(function(){
                                 // Notify user asset is registered to another address
                                 dialogMessage('Notice', '<center><p>The name <b><i>' + name + '</i></b> is registered to address ' + o.owner + '</p>' +
                                               '<p>You may still purchase this token from the current owner if they have listed it for sale.</p>' + 
-                                              '<a href="https://coindaddy.io/search?network=xcp&q=' + name + '" class="btn btn-success" target="_blank"><i class="fa fw-coindaddy pull-left" style="top:0px"></i> Check if ' + name + ' is for sale on CoinDaddy</a></center>', true);
+                                              '<a href="https://coindaddy.io/search?network=xcp&q=' + name + '" class="btn btn-success" target="_blank"><i class="fa FWUE-coindaddy pull-left" style="top:0px"></i> Check if ' + name + ' is for sale on CoinDaddy</a></center>', true);
                             }
                         }
                     }
@@ -150,7 +150,7 @@ $(document).ready(function(){
                 update = false;
         });
         if(update){
-            $.getJSON(FW.XCHAIN_API + '/api/suggestions/' + query, function(o){
+            $.getJSON(FWUE.XCHAIN_API + '/api/suggestions/' + query, function(o){
                 if(o.data)
                     setupTokenNameField(o.data);
             });

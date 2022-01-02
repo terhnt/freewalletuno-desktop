@@ -19,7 +19,7 @@
 // Function to calculate and set fiat value based on asset amount
 function updateSendValue(amt){
     if(! $('#amount-value').prop('disabled')){
-        var val = (FW.ASSET_INFO.estimated_value.btc *  numeral(amt).value()) * btc_info.price_usd;
+        var val = (FWUE.ASSET_INFO.estimated_value.btc *  numeral(amt).value()) * btc_info.price_usd;
         if(!isFinite(val))
             val = 0;
         $('#amount-value').val(numeral(val).format('0,0.00'));
@@ -28,8 +28,8 @@ function updateSendValue(amt){
 
 // Function to calculate and display asset amount based on fiat value
 function updateSendAmount(val){
-    var amt = ((numeral(val).value() / btc_info.price_usd) / FW.ASSET_INFO.estimated_value.btc),
-        fmt = (FW.ASSET_INFO.divisible) ? '0,0.00000000' : '0,0',
+    var amt = ((numeral(val).value() / btc_info.price_usd) / FWUE.ASSET_INFO.estimated_value.btc),
+        fmt = (FWUE.ASSET_INFO.divisible) ? '0,0.00000000' : '0,0',
         val = $('#available').val();
     // If we have an available amount field, rely on that to determine proper format
     if(val)
@@ -58,7 +58,7 @@ $(document).ready(function(){
         $('#amount').addClass('input-rounded-right');
     } else if(type=='dispenser-buy'){
         // Update quantity to give_quantity
-        $('#amount').val(FW.DIALOG_DATA.give_quantity);
+        $('#amount').val(FWUE.DIALOG_DATA.give_quantity);
     }
 
     // Wait a brief moment to allow things to initialize
@@ -77,7 +77,7 @@ $(document).ready(function(){
         if(type=='issue-supply')
             txt = 'This is the amount of additional supply you would like to issue';
         if(type=='dispenser-buy')
-            txt = 'This is the amount of ' + FW.DIALOG_DATA.name +' that you would like to buy';
+            txt = 'This is the amount of ' + FWUE.DIALOG_DATA.name +' that you would like to buy';
         if(txt)
             tip.attr('data-original-title',txt);
 
@@ -91,8 +91,8 @@ $(document).ready(function(){
     $('#amount').change(function(e){
         var amt = String($(this).val()).replace(/[^0-9.]/g,''),
             val = $('#available').val(),
-            fmt = (FW.ASSET_INFO.divisible) ? '0,0.00000000' : '0,0',
-            o   = FW.DIALOG_DATA;
+            fmt = (FWUE.ASSET_INFO.divisible) ? '0,0.00000000' : '0,0',
+            o   = FWUE.DIALOG_DATA;
         // If we have an available amount field, rely on that to determine proper format
         if(val)
             fmt = (val.indexOf('.')!=-1) ? '0,0.00000000' : '0,0';
@@ -150,7 +150,7 @@ $(document).ready(function(){
         var max = String($('#available').val()).replace(/[^0-9.,]/g,'');
         // For dispenser buys, force max to be max available in dispenser
         if(type=='dispenser-buy')
-            max = FW.DIALOG_DATA.give_remaining;
+            max = FWUE.DIALOG_DATA.give_remaining;
         $('#amount').val(max).change();
         // If fiat field is not disabled, set fiat value as well
         if(! $('#amount-value').prop('disabled')){

@@ -42,7 +42,7 @@
                     <div class="market-icon"><img src="images/icons/btc.png"></div>
                     <div class="market-name"></div>
                     <div class="market-pair">
-                        <img src="images/icons/btc.png" class="fw-icon-20"> <span></span> 
+                        <img src="images/icons/btc.png" class="FWUE-icon-20"> <span></span> 
                         <a href="#" class="fa fa-lg fa-exchange" data-toggle="tooltip" data-placement="bottom" title="Reverse" id="market-swap-button"></a>
                         <a href="#" class="fa fa-lg fa-refresh"  data-toggle="tooltip" data-placement="bottom" title="Refresh" id="market-refresh-button"></a>
                     </div>
@@ -281,7 +281,7 @@
                         <!-- Asset #1 Information (supply, price, reputation) -->
                         <div id="asset1-info">
                             <div class="panel-heading panel-heading-lg">
-                                <img src="images/icons/btc.png" class="asset-icon fw-icon-20"> <span class="asset1-name"></span> Information
+                                <img src="images/icons/btc.png" class="asset-icon FWUE-icon-20"> <span class="asset1-name"></span> Information
                                 <a href="#" class="btn btn-xs btn-success pull-right more-info" data-toggle="tooltip" data-placement="left" title="More Information" target="_blank"><i class="fa fa-lg auto-width fa-info-circle"></i></a>
                             </div>                    
                             <table class="table table-striped cell-border table-condensed no-bottom-margin" width="100%">
@@ -304,7 +304,7 @@
                         <!-- Asset #2 Information (supply, price, reputation) -->
                         <div id="asset2-info">
                             <div class="panel-heading panel-middle panel-heading-lg">
-                                <img src="images/icons/btc.png" class="asset-icon fw-icon-20"> <span class="asset2-name"></span> Information
+                                <img src="images/icons/btc.png" class="asset-icon FWUE-icon-20"> <span class="asset2-name"></span> Information
                                 <a href="#" class="btn btn-xs btn-success pull-right more-info" data-toggle="tooltip" data-placement="left" title="More Information" target="_blank"><i class="fa fa-lg auto-width fa-info-circle"></i></a>
                             </div>                    
                             <table class="table table-striped cell-border table-condensed no-bottom-margin" width="100%">
@@ -341,7 +341,7 @@
 
 <script>
 // Define the basic chart elements config common to all charts
-FW.CHART_CONFIG = {
+FWUE.CHART_CONFIG = {
     chart: {
         borderColor: '#DFD7CA',
         borderWidth: 1,
@@ -475,10 +475,10 @@ $(document).ready(function(){
 
 
     // Initialize some placeholders
-    FW.RAW_CHART_DATA  = [];
-    FW.CHART_DATA      = [];
-    FW.MARKET_NAME     = 'BTC/XCP';
-    FW.ASSET_DIVISIBLE = {};
+    FWUE.RAW_CHART_DATA  = [];
+    FWUE.CHART_DATA      = [];
+    FWUE.MARKET_NAME     = 'BTC/XCP';
+    FWUE.ASSET_DIVISIBLE = {};
 
     // Load preferred market chart
     var chart = ls.getItem('marketChart') || 'candlestick';
@@ -497,27 +497,27 @@ $(document).ready(function(){
     $('#buy-fee-priority').selectpicker();
     $('#sell-fee-priority').selectpicker();
 
-    // Handle loading any data from FW.DIALOG_DATA
-    var data = FW.DIALOG_DATA;
+    // Handle loading any data from FWUE.DIALOG_DATA
+    var data = FWUE.DIALOG_DATA;
     if(data.market)
-        FW.MARKET_NAME = data.market;
+        FWUE.MARKET_NAME = data.market;
 
     // Reset dialog data so we don't reuse data in the future
-    FW.DIALOG_DATA = {};
+    FWUE.DIALOG_DATA = {};
 
      // Update market information 
-    updateMarket(FW.MARKET_NAME);
+    updateMarket(FWUE.MARKET_NAME);
 
     // Handle swapping the market when the user clicks the <-> swap button
     $('#market-swap-button').click($.debounce(100,function(e){
-        var x = String(FW.MARKET_NAME).split('/');
-        FW.MARKET_NAME = x[1] + '/' + x[0];
-        updateMarket(FW.MARKET_NAME);
+        var x = String(FWUE.MARKET_NAME).split('/');
+        FWUE.MARKET_NAME = x[1] + '/' + x[0];
+        updateMarket(FWUE.MARKET_NAME);
     }));
 
     // Handle Refreshing the market data
     $('#market-refresh-button').click($.debounce(100,function(e){
-        updateMarket(FW.MARKET_NAME, true);
+        updateMarket(FWUE.MARKET_NAME, true);
     }));
 
     // Set the active chart in the dropdown list
@@ -548,7 +548,7 @@ $(document).ready(function(){
     // Handle detecting order cancellations
     $('#open-orders').on('click', 'a.cancel-button', function(e){
         var tx = $(this).attr('data-tx');
-        FW.DIALOG_DATA = {
+        FWUE.DIALOG_DATA = {
             tx_hash: tx
         }
         dialogCancelOrder();
@@ -643,13 +643,13 @@ $(document).ready(function(){
             console.log('caught submit id,vals=',id,vals);
             // Get object with form values
             var vals   = array2Object($(this).serializeArray()),
-                assets = String(FW.MARKET_NAME).split('/'),
+                assets = String(FWUE.MARKET_NAME).split('/'),
                 asset1 = assets[0],
                 asset2 = assets[1],
                 errors = [],
                 minbtc = 0.00001; // Minimum BTC order amount
-            console.log('FW.ASSET_DIVISIBLE=',FW.ASSET_DIVISIBLE);
-            console.log('FW.MARKET_NAME=',FW.MARKET_NAME);
+            console.log('FWUE.ASSET_DIVISIBLE=',FWUE.ASSET_DIVISIBLE);
+            console.log('FWUE.MARKET_NAME=',FWUE.MARKET_NAME);
             // Verify price/amount/total are greater than 0
             if(numeral(vals[id + '-price']).value()==0){
                 errors.push('You must enter a ' + id + ' price which is greater than 0!');
@@ -664,12 +664,12 @@ $(document).ready(function(){
                 $('#' + id + '-total').closest('.form-group').addClass('has-error has-danger');
             }
             // Verify that the amount is valid (divisible/integer)
-            if(!FW.ASSET_DIVISIBLE[asset1] && vals[id + '-amount'].split('.')[1]!='00000000'){
+            if(!FWUE.ASSET_DIVISIBLE[asset1] && vals[id + '-amount'].split('.')[1]!='00000000'){
                 errors.push('Your ' + id + ' amount must be an integer!');
                 $('#' + id + '-amount').closest('.form-group').addClass('has-error has-danger');
             }
             // Verify that the price and total are valid (divisible/integer)
-            if(!FW.ASSET_DIVISIBLE[asset2] && vals[id + '-total'].split('.')[1]!='00000000'){
+            if(!FWUE.ASSET_DIVISIBLE[asset2] && vals[id + '-total'].split('.')[1]!='00000000'){
                 errors.push('Your ' + id + ' total must be an integer!');
                 $('#' + id + '-total').closest('.form-group').addClass('has-error has-danger');
             }
@@ -701,12 +701,12 @@ $(document).ready(function(){
                     give_asset  = (id=='buy') ? asset2 : asset1,
                     get_amount  = (id=='buy') ? vals['buy-amount'] : vals['sell-total'],
                     give_amount = (id=='buy') ? vals['buy-total'] : vals['sell-amount'],
-                    get_format  = (FW.ASSET_DIVISIBLE[get_asset]) ? '0.00000000' : '0',
-                    give_format = (FW.ASSET_DIVISIBLE[give_asset]) ? '0.00000000' : '0';
+                    get_format  = (FWUE.ASSET_DIVISIBLE[get_asset]) ? '0.00000000' : '0',
+                    give_format = (FWUE.ASSET_DIVISIBLE[give_asset]) ? '0.00000000' : '0';
 
                 // Save data so it is easily available to the dialog box
-                FW.DIALOG_DATA = {
-                    market: FW.MARKET_NAME,
+                FWUE.DIALOG_DATA = {
+                    market: FWUE.MARKET_NAME,
                     type: id,
                     get_asset:   get_asset,
                     give_asset:  give_asset,

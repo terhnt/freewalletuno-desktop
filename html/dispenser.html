@@ -39,7 +39,7 @@ function doneCb(tx){
     if(tx){
         dialogClose('dialog-dispenser');
         dialogMessage('<i class="fa fa-lg fa-arrows-h"></i> Create Dispenser Successful', '<center>Your dispenser transaction has been sent to the network and should be included to a block shortly.' +
-                      '<br/><br/><a class="btn btn-success" href="' + FW.XCHAIN_API + '/tx/' + tx + '" target="_blank">View Transaction</a></center>');
+                      '<br/><br/><a class="btn btn-success" href="' + FWUE.XCHAIN_API + '/tx/' + tx + '" target="_blank">View Transaction</a></center>');
     }
 }
 
@@ -47,7 +47,7 @@ function doneCb(tx){
 function confirmCreateDispenser(vals){
     // Callback to run if user confirms action
     var confirmCb = function(){
-        var network  = (FW.WALLET_NETWORK==2) ? 'testnet' : 'mainnet',
+        var network  = (FWUE.WALLET_NETWORK==2) ? 'testnet' : 'mainnet',
             escrow_sat = (vals['escrow-amount'].indexOf('.')!=-1) ? numeral(vals['escrow-amount']).multiply(100000000).format('0') : numeral(vals['escrow-amount']).format('0'),
             give_sat   = (vals['escrow-amount'].indexOf('.')!=-1) ? numeral(vals['give-amount']).multiply(100000000).format('0') : numeral(vals['give-amount']).format('0'),
             btc_sat    = parseInt(numeral(vals['btc-amount']).multiply(100000000).value()),
@@ -104,8 +104,8 @@ $(document).ready(function(){
             placement: 'bottom'
         }); 
 
-        // Handle loading any data from FW.DIALOG_DATA
-        var data = FW.DIALOG_DATA;
+        // Handle loading any data from FWUE.DIALOG_DATA
+        var data = FWUE.DIALOG_DATA;
 
         if(data.token){
             $('#token-name-select').val(data.token);
@@ -113,7 +113,7 @@ $(document).ready(function(){
         }
 
         // Reset dialog data so we don't reuse data on form in the future
-        FW.DIALOG_DATA = {};
+        FWUE.DIALOG_DATA = {};
 
         // Detect any asset change and clear the escrow and give amounts
         $('#token-name-select').change(function(e){
@@ -181,7 +181,7 @@ $(document).ready(function(){
             dialogMessage('<i class="fa fa-lg fa-fw fa-exclamation-circle"></i> Error(s)', errors.join('<br/>') );
         } else {
             // Check if user has any dispensers setup on this address already
-            $.getJSON(FW.XCHAIN_API + '/api/dispensers/' + vals.destination, function(o){
+            $.getJSON(FWUE.XCHAIN_API + '/api/dispensers/' + vals.destination, function(o){
                 var found = false
                 o.data.forEach(function(item){
                     if(item.status==0)
@@ -192,7 +192,7 @@ $(document).ready(function(){
                     dialogWarnMultipleDispensers(vals);
                 } else {
                     // So far so good, now lets check mempool for any pending dispenser transactions
-                    $.getJSON(FW.XCHAIN_API + '/api/mempool/' + vals.destination, function(o){
+                    $.getJSON(FWUE.XCHAIN_API + '/api/mempool/' + vals.destination, function(o){
                         var found = false
                         o.data.forEach(function(item){
                             if(item.tx_type=='Dispenser')
