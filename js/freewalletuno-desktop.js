@@ -2559,15 +2559,15 @@ function cpOrder(network, source, get_asset, give_asset, get_quantity, give_quan
 // Handle creating/signing/broadcasting an 'Burn' transaction
 function cpBurn(network, source, quantity, fee, callback){
     var cb  = (typeof callback === 'function') ? callback : false;
-    updateTransactionStatus('pending', 'Generating counterparty transaction...');
+    updateTransactionStatus('pending', 'Generating unoparty transaction...');
     // Create unsigned send transaction
     createBurn(network, source, quantity, fee, function(o){
         if(o && o.result){
-            updateTransactionStatus('pending', 'Signing counterparty transaction...');
+            updateTransactionStatus('pending', 'Signing unoparty transaction...');
             // Sign the transaction
             signTransaction(network, source, source, o.result, function(signedTx){
                 if(signedTx){
-                    updateTransactionStatus('pending', 'Broadcasting counterparty transaction...');
+                    updateTransactionStatus('pending', 'Broadcasting unoparty transaction...');
                     // Broadcast the transaction
                     broadcastTransaction(network, signedTx, function(txid){
                         if(txid){
