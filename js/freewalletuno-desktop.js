@@ -4450,7 +4450,7 @@ function displayContextMenu(event){
             label: 'View on chainz.cryptoid',
             click: function(){
                 var net = (FWUE.WALLET_NETWORK==2) ? 'tUNO' : 'UNO',
-                    url  = 'https://www.chainz.cryptoid.info/api.dws?q=tx&t=' + tx;
+                    url  = 'https://www.chainz.cryptoid.info/api.dws?q=txinfo&t=' + tx;
                 nw.Shell.openExternal(url);
             }
         }));
