@@ -1,7 +1,7 @@
 {
   "main": "index.html",
   "name": "FreeWalletUno",
-  "description": "FreewalletUno is a free open source desktop wallet that supports Unobtanium and Counterparty",
+  "description": "FreewalletUno is a free open source desktop wallet that supports Unobtanium and Unoparty",
   "version": "0.9.19",
   "author": "Jeremy Johnson <j-dog@j-dog.net>",
   "license": "MIT",

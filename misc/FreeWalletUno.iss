@@ -28,10 +28,10 @@ Root: HKCR; Subkey: "unobtanium"; ValueType: "string"; ValueName: "URL Protocol"
 Root: HKCR; Subkey: "unobtanium\DefaultIcon"; ValueType: "string"; ValueData: "{app}\FreeWalletUno.exe,0"
 Root: HKCR; Subkey: "unobtanium\shell\open\command"; ValueType: "string"; ValueData: """{app}\FreeWalletUno.exe"" ""%1"""
 ; Add support for unoparty: urls
-Root: HKCR; Subkey: "counterparty"; ValueType: "string"; ValueData: "URL:counterparty Protocol"; Flags: uninsdeletekey
-Root: HKCR; Subkey: "counterparty"; ValueType: "string"; ValueName: "URL Protocol"; ValueData: ""
-Root: HKCR; Subkey: "counterparty\DefaultIcon"; ValueType: "string"; ValueData: "{app}\FreeWalletUno.exe,0"
-Root: HKCR; Subkey: "counterparty\shell\open\command"; ValueType: "string"; ValueData: """{app}\FreeWalletUno.exe"" ""%1"""
+Root: HKCR; Subkey: "unoparty"; ValueType: "string"; ValueData: "URL:unoparty Protocol"; Flags: uninsdeletekey
+Root: HKCR; Subkey: "unoparty"; ValueType: "string"; ValueName: "URL Protocol"; ValueData: ""
+Root: HKCR; Subkey: "unoparty\DefaultIcon"; ValueType: "string"; ValueData: "{app}\FreeWalletUno.exe,0"
+Root: HKCR; Subkey: "unoparty\shell\open\command"; ValueType: "string"; ValueData: """{app}\FreeWalletUno.exe"" ""%1"""
 ; Add support for freewalletuno: urls
 Root: HKCR; Subkey: "freewalletuno"; ValueType: "string"; ValueData: "URL:freewalletuno Protocol"; Flags: uninsdeletekey
 Root: HKCR; Subkey: "freewalletuno"; ValueType: "string"; ValueName: "URL Protocol"; ValueData: ""

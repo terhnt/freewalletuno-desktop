@@ -5,7 +5,7 @@
     </div>
     <div class="form-group">
         <label class="col-sm-3 control-label text-left" for="token-type">
-            Type 
+            Type
             <a href="#" data-toggle="tooltip" title='This is the type of token you would like to create' class="pull-right"><i class="fa fa-lg fa-question-circle-o margin-top-5" ></i></a>
         </label>
         <div class="col-sm-9">
@@ -18,7 +18,7 @@
     </div>
     <div class="form-group">
         <label class="col-sm-3 control-label text-left" for="token-name">
-            Token Name 
+            Token Name
             <a href="#" data-toggle="tooltip" title='This is the name of the token you would like to create' class="pull-right"><i class="fa fa-lg fa-question-circle-o margin-top-5" ></i></a>
         </label>
         <div class="col-sm-9">
@@ -40,6 +40,23 @@
                 </select>
             </div>
         </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label text-left" for="token-amount">
+          Meltable
+        <a href="#" data-toggle="tooltip" title='This is the amount you would like to back the assets created with of another asset (if meltable)' class="pull-right"><i class="fa fa-lg fa-question-circle-o margin-top-5" ></i></a>
+        </label>
+        <div class="col-sm-9">
+          <div class="input-group pull-right" style="width:180px;margin-left:14px;">
+                <span class="input-group-addon">Meltable</span>
+                <select id="asset-meltable" name="meltable" class="selectpicker">
+                    <option>Yes</option>
+                    <option>No</option>
+                </select>
+          </div>
+            <input type="text" class="form-control pull-left" name="backing"  id="backing-amount" placeholder="0.00000000" style="width:224px" value="0">
+            <input type="text" class="form-control" id="backing-name" name="backing_asset" placeholder="XUP" data-minlength="3" required>
+          </div>
     </div>
     <div class="form-group" id="token-description-field">
         <!-- Token Description Field -->
@@ -71,10 +88,10 @@ $(document).ready(function(){
     setTimeout(function(){
 
         // Initialize any tooltips
-        $('[data-toggle="tooltip"]').tooltip({ 
+        $('[data-toggle="tooltip"]').tooltip({
             html: true,
             placement: 'bottom'
-        }); 
+        });
 
         // Remove any error indicators when user changes a field value
         $('#create-token-form input').change(function(e){
@@ -158,7 +175,7 @@ $(document).ready(function(){
                                 // Parent asset is owned by another address
                                 if(data.owner!=FWUE.WALLET_ADDRESS){
                                     dialogMessage('Notice', '<center><p>The name <b><i>' + parent + '</i></b> is already registered to address ' + data.owner + '</p>' +
-                                                  '<p>You may still purchase <b><i>' + name + '</b></i> from the current owner if they have listed it for sale.</p>' + 
+                                                  '<p>You may still purchase <b><i>' + name + '</b></i> from the current owner if they have listed it for sale.</p>' +
                                                   '<a href="https://coindaddy.io/search?network=xcp&q=' + name + '" class="btn btn-success" target="_blank"><i class="fa FWUE-coindaddy pull-left" style="top:0px"></i> Check if this token is listed for sale on CoinDaddy</a></center>', true);
                                 }
                             }
@@ -173,12 +190,12 @@ $(document).ready(function(){
                                 found = true;
                         });
                         if(found){
-                            // Notify user that they need to switch 
+                            // Notify user that they need to switch
                             dialogMessage('Notice', '<center>The name <b><i>' + name + '</i></b> is already registered to another address in your wallet ' + o.owner + '</center>', true);
                         } else {
                                 // Notify user asset is registered to another address
                                 dialogMessage('Notice', '<center><p>The name <b><i>' + name + '</i></b> is already registered to address ' + o.owner + '</p>' +
-                                              '<p>You may still purchase this token from the current owner if they have listed it for sale.</p>' + 
+                                              '<p>You may still purchase this token from the current owner if they have listed it for sale.</p>' +
                                               '<a href="https://coindaddy.io/search?network=xcp&q=' + name + '" class="btn btn-success" target="_blank"><i class="fa FWUE-coindaddy pull-left" style="top:0px"></i> Check if ' + name + ' is for sale on CoinDaddy</a></center>', true);
                         }
                     }
@@ -190,12 +207,12 @@ $(document).ready(function(){
     // Handle form validation and displaying any errors
     $('#create-token-form').validator().on('submit', function(e){
         // prevent form submission
-        e.preventDefault(); 
+        e.preventDefault();
         // Get object with form values
         var vals   = array2Object($(this).serializeArray()),
             errors = [];
         console.log('vals=',vals);
-        // Remove error indicators from any fields 
+        // Remove error indicators from any fields
         $('.form-group').removeClass('has-error has-danger');
         var type = vals.type
         // Verify we have an asset name
@@ -254,7 +271,7 @@ $(document).ready(function(){
         // Show error for token name
         if(errors.length)
             $('#token-name').closest('.form-group').addClass('has-error has-danger');
-        // Verify we have valid fee amount 
+        // Verify we have valid fee amount
         if(numeral(vals['fee-amount']).value()==0){
             errors.push('You must enter a fee which is greater than 0.00000000!');
             $('#fee-amount').closest('.form-group').addClass('has-error has-danger');
@@ -277,9 +294,11 @@ $(document).ready(function(){
             var confirmCb = function(){
                 var network   = (FWUE.WALLET_NETWORK==2) ? 'testnet' : 'mainnet',
                     amt_sat   = (vals.amount.indexOf('.')!=-1) ? numeral(vals.amount).multiply(100000000).value() : numeral(vals.amount).value(),
+                    backing_amt_sat   = (vals.backing.indexOf('.')!=-1) ? numeral(vals.amount).multiply(100000000).value() : numeral(vals.amount).value(),
                     fee_sat   = parseInt(numeral(vals['fee-amount']).multiply(100000000).value()),
                     divisible = (vals.divisible=='Yes') ? true : false;
-                cpIssuance(network, vals.source, vals.name, amt_sat, divisible, vals.description, null, fee_sat, doneCb);
+                    meltable = (vals.meltable=='Yes') ? true : false;
+                cpIssuance(network, vals.source, vals.name, amt_sat, divisible, vals.description, null, meltable, backing_amt_sat, vals.backing_asset, fee_sat, doneCb);
             }
             // Confirm the action with the user
             var title = '<i class="fa fa-lg fa-fw fa-question-circle"></i> Confirm  Issuance?',

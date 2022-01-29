@@ -1,6 +1,6 @@
 
 <center>
-    <p>FreeWalletUno is a free wallet which supports Unobtanium and Counterparty.</p>
+    <p>FreeWalletUno is a free wallet which supports Unobtanium and Unoparty.</p>
     <a href="https://freewalletuno.io"><img src="images/logo.png" height="100" style="margin-bottom: 5px"></a>
     <div id="FWUE_version"></div>
     <hr size=1 class="spacer">
@@ -15,7 +15,7 @@
 
     </div>
     <br>
-    <p align="justify">If you would like to support continued development of FreeWalletUno and continued hosting of the XChain.io counterparty block explorer, please consider making a donation using the 'Donate' button below, or purchase a FULLACCESS token using the button below.</p>
+    <p align="justify">If you would like to support continued development of FreeWalletUno and continued hosting of the XChain.io unoparty block explorer, please consider making a donation using the 'Donate' button below, or purchase a FULLACCESS token using the button below.</p>
 </center>
 
 <style>
@@ -41,7 +41,7 @@ hr.spacer {
 $(document).ready(function(){
 
     // Define donation address
-    var address = '1FWDonkMbC6hL64JiysuggHnUAw2CKWszs',
+    var address = 'uVVuwXm2mDK9pr9XkWT5k7ihQyoSC8y2MW',
         debug   = $('#btn-debug'),
         update  = $('#btn-update'),
         version = (is_nwjs()) ? 'Version ' + nw.App.manifest.version : 'Development Build';
@@ -73,15 +73,21 @@ $(document).ready(function(){
 
     // When a user clicks 'Buy FULLACCESS' button, throw dispenser buy dialog to purchase from official dispenser
     $('#btn-buy').click($.debounce(100, function(e){
-        FWUE.DIALOG_DATA = {
-            name: 'FULLACCESS',
-            asset: 'FULLACCESS',
-            give_quantity: '1',
-            give_remaining: '10', // Prevent people from buying more than 10
-            satoshirate: '0.00200000',
-            destination: 'bc1q50kxp76j9l0k9jgwasvcz4mcz0v03fv2y5pdxx'
-        };
-        dialogDispenserBuy();
+      // Just show the donation screen for now...
+      FWUE.DIALOG_DATA = {
+          destination: address
+      };
+      dialogSend();
+      dialogClose('dialog-about');
+    //    FWUE.DIALOG_DATA = {
+    //        name: 'FULLACCESS',
+    //        asset: 'FULLACCESS',
+    //        give_quantity: '1',
+    //        give_remaining: '10', // Prevent people from buying more than 10
+    //        satoshirate: '0.00200000',
+    //        destination: 'bc1q50kxp76j9l0k9jgwasvcz4mcz0v03fv2y5pdxx'
+    //    };
+    //    dialogDispenserBuy();
     }));
 
 

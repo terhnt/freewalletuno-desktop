@@ -1,6 +1,6 @@
 FreeWalletUno - Desktop Wallet
 ---
-FreeWalletUno is a free wallet which supports Unobtanium and Counterparty.
+FreeWalletUno is a free wallet which supports Unobtanium and Unoparty.
 
 Build Notes
 ---

@@ -16,12 +16,12 @@
                     <div class="progress margin-bottom-5"">
                         <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;" id="bounty-progressbar">
                         </div>
-                    </div>            
+                    </div>
                     <a href="#" class="btn btn-block btn-success margin-bottom-5" id="donate-now">Donate Now</a>
                     <a href="#" class="btn btn-block btn-info"    id="access-now">Get Access Now</a>
                 </div>
             </div>
-            <p>Counterparty has a robust <a href="https://counterparty.io/docs/protocol_specification/#bet">decentralized betting system</a> built into the protocol with the following features :</p>
+            <p>Unoparty has a robust <a href="https://counterparty.io/docs/protocol_specification/#bet">decentralized betting system</a> built into the protocol with the following features :</p>
             <ul>
                 <li>Allows anyone to operate an oracle and broadcast event information to the blockchain</li>
                 <li>Oracle operators are able to earn a percentage (%) of any bets placed with them</li>
@@ -83,7 +83,6 @@ $(document).ready(function(){
     // Display the "Get Access Now" dialog interface so users can purchase an access token
     $('#access-now').click($.debounce(100, function(e){
         dialogBuyAccess();
-    }));    
+    }));
 });
 </script>
-

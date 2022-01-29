@@ -47,10 +47,10 @@ $(document).ready(function(){
         FWUE.DIALOG_DATA = {};
 
         // Initialize any tooltips
-        $('[data-toggle="tooltip"]').tooltip({ 
+        $('[data-toggle="tooltip"]').tooltip({
             html: true,
             placement: 'bottom'
-        }); 
+        });
 
         // Remove any error indicators when user changes a field value
         $('#issue-supply-form input').change(function(e){
@@ -72,24 +72,24 @@ $(document).ready(function(){
     // Handle form validation and displaying any errors
     $('#issue-supply-form').validator().on('submit', function(e){
         // prevent form submission
-        e.preventDefault(); 
+        e.preventDefault();
         // Get object with form values
         var vals   = array2Object($(this).serializeArray()),
             errors = [];
         console.log('vals=',vals);
-        // Remove error indicators from any fields 
+        // Remove error indicators from any fields
         $('.form-group').removeClass('has-error has-danger');
         // Verify we have an asset name
         if(vals.name==''){
             errors.push('You must enter a token name!');
             $('#token-name').closest('.form-group').addClass('has-error has-danger');
         }
-        // Verify we have valid fee amount 
+        // Verify we have valid fee amount
         if(numeral(vals['fee-amount']).value()==0){
             errors.push('You must enter a fee which is greater than 0.00000000!');
             $('#fee-amount').closest('.form-group').addClass('has-error has-danger');
         }
-        // Verify we have valid amount 
+        // Verify we have valid amount
         if(numeral(vals.amount).value()==0){
             errors.push('You must enter an amount which is greater than 0!');
             $('#amount').closest('.form-group').addClass('has-error has-danger');
@@ -113,7 +113,7 @@ $(document).ready(function(){
                     amt_sat = (vals.amount.indexOf('.')!=-1) ? numeral(vals.amount).multiply(100000000).value() : numeral(vals.amount).value(),
                     fee_sat = parseInt(numeral(vals['fee-amount']).multiply(100000000).value()),
                     info    = FWUE.ASSET_INFO;
-                cpIssuance(network, vals.source, vals.name, amt_sat, info.divisible, info.description, null, fee_sat, doneCb);
+                cpIssuance(network, vals.source, vals.name, amt_sat, info.divisible, info.description, null, fee_sat, False, 0, 'XCP', doneCb);
             }
             // Confirm the action with the user
             var title = '<i class="fa fa-lg fa-fw fa-bank"></i> Confirm Supply Issuance?',
