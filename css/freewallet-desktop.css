@@ -713,7 +713,7 @@ form .tooltip {
 .nav-tabs-theme > li.active > a:hover,
 .nav-tabs-theme > li.active > a:focus {
     color: #fff;
-    background-color: #428bca;
+    background-color: #ffb800;
 }
 
 
@@ -779,7 +779,7 @@ tr.text-right th {
 }
 .datatable-options {
   color: #fff;
-  background: #428bca;
+  background: #ffb800;
   padding: 5px;
 }
 .datatable-options label {
@@ -824,7 +824,7 @@ tr.text-right th {
     font-weight: bold;
 }
 .market-header {
-    border-left: 5px solid #428bca;
+    border-left: 5px solid #ffb800;
     padding-left: 5px;
 }
 .market-header .market-name {
