@@ -3,7 +3,7 @@
     <div class="col-xs-12">
         <div class="panel panel-default table-responsive">
             <div class="panel-heading panel-heading-lg">
-                <i class="fa fa-lg fa-bitcoin"></i> BTCPay Details
+                <i class="fa fa-lg fa-bitcoin"></i> UNOPay Details
                 <a href="#" class="btn btn-xs btn-success pull-right" id="history-info-more" target="_blank"><i class="fa fa-info-circle"></i> more info</a>
             </div>
             <table class="table table-striped table-bordered table-condensed">
@@ -65,7 +65,7 @@
                 $('#source').html(o.source);
                 $('#destination').html(o.destination);
                 $('#tx-hash').html(o.tx_hash);
-                $('#quantity').text(numeral(o.btc_amount).format('0,0.00000000') + ' BTC');
+                $('#quantity').text(numeral(o.btc_amount).format('0,0.00000000') + ' UNO');
                 var x = o.order_match_id.split('_');
                 // Remove order_match_id from status
                 $('#status').text(o.status.replace(o.order_match_id,''));
@@ -79,7 +79,7 @@
                     $('#tx-index').text('-');
                 }
             }
-        });   
+        });
 
     });
 

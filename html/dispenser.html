@@ -19,7 +19,7 @@
         <!-- Give Amount Field -->
     </div>
     <div class="form-group" id="btc-amount-field">
-        <!-- BTC Amount Field -->
+        <!-- UNO Amount Field -->
     </div>
     <div class="form-group" id="tx-fee-field">
         <!-- Transaction Fee Field -->
@@ -59,12 +59,12 @@ function confirmCreateDispenser(vals){
     // Confirm the action with the user
     var title = '<i class="fa fa-lg fa-fw fa-arrows-h"></i> Confirm Create Dispenser?',
         msg   = 'Escrow <b>' + vals['escrow-amount'] + ' ' + vals.name + '</b> in a dispenser at <br><b>' + vals.destination + '</b>';
-        msg  += '<br>Dispense <b>' + vals['give-amount'] + ' ' + vals.name + '</b> for <b>' + vals['btc-amount'] + ' BTC</b> each?';
+        msg  += '<br>Dispense <b>' + vals['give-amount'] + ' ' + vals.name + '</b> for <b>' + vals['btc-amount'] + ' UNO</b> each?';
     dialogConfirm(title, '<center>' + msg + '</center>', false, true, confirmCb);
 }
 
 // Handle throwing a scary warning to discourage people from setting up multiple dispensers on the same address
-// This should hopefully prevent some users from losing funds because they do not understand that a single BTC payment can trigger multiple dispensers
+// This should hopefully prevent some users from losing funds because they do not understand that a single UNO payment can trigger multiple dispensers
 function dialogWarnMultipleDispensers(vals){
     var message = '<div class="alert alert-danger" role="alert"><strong><center>There is already a dispenser setup at this address!<br><br>Setting up multiple dispensers on the same address is not suggested, and can result in dispensing tokens unexpectedly and loss of funds!</center></strong></div>';
     message += '<center>Are you sure you want to continue setting up this dispenser?'
@@ -76,7 +76,7 @@ function dialogWarnMultipleDispensers(vals){
 
 // Handle throwing a scary warning to discourage people from setting up dispensers on everyday use addresses
 function dialogWarnSameAddress(vals){
-    var message = '<div class="alert alert-danger" role="alert"><strong><center>Setting up a dispenser on an address you commonly use is not advised and can result in dispensing tokens unexpectedly and loss of funds!</center><br>Example: Withdrawing BTC from an exchange or sending BTC to this address from another address you control could trigger an unexpected dispense.</strong></div>';
+    var message = '<div class="alert alert-danger" role="alert"><strong><center>Setting up a dispenser on an address you commonly use is not advised and can result in dispensing tokens unexpectedly and loss of funds!</center><br>Example: Withdrawing UNO from an exchange or sending UNO to this address from another address you control could trigger an unexpected dispense.</strong></div>';
     message += '<center>Are you sure you want to continue setting up this dispenser?'
     dialogConfirm('<i class="fa fa-lg fa-fw fa-exclamation-circle"></i> Warning', message, false, true, function(){
         confirmCreateDispenser(vals);
@@ -165,9 +165,9 @@ $(document).ready(function(){
             $('#give-amount').closest('.form-group').addClass('has-error has-danger');
         }
 
-        // Verify we have valid BTC amount
+        // Verify we have valid UNO amount
         if(numeral(vals['btc-amount']).value()==0){
-            errors.push('You must enter an BTC amount which is greater than 0!');
+            errors.push('You must enter an UNO amount which is greater than 0!');
             $('#btc-amount').closest('.form-group').addClass('has-error has-danger');
         }
 

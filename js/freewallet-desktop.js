@@ -89,8 +89,8 @@ FW.BASE_DISPENSERS    = JSON.parse(ls.getItem('walletDispensers')) || FW.DEFAULT
 FW.DISPENSER_OPTIONS  = JSON.parse(ls.getItem('walletDispenserOptions')) || []; // 1=hide closed
 FW.BASE_DISPENSERS    = FW.BASE_DISPENSERS.slice(0, 10); // Limit dispenser watchlist to 10
 
-// Define arrays to hold BTCPay information
-FW.BTCPAY_ORDERS  = JSON.parse(ls.getItem('btcpayOrders'))  || {}; // array of order tx_hashes to monitor for BTCpay transactions
+// Define arrays to hold UNOPay information
+FW.BTCPAY_ORDERS  = JSON.parse(ls.getItem('btcpayOrders'))  || {}; // array of order tx_hashes to monitor for UNOpay transactions
 FW.BTCPAY_MATCHES = JSON.parse(ls.getItem('btcpayMatches')) || {}; // array of order matches that have seen/processed
 FW.BTCPAY_QUEUE   = JSON.parse(ls.getItem('btcpayQueue'))   || {}; // Array of btcpay transactions to process
 // Example of how BTCPAY data is stored
@@ -1067,7 +1067,7 @@ function autoBtcpay(network, o){
     cpBtcpay(network, o.source, id, fee_sat, function(tx){
         // Only proceed if we have a valid tx hash for the broadcast tx... otherwise leave in queue so we can try again
         if(tx){
-            dialogMessage('<i class="fa fa-lg fa-check"></i> BTCPay Successful', '<center>Your BTC payment has been broadcast to the network and your order should complete shortly.' +
+            dialogMessage('<i class="fa fa-lg fa-check"></i> UNOPay Successful', '<center>Your UNO payment has been broadcast to the network and your order should complete shortly.' +
                           '<br/><br/><a class="btn btn-success" href="' + FW.XCHAIN_API + '/tx/' + tx + '" target="_blank">View Transaction</a></center>');
             // Remove the order match from the queue and check the queue again after a brief delay
             removeFromBtcpayQueue(o.tx0_hash, o.tx1_hash);
@@ -1102,7 +1102,7 @@ function updateBalances(address, page, full, callback){
     });
 }
 
-// Handle updating BTC balance from external source with multiple failovers
+// Handle updating UNO balance from external source with multiple failovers
 function updateBTCBalance(address, callback){
     // Main API - chainz.cryptoid
     getBTCBalance(address, 'chainz.cryptoid', function(bal){
@@ -1198,7 +1198,7 @@ function updateWalletBalances( address, force ){
         ms    = 300000, // 5 minutes
         btc   = false,  // Flag to indicate if UNO update is done
         xcp   = false;  // Flag to indicate if XUP update is done
-    // Handle updating BTC and XUP asset balances
+    // Handle updating UNO and XUP asset balances
     if((parseInt(last) + ms)  <= Date.now() || force){
         // console.log('updating wallet balances');
         // Callback to handle saving data when we are entirely done
@@ -1244,7 +1244,7 @@ function updateWalletBalances( address, force ){
             data: [],
             lastUpdated: Date.now()
         }
-        // Get BTC/XCP currency info
+        // Get UNO/XCP currency info
         var btc_info = getAssetPrice('UNO',true),
             xcp_info = getAssetPrice('XUP',true);
         // Update asset balances
@@ -1252,7 +1252,7 @@ function updateWalletBalances( address, force ){
             xcp = true; // Flag to indicate we are done with XCP update
             doneCb();
         });
-        // Update BTC Balance
+        // Update UNO Balance
         updateBTCBalance(address, function(sat){
             var qty = numeral(sat * 0.00000001).format('0,0.00000000');
             FW.TEMP_BALANCES.data.push({
@@ -1264,13 +1264,13 @@ function updateWalletBalances( address, force ){
                 },
                 quantity: qty
             });
-            btc = true; // Flag to indicate we are done with BTC update
+            btc = true; // Flag to indicate we are done with UNO update
             doneCb();
         });
     }
 }
 
-// Handle updating BTC history from external source with multiple failovers
+// Handle updating UNO history from external source with multiple failovers
 function updateBTCHistory(address, callback){
     // Main API - Blockcypher
     getBTCHistory(address, 'blockcypher', function(txs){
@@ -1296,7 +1296,7 @@ function updateBTCHistory(address, callback){
     });
 }
 
-// Handle getting BTC transaction history from various sources
+// Handle getting UNO transaction history from various sources
 function getBTCHistory(address, source, callback){
     var addr = (address) ? address : FW.WALLET_ADDRESS,
         data = false; // Array of history transactions
@@ -1404,8 +1404,8 @@ function updateWalletHistory( address, force ){
         last  = info.lastUpdated || 0,
         ms    = 300000; // 5 minutes
     var status = {
-        btc: false,    // Flag to indicate if BTC update is done
-        xcp: false,    // Flag to indicate if XCP update is done
+        btc: false,    // Flag to indicate if UNO update is done
+        xcp: false,    // Flag to indicate if XUP update is done
         mempool: false // Flag to indicate if mempool update is done
     }
     // Handle updating BTC and XUP transaction history
@@ -1451,14 +1451,14 @@ function updateWalletHistory( address, force ){
                 else
                     arr.push(item);
             });
-            // Bail out if this is already a known BTC transaction
+            // Bail out if this is already a known UNO transaction
             if(data.asset=='UNO' && typeof record.tx!== 'undefined')
                 return;
             // Add the data to the array and save arr to info.data
             arr.push(data);
             info.data = arr;
         }
-        // Handle updating BTC history
+        // Handle updating UNO history
         updateBTCHistory(addr, function(txs){
             if(txs instanceof Array){
                 txs.forEach(function(tx){
@@ -1472,7 +1472,7 @@ function updateWalletHistory( address, force ){
                     });
                 });
             }
-            status.btc = true; // Flag to indicate we are done with BTC update
+            status.btc = true; // Flag to indicate we are done with UNO update
             doneCb();
         });
         // Handle updating XCP Transactions
@@ -1565,7 +1565,7 @@ function updateNetworkInfo( force ){
     var last = ls.getItem('networkInfoLastUpdated') || 0,
         ms   = 300000; // 5 minutes
     if((parseInt(last) + ms)  <= Date.now() || force ){
-        // BTC/USD Price
+        // UNO/USD Price
         $.getJSON( FW.XCHAIN_API + '/api/network', function( data ){
             if(data){
                 FW.NETWORK_INFO = data;
@@ -1651,7 +1651,7 @@ function getPrivateKey(network, address, prepend=false){
 function updateBalancesList(){
     var html    = '',
         cnt     = 0,
-        active  = 'UNO', // default to BTC being active
+        active  = 'UNO', // default to UNO being active
         addr    = FW.WALLET_ADDRESS,
         search  = $('.balances-list-search'),
         filter  = search.val(),
@@ -1666,7 +1666,7 @@ function updateBalancesList(){
         fmt_usd = '0,0.00',
         display = [];
     if(info && info.data.length){
-        // Always display BTC balance
+        // Always display UNO balance
         display.push({
             asset: 'UNO',
             icon: 'UNO',
@@ -1746,7 +1746,7 @@ function getBalanceHtml(data){
 function updateHistoryList(){
     var html    = '',
         cnt     = 0,
-        active  = 'UNO', // default to BTC being active
+        active  = 'UNO', // default to UNO being active
         addr    = FW.WALLET_ADDRESS,
         search  = $('.history-list-search'),
         filter  = search.val(),
@@ -1995,7 +1995,7 @@ function loadAssetInfo(asset){
                 $('.rateit').rateit();
             }
         }
-        // Hardcode the BTC values.. otherwise request the asset details
+        // Hardcode the UNO values.. otherwise request the asset details
         if(asset=='UNO'){
             var btc = getAssetPrice('UNO',true),
                 xcp = getAssetPrice('XUP',true);
@@ -4047,7 +4047,7 @@ function dialogBTCpay(closable=true){
         id: 'dialog-btcpay',
         closable: closable,
         closeByBackdrop: false,
-        title: '<i class="fa fa-fw fa-bitcoin"></i> Confirm BTCpay?',
+        title: '<i class="fa fa-fw fa-bitcoin"></i> Confirm UNOpay?',
         message: $('<div></div>').load('html/btcpay.html')
     });
 }
@@ -4149,11 +4149,11 @@ function dialogLogout(){
     });
 }
 
-// 'Enable BTCpay' dialog box
+// 'Enable UNOpay' dialog box
 function dialogEnableBtcpay(){
     BootstrapDialog.show({
         type: 'type-default',
-        title: '<i class="fa fa-lg fa-fw fa-question-circle"></i> Enable Auto-BTCpay?',
+        title: '<i class="fa fa-lg fa-fw fa-question-circle"></i> Enable Auto-UNOpay?',
         cssClass: 'btc-wallet-password',
         closable: false,
         closeByBackdrop: false,
@@ -4172,7 +4172,7 @@ function dialogEnableBtcpay(){
             cssClass: 'btn-danger',
             action: function(dialog){
                 // Confirm with user that auto-btcpay will be disabled
-                dialogConfirm('Disable Auto-BTCpay?','<div class="alert alert-danger text-center"><b>Notice</b>: Any order matches for BTC will need to be paid manually!</div>', false, false, function(){
+                dialogConfirm('Disable Auto-UNOpay?','<div class="alert alert-danger text-center"><b>Notice</b>: Any order matches for UNO will need to be paid manually!</div>', false, false, function(){
                     dialog.close();
                 });
             }
@@ -4203,7 +4203,7 @@ function dialogEnableBtcpay(){
                         ss.removeItem('wallet');
                         ss.removeItem('walletPassword');
                         dialog.close();
-                        dialogMessage('<i class="fa fa-lg fa-fw fa-unlock"></i> Auto-BTCpay Enabled', 'Auto-BTCpay is now enabled and any order matches for BTC will be automatically paid');
+                        dialogMessage('<i class="fa fa-lg fa-fw fa-unlock"></i> Auto-UNOpay Enabled', 'Auto-UNOpay is now enabled and any order matches for UNO will be automatically paid');
                     } else {
                         dialogMessage(null, 'Invalid password', true);
                     }
@@ -4868,8 +4868,8 @@ function removeMarket(market){
     // Remove tab and tab content
     $("li.tab[data-market='" + market + "']").remove();
     $('#' + market).remove();
-    // Switch back to BTC tab
-    $('#markets-tabs a[href="#BTC"]').tab('show');
+    // Switch back to UNO tab
+    $('#markets-tabs a[href="#UNO"]').tab('show');
     // Handle removing from base pairs
     if(FW.BASE_MARKETS.indexOf(market)!=-1){
         // Remove market from FW.BASE_MARKETS
@@ -5391,7 +5391,7 @@ function addDispenserWatchlist(asset){
                   '                <th>Escrowed</th>' +
                   '                <th>Give Amount</th>' +
                   '                <th>Give Remaining</th>' +
-                  '                <th>BTC Price</th>' +
+                  '                <th>UNO Price</th>' +
                   '                <th>Status</th>' +
                   '                <th></th>' +
                   '            </tr>' +
@@ -5410,7 +5410,7 @@ function removeDispenserWatchlist(asset){
     // Remove tab and tab content
     $("li.tab[data-asset='" + asset + "']").remove();
     $('#' + asset).remove();
-    // Switch back to BTC tab
+    // Switch back to UNO tab
     $('#dispensers-tabs a[href="#my-dispensers"]').tab('show');
     // Handle removing from base pairs
     if(FW.BASE_DISPENSERS.indexOf(asset)!=-1){

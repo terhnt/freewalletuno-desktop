@@ -174,7 +174,7 @@ FW.MARKETS_DATATABLE_CONFIG = {
         var asset  = $(this).closest('.tab-pane')[0].id,
             market = '<img src="' + FW.XCHAIN_API + '/icon/' + asset + '.png" class="fw-icon-20"> ' + asset + ' Markets (' + numeral(total).format('0,0') + ')';
         $(this).closest('.panel').find('.datatable-options .market-name').html(market);
-        // Determine Total Volume 
+        // Determine Total Volume
         var volume = 0;
         table.rows( { search: 'applied' } ).data().each(function(data){ volume += parseFloat(data[4]); });
         $(this).closest('.panel').find('.datatable-options .market-volume').text('24h Volume: ' + numeral(volume).format('0,0.00000000'));
@@ -216,8 +216,8 @@ $(document).ready(function(){
     // // Populate base market tables/tabs
     // FW.BASE_MARKETS.forEach(function(market){ addMarket(market); });
 
-    // // Set BTC as the active tab (also hides all the non-active tab content panels we added)
-    // $('#markets-tabs a[href="#BTC"]').tab('show');
+    // // Set UNO as the active tab (also hides all the non-active tab content panels we added)
+    // $('#markets-tabs a[href="#UNO"]').tab('show');
 
     // // Initialize the datatables
     // $('.datatable').DataTable(FW.MARKETS_DATATABLE_CONFIG);
@@ -250,7 +250,7 @@ $(document).ready(function(){
     // if(FW.MARKET_OPTIONS.indexOf(3)!=-1) $(".checkbox [name='options-numeric']").prop('checked', true);
 
     // // Handle updating view when user changes the viewing options
-    // $('.dropdown-checkboxes .checkbox input').change($.debounce(100,function(e){ 
+    // $('.dropdown-checkboxes .checkbox input').change($.debounce(100,function(e){
     //     var arr = [];
     //     if($(".checkbox [name='options-named']").is(':checked')) arr.push(1);
     //     if($(".checkbox [name='options-subassets']").is(':checked')) arr.push(2);
@@ -273,7 +273,7 @@ $(document).ready(function(){
     // });
 
     // // Filter datatable results as user types search string
-    // $('#markets-query').keyup($.debounce(100,function(e){ 
+    // $('#markets-query').keyup($.debounce(100,function(e){
     //     var code  = (e.keyCode) ? e.keyCode : e.which,
     //         query = $(this).val().replace('\\','/').toUpperCase();
     //     FW.BASE_MARKETS.forEach(function(market){
@@ -286,20 +286,20 @@ $(document).ready(function(){
     // }));
 
     // // When user clicks 'Search' button, try to determine what user is searching for
-    // $('#markets-search').click($.debounce(100,function(e){ 
+    // $('#markets-search').click($.debounce(100,function(e){
     //     var query = $('#markets-query').val().replace('\\','/').toUpperCase();
     //     if(query.indexOf('/')!=-1)
     //         openMarket(query);
     // }));
 
     // // When user clicks market link, open market in main window
-    // $('#markets').on('click', 'a.market-link', $.debounce(100,function(e){ 
+    // $('#markets').on('click', 'a.market-link', $.debounce(100,function(e){
     //     var market = $(e.target).closest('tr').attr('data-market');
     //     openMarket(market, false);
     // }));
 
     // // Make sure only one tab is active at a time (fixes issue where multiple items in the 'More' menu can appear as active)
-    // $('#markets').on('click', 'li.tab', $.debounce(100,function(e){ 
+    // $('#markets').on('click', 'li.tab', $.debounce(100,function(e){
     //     $('#markets li.tab').removeClass('active');
     //     $(e.target).closest('li.tab').addClass('active');
     // }));
@@ -311,14 +311,14 @@ $(document).ready(function(){
 
     // // Unbind the event to prevent duplicate listeners
     // $(window).unbind('resize');
-    // // Detect any window resizes and resize datatables to fit 
+    // // Detect any window resizes and resize datatables to fit
     // $(window).resize($.debounce(10,function(e){
     //     var win    = $(window),
     //         height = win.height(),
     //         width  = win.width();
     //     // Fit max amount of tabs on screen (horizontally)
     //     if(width!=lastWidth)
-    //         autoCollapseTabs();            
+    //         autoCollapseTabs();
     //     // Try to fit max amount of rows on screen (vertically)
     //     if(height!=lastHeight){
     //         var rows = getMarketsRowCount();

@@ -55,7 +55,7 @@
                               <th>Escrowed</th>
                               <th>Give Amount</th>
                               <th>Give Remaining</th>
-                              <th>BTC Price</th>
+                              <th>UNO Price</th>
                               <th>Status</th>
                               <th></th>
                           </tr>
@@ -193,7 +193,7 @@ $(document).ready(function(){
     if(FW.DISPENSER_OPTIONS.indexOf(1)!=-1) $(".checkbox [name='options-closed']").prop('checked', true);
 
     // // Handle updating view when user changes the viewing options
-    $('.dropdown-checkboxes .checkbox input').change($.debounce(100,function(e){ 
+    $('.dropdown-checkboxes .checkbox input').change($.debounce(100,function(e){
         var arr = [];
         if($(".checkbox [name='options-closed']").is(':checked')) arr.push(1);
         FW.DISPENSER_OPTIONS = arr;
@@ -217,7 +217,7 @@ $(document).ready(function(){
     });
 
     // When user clicks dispenser name, launch dispenser in external window
-    $('#dispensers-lists').on('click', 'a.dispenser-link', $.debounce(100,function(e){ 
+    $('#dispensers-lists').on('click', 'a.dispenser-link', $.debounce(100,function(e){
         var data = String($(e.target).closest('tr').attr('data')).split(','),
             url  = FW.XCHAIN_API + '/tx/' + data[6];
         if(typeof nw !== 'undefined'){
@@ -228,7 +228,7 @@ $(document).ready(function(){
     }));
 
     // When user clicks dispenser name, launch dispenser in external window
-    $('#dispensers-lists').on('click', '.btn-close', $.debounce(100,function(e){ 
+    $('#dispensers-lists').on('click', '.btn-close', $.debounce(100,function(e){
         var data = String($(e.target).closest('tr').attr('data')).split(','),
             [name, asset] = String(data[0]).split('|');
         FW.DIALOG_DATA = {
@@ -241,7 +241,7 @@ $(document).ready(function(){
 
 
     // When user clicks buy button, launch Buy from dispenser dialog box
-    $('#dispensers-lists').on('click', '.btn-buy', $.debounce(100,function(e){ 
+    $('#dispensers-lists').on('click', '.btn-buy', $.debounce(100,function(e){
         var data = String($(e.target).closest('tr').attr('data')).split(','),
             [name, asset] = String(data[7]).split('|');
         FW.DIALOG_DATA = {
@@ -256,7 +256,7 @@ $(document).ready(function(){
     }));
 
     // Make sure only one tab is active at a time (fixes issue where multiple items in the 'More' menu can appear as active)
-    $('#dispensers-lists').on('click', 'li.tab', $.debounce(100,function(e){ 
+    $('#dispensers-lists').on('click', 'li.tab', $.debounce(100,function(e){
         $('#dispensers-lists li.tab').removeClass('active');
         $(e.target).closest('li.tab').addClass('active');
     }));
@@ -268,14 +268,14 @@ $(document).ready(function(){
 
     // Unbind the event to prevent duplicate listeners
     $(window).unbind('resize');
-    // Detect any window resizes and resize datatables to fit 
+    // Detect any window resizes and resize datatables to fit
     $(window).resize($.debounce(10,function(e){
         var win    = $(window),
             height = win.height(),
             width  = win.width();
         // Fit max amount of tabs on screen (horizontally)
         if(width!=lastWidth)
-            autoCollapseWatchlistTabs();            
+            autoCollapseWatchlistTabs();
         // Try to fit max amount of rows on screen (vertically)
         if(height!=lastHeight){
             var rows = getDispensersRowCount();

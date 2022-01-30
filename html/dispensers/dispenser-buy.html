@@ -7,7 +7,7 @@
         <!-- Amount Field -->
     </div>
     <div class="form-group" id="btc-amount-field">
-        <!-- BTC Amount Field -->
+        <!-- UNO Amount Field -->
     </div>
     <div class="form-group" id="tx-fee-field">
         <!-- Transaction Fee Field -->
@@ -37,7 +37,7 @@ function doneCb(tx){
 // This should hopefully prevent some users from losing funds because they are not aware they are purchasing less than 1 token
 function dialogWarnGiveQuantityAmount(vals){
     var asset = FW.DIALOG_DATA.name;
-    var message = '<div class="alert alert-danger" role="alert"><strong><center>You are attempting to make a BTC purchase from a dispenser which is selling less than 1 ' + asset + ' token per dispense!<br><br>Please make sure this is an action that you would like to perform, as it may result in you getting less ' + asset + ' tokens from the dispenser than expected!</center></strong></div>';
+    var message = '<div class="alert alert-danger" role="alert"><strong><center>You are attempting to make a UNO purchase from a dispenser which is selling less than 1 ' + asset + ' token per dispense!<br><br>Please make sure this is an action that you would like to perform, as it may result in you getting less ' + asset + ' tokens from the dispenser than expected!</center></strong></div>';
     message += '<center>Are you sure you want to continue purchasing from this dispenser?'
     dialogConfirm('<i class="fa fa-lg fa-fw fa-exclamation-circle"></i> Warning', message, false, true, function(){
         checkDispenserQuantity(vals);
@@ -47,7 +47,7 @@ function dialogWarnGiveQuantityAmount(vals){
 // Confirm with user that they understand the purchase amount is less than 1.0
 // This should hopefully prevent some users from losing funds because they are not aware they are purchasing less than 1 token
 function dialogWarnEmptyDispenser(vals){
-    var message = '<div class="alert alert-danger" role="alert"><strong><center>This dispenser already has pending dispense transactions which will empty this dispenser!<br><br>Are you sure you want to make this payment, as it may result in you losing your BTC funds and getting no token dispensed from the dispenser!</center></strong></div>';
+    var message = '<div class="alert alert-danger" role="alert"><strong><center>This dispenser already has pending dispense transactions which will empty this dispenser!<br><br>Are you sure you want to make this payment, as it may result in you losing your UNO funds and getting no token dispensed from the dispenser!</center></strong></div>';
     message += '<center>Are you sure you want to continue purchasing from this dispenser?'
     dialogConfirm('<i class="fa fa-lg fa-fw fa-exclamation-circle"></i> Warning', message, false, true, function(){
         confirmDispenserPayment(vals);
@@ -68,7 +68,7 @@ function confirmDispenserPayment(vals){
     var data    = FW.DIALOG_DATA;
     var title = '<img src="' + FW.XCHAIN_API + '/icon/' + data.asset + '.png" class="fw-icon-20 margin-right-5"> Confirm Buy ' + data.name + '?';
     var msg  = 'Buy <b>' + vals.amount + ' ' + data.name + '</b>';
-        msg += ' <br/>for <b>' + vals['btc-amount'] + ' BTC</b>';
+        msg += ' <br/>for <b>' + vals['btc-amount'] + ' UNO</b>';
     dialogConfirm(title, '<center>' + msg + '</center>', false, true, confirmCb);
 }
 
@@ -148,7 +148,7 @@ $(document).ready(function(){
             $('#fee-amount').closest('.form-group').addClass('has-error has-danger');
         }
 
-        // Verify BTC being paid will at least trigger one dispense
+        // Verify UNO being paid will at least trigger one dispense
         if(numeral(vals['btc-amount']).value() < numeral(FW.DIALOG_DATA.satoshirate).value()){
             errors.push('UNO Amount is lower than the requested dispenser amount!');
             $('#btc-amount').closest('.form-group').addClass('has-error has-danger');

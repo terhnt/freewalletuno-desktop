@@ -31,7 +31,7 @@
                         </ul>
                     </div>
                 </div>
-            </div>     
+            </div>
         </div>
     </div>
 
@@ -165,8 +165,8 @@ $(document).ready(function(){
     // Populate base market tables/tabs
     FW.BASE_MARKETS.forEach(function(market){ addMarket(market, true); });
 
-    // Set BTC as the active tab (also hides all the non-active tab content panels we added)
-    $('#markets-tabs a[href="#BTC"]').tab('show');
+    // Set UNO as the active tab (also hides all the non-active tab content panels we added)
+    $('#markets-tabs a[href="#UNO"]').tab('show');
 
     // Handle updating the base market pairs info in memory
     updateBaseMarkets(false);
@@ -175,7 +175,7 @@ $(document).ready(function(){
     autoCollapseTabs();
 
     // When user clicks market link, open market in main window
-    $('#markets-small').on('click', 'a.market-link', $.debounce(100,function(e){ 
+    $('#markets-small').on('click', 'a.market-link', $.debounce(100,function(e){
         var market = $(e.target).closest('tr').attr('data-market');
         // console.log('caught click market=',market);
         FW.MARKET_NAME = market;
@@ -194,7 +194,7 @@ $(document).ready(function(){
     if(FW.MARKET_OPTIONS.indexOf(3)!=-1) $(".checkbox [name='options-numeric']").prop('checked', true);
 
     // Handle updating view when user changes the viewing options
-    $('.dropdown-checkboxes .checkbox input').change($.debounce(100,function(e){ 
+    $('.dropdown-checkboxes .checkbox input').change($.debounce(100,function(e){
         var arr = [];
         if($(".checkbox [name='options-named']").is(':checked')) arr.push(1);
         if($(".checkbox [name='options-subassets']").is(':checked')) arr.push(2);
@@ -216,7 +216,7 @@ $(document).ready(function(){
            e.stopPropagation();
     });
     // Filter datatable results as user types search string
-    $('#markets-filter').keyup($.debounce(100,function(e){ 
+    $('#markets-filter').keyup($.debounce(100,function(e){
         var query = $(this).val();
         FW.BASE_MARKETS.forEach(function(market){
             var table = $('#' + market + ' table.datatable').DataTable();

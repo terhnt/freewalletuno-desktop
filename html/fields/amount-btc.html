@@ -1,6 +1,6 @@
 <!-- BTC Amount Field -->
 <label class="col-sm-3 control-label text-left" for="btc-amount">
-    BTC Amount
+    UNO Amount
     <a href="#" data-toggle="tooltip" title='This is the amount that you would like to charge per dispense' class="pull-right" id="btc-amount-tooltip"><i class="fa fa-lg fa-question-circle-o margin-top-5" ></i></a>
 </label>
 <div class="col-sm-9">
@@ -31,7 +31,7 @@ function updateBTCAmount(val){
 
 $(document).ready(function(){
 
-    // Stash current price info on BTC and XUP
+    // Stash current price info on UNO and XUP
     var btc_info = getAssetPrice('UNO',true);
         xcp_info = getAssetPrice('XUP',true);
         type     = getFormType(),
@@ -51,7 +51,7 @@ $(document).ready(function(){
         if(type=='dispenser')
             txt = 'This is the amount that you would like to charge per dispense';
         if(type=='dispenser-buy')
-            txt = 'This is the amount of BTC that this purchase will cost';
+            txt = 'This is the amount of UNO that this purchase will cost';
         if(txt)
             tip.attr('data-original-title',txt);
 
