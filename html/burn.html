@@ -37,10 +37,10 @@ $(document).ready(function(){
     setTimeout(function(){
 
         // Initialize any tooltips
-        $('[data-toggle="tooltip"]').tooltip({ 
+        $('[data-toggle="tooltip"]').tooltip({
             html: true,
             placement: 'bottom'
-        }); 
+        });
 
     },100);
 
@@ -57,21 +57,21 @@ $(document).ready(function(){
     // Handle form validation and displaying any errors
     $('#burn-form').validator().on('submit', function(e){
         // prevent form submission
-        e.preventDefault(); 
+        e.preventDefault();
         // Get object with form values
         var vals   = array2Object($(this).serializeArray()),
             errors = [];
         console.log('vals=',vals);
-        // Remove error indicators from any fields 
+        // Remove error indicators from any fields
         $('.form-group').removeClass('has-error has-danger');
 
-        // Verify we have valid amount 
+        // Verify we have valid amount
         if(numeral(vals.amount).value()==0){
             errors.push('You must enter an amount which is greater than 0!');
             $('#amount').closest('.form-group').addClass('has-error has-danger');
         }
 
-        // Verify we have valid fee amount 
+        // Verify we have valid fee amount
         if(numeral(vals['fee-amount']).value()==0){
             errors.push('You must enter a fee which is greater than 0.00000000!');
             $('#fee-amount').closest('.form-group').addClass('has-error has-danger');
@@ -97,7 +97,7 @@ $(document).ready(function(){
             }
             // Confirm the action with the user
             var title = '<i class="fa fa-lg fa-fw fa-fire"></i> Confirm Burn?',
-                msg   = 'Burn <b>' + numeral(vals.amount).format('0,0.00000000') + '</b> BTC';
+                msg   = 'Burn <b>' + numeral(vals.amount).format('0,0.00000000') + '</b> UNO';
             dialogConfirm(title, '<center>' + msg + '</center>', false, true, confirmCb);
         }
     })

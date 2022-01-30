@@ -52,7 +52,7 @@ function confirmCreateDispenser(vals){
             give_sat   = (vals['escrow-amount'].indexOf('.')!=-1) ? numeral(vals['give-amount']).multiply(100000000).format('0') : numeral(vals['give-amount']).format('0'),
             btc_sat    = parseInt(numeral(vals['btc-amount']).multiply(100000000).value()),
             fee_sat    = parseInt(numeral(vals['fee-amount']).multiply(100000000).value()),
-            asset      = vals.name, 
+            asset      = vals.name,
             status     = 0; // Hardcode to open for creating a dispenser... can close via dispensers interface
         cpDispenser(network, vals.source, vals.destination, asset, escrow_sat, give_sat, btc_sat, status, fee_sat, doneCb);
     }
@@ -86,23 +86,24 @@ function dialogWarnSameAddress(vals){
 $(document).ready(function(){
 
     // Load any field content
-    $('#source-address-field').load('html/fields/source-address.html');
-    $('#destination-address-field').load('html/fields/destination-address.html');
-    $('#token-name-select-field').load('html/fields/token-name-select.html');
-    $('#available-field').load('html/fields/available.html');
-    $('#escrow-amount-field').load('html/fields/amount-escrow.html');
-    $('#give-amount-field').load('html/fields/amount-give.html');
-    $('#btc-amount-field').load('html/fields/amount-btc.html');
+    // temporarily comment this out
+    // $('#source-address-field').load('html/fields/source-address.html');
+    // $('#destination-address-field').load('html/fields/destination-address.html');
+    // $('#token-name-select-field').load('html/fields/token-name-select.html');
+    // $('#available-field').load('html/fields/available.html');
+    // $('#escrow-amount-field').load('html/fields/amount-escrow.html');
+    // $('#give-amount-field').load('html/fields/amount-give.html');
+    // $('#btc-amount-field').load('html/fields/amount-btc.html');
     $('#tx-fee-field').load('html/fields/tx-fee.html');
 
     // Delay initializing some fields to give things a chance to load
     setTimeout(function(){
 
         // Initialize any tooltips
-        $('[data-toggle="tooltip"]').tooltip({ 
+        $('[data-toggle="tooltip"]').tooltip({
             html: true,
             placement: 'bottom'
-        }); 
+        });
 
         // Handle loading any data from FW.DIALOG_DATA
         var data = FW.DIALOG_DATA;
@@ -138,12 +139,12 @@ $(document).ready(function(){
     // Handle form validation and displaying any errors
     $('#dispenser-form').validator().on('submit', function(e){
         // prevent form submission
-        e.preventDefault(); 
+        e.preventDefault();
         // Get object with form values
         var vals   = array2Object($(this).serializeArray()),
             errors = [];
         console.log('vals=',vals);
-        // Remove error indicators from any fields 
+        // Remove error indicators from any fields
         $('.form-group').removeClass('has-error has-danger');
 
         // Verify we have a valid dispenser address
@@ -152,25 +153,25 @@ $(document).ready(function(){
             $('#destination-address').closest('.form-group').addClass('has-error has-danger');
         }
 
-        // Verify we have valid escrow amount 
+        // Verify we have valid escrow amount
         if(numeral(vals['escrow-amount']).value()==0){
             errors.push('You must enter an escrow amount which is greater than 0!');
             $('#escrow-amount').closest('.form-group').addClass('has-error has-danger');
         }
 
-        // Verify we have valid give amount 
+        // Verify we have valid give amount
         if(numeral(vals['give-amount']).value()==0){
             errors.push('You must enter an give amount which is greater than 0!');
             $('#give-amount').closest('.form-group').addClass('has-error has-danger');
         }
 
-        // Verify we have valid BTC amount 
+        // Verify we have valid BTC amount
         if(numeral(vals['btc-amount']).value()==0){
             errors.push('You must enter an BTC amount which is greater than 0!');
             $('#btc-amount').closest('.form-group').addClass('has-error has-danger');
         }
 
-        // Verify we have valid fee amount 
+        // Verify we have valid fee amount
         if(numeral(vals['fee-amount']).value()==0){
             errors.push('You must enter a fee which is greater than 0.00000000!');
             $('#fee-amount').closest('.form-group').addClass('has-error has-danger');

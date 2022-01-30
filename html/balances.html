@@ -5,7 +5,7 @@
             <a href="#" class="balances-list-refresh"><i class="fa fa-refresh pull-left"></i></a></li>
             <input type="text" class="form-control balances-list-search" placeholder="Enter search here">
             <div style="clear:both;"></div>
-        </div>        
+        </div>
         <div class="balances-list-assets">
             <ul class="nav">
             </ul>
@@ -48,7 +48,7 @@
                 <td id="asset-value-btc">&nbsp;</td>
                 <td id="asset-value-xcp">&nbsp;</td>
                 <td id="asset-value-usd">&nbsp;</td>
-            </tr>                
+            </tr>
             </tbody>
             </table>
 
@@ -147,11 +147,11 @@
 <script>
 $(document).ready(function(){
 
-    // Display balances list        
+    // Display balances list
     updateBalancesList();
 
     // Display BTC asset info
-    loadAssetInfo('BTC');
+    loadAssetInfo('UNO');
 
     // Handle detecting keyup events and filter the balances list to show matches
     // buffer the event by 250ms so we can allow for additional keystrokes before processing

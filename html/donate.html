@@ -21,7 +21,7 @@ hr.spacer {
 </style>
 
 <div class="text-right">
-    <div id="btn-buy" class="btn btn-success pull-left"><i class="fa fa-lg fa-fw fa-btc"></i> Buy FULLACCESS</div>
+    <!-- <div id="btn-buy" class="btn btn-success pull-left"><i class="fa fa-lg fa-fw fa-btc"></i> Buy FULLACCESS</div> -->
     <div id="btn-donate" class="btn btn-info"><i class="fa fa-lg fa-fw fa-bitcoin"></i> Donate</div>
 </div>
 
@@ -51,7 +51,7 @@ $(document).ready(function(){
     $('#btn-donate').click($.debounce(100, function(e){
         FW.DIALOG_DATA = {
             destination: address,
-            token: 'BTC'
+            token: 'UNO'
         };
         dialogSend();
         dialogClose('dialog-donate');

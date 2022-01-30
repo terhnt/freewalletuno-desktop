@@ -15,7 +15,7 @@ nwjs=/Applications/nwjs.app/Contents/MacOS/nwjs
 ###
 
 # Verify we are building on a mac
-if [ "$OSTYPE" != "darwin" ] ; then
+if [ "$OSTYPE" != "darwin" || "$OSTYPE" != "darwin19" ] ; then
     echo "Build script is meant to be run on MacOS!"
     exit
 fi
@@ -25,7 +25,7 @@ base_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # Extract app name and version from package.json
 app_name=`cat package.json | grep -m1 "name" | awk '{print $2}' | tr -d '",'`
-version=`cat package.json | grep -m1 "version" | awk '{print $2}' | tr -d '",'` 
+version=`cat package.json | grep -m1 "version" | awk '{print $2}' | tr -d '",'`
 
 # Copy files to build directory
 while true; do
@@ -93,12 +93,12 @@ while true; do
         [Yy]* ) yn="Y"
                 plist=$base_dir/builds/$app_name/osx64/$app_name.app/Contents/Info.plist
                 echo "### Editing Plist file at $plist..."
-                /usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes:3:CFBundleURLName string Bitcoin" $plist
+                /usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes:3:CFBundleURLName string Unobtanium" $plist
                 /usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes:3:CFBundleURLSchemes array" $plist
-                /usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes:3:CFBundleURLSchemes:0 string bitcoin" $plist
-                /usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes:4:CFBundleURLName string Counterparty" $plist
+                /usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes:3:CFBundleURLSchemes:0 string unobtanium" $plist
+                /usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes:4:CFBundleURLName string Unoparty" $plist
                 /usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes:4:CFBundleURLSchemes array" $plist
-                /usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes:4:CFBundleURLSchemes:0 string counterparty" $plist
+                /usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes:4:CFBundleURLSchemes:0 string unoparty" $plist
                 /usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes:5:CFBundleURLName string FreeWallet" $plist
                 /usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes:5:CFBundleURLSchemes array" $plist
                 /usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes:5:CFBundleURLSchemes:0 string freewallet" $plist
@@ -169,11 +169,11 @@ while true; do
                 # create the temp DMG file
                 echo "### Creating temporary DMG file..."
                 hdiutil create -srcfolder "$staging" -volname "$vol_name" -fs HFS+ -fsargs "-c c=64,a=16,e=16" -format UDRW -size ${size}M "$dmg_tmp"
-     
+
                 # mount it and save the device
                 echo "### Mounting temporary DMG file : $dmg_tmp ..."
                 device=$(hdiutil attach -readwrite -noverify "$dmg_tmp" | egrep '^/dev/' | sed 1q | awk '{print $1}')
-     
+
                 # sleep to let the device actually mount
                 sleep 2
 
@@ -213,11 +213,11 @@ while true; do
 
                 # unmount it
                 hdiutil detach $device
-                 
+
                 # now make the final image a compressed disk image
                 echo "### Creating compressed image..."
                 hdiutil convert $dmg_tmp -format UDZO -imagekey zlib-level=9 -o $dmg_out
-                 
+
                 # Move file to its final destination
                 echo "### Moving dmg to final destination..."
                 mv $dmg_out $base_dir/builds/$app_name/osx64/

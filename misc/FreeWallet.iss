@@ -22,16 +22,16 @@ OutputBaseFilename=FreeWallet
 ArchitecturesInstallIn64BitMode=x64
 
 [Registry]
-; Add support for bitcoin: urls
-Root: HKCR; Subkey: "bitcoin"; ValueType: "string"; ValueData: "URL:bitcoin Protocol"; Flags: uninsdeletekey
-Root: HKCR; Subkey: "bitcoin"; ValueType: "string"; ValueName: "URL Protocol"; ValueData: ""
-Root: HKCR; Subkey: "bitcoin\DefaultIcon"; ValueType: "string"; ValueData: "{app}\FreeWallet.exe,0"
-Root: HKCR; Subkey: "bitcoin\shell\open\command"; ValueType: "string"; ValueData: """{app}\FreeWallet.exe"" ""%1"""
-; Add support for counterparty: urls
-Root: HKCR; Subkey: "counterparty"; ValueType: "string"; ValueData: "URL:counterparty Protocol"; Flags: uninsdeletekey
-Root: HKCR; Subkey: "counterparty"; ValueType: "string"; ValueName: "URL Protocol"; ValueData: ""
-Root: HKCR; Subkey: "counterparty\DefaultIcon"; ValueType: "string"; ValueData: "{app}\FreeWallet.exe,0"
-Root: HKCR; Subkey: "counterparty\shell\open\command"; ValueType: "string"; ValueData: """{app}\FreeWallet.exe"" ""%1"""
+; Add support for unobtanium: urls
+Root: HKCR; Subkey: "unobtanium"; ValueType: "string"; ValueData: "URL:unobtanium Protocol"; Flags: uninsdeletekey
+Root: HKCR; Subkey: "unobtanium"; ValueType: "string"; ValueName: "URL Protocol"; ValueData: ""
+Root: HKCR; Subkey: "unobtanium\DefaultIcon"; ValueType: "string"; ValueData: "{app}\FreeWallet.exe,0"
+Root: HKCR; Subkey: "unobtanium\shell\open\command"; ValueType: "string"; ValueData: """{app}\FreeWallet.exe"" ""%1"""
+; Add support for unoparty: urls
+Root: HKCR; Subkey: "unoparty"; ValueType: "string"; ValueData: "URL:unoparty Protocol"; Flags: uninsdeletekey
+Root: HKCR; Subkey: "unoparty"; ValueType: "string"; ValueName: "URL Protocol"; ValueData: ""
+Root: HKCR; Subkey: "unoparty\DefaultIcon"; ValueType: "string"; ValueData: "{app}\FreeWallet.exe,0"
+Root: HKCR; Subkey: "unoparty\shell\open\command"; ValueType: "string"; ValueData: """{app}\FreeWallet.exe"" ""%1"""
 ; Add support for freewallet: urls
 Root: HKCR; Subkey: "freewallet"; ValueType: "string"; ValueData: "URL:freewallet Protocol"; Flags: uninsdeletekey
 Root: HKCR; Subkey: "freewallet"; ValueType: "string"; ValueName: "URL Protocol"; ValueData: ""
