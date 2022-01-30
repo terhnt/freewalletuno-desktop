@@ -8,6 +8,7 @@
 var ls = localStorage,
     ss = sessionStorage,
     bc = bitcore;
+    bj = bitcoinjs;
 
 // Define FreeWallet namespace
 FW = {};
@@ -57,8 +58,8 @@ FW.WALLET_HISTORY  = JSON.parse(ls.getItem('walletHistory'))  || [];
 // Define default server info
 FW.WALLET_SERVER_INFO = {
     mainnet: {
-        host: 'api.counterparty.io',
-        port: 4000,
+        host: 'api.unoparty.io',
+        port: 4120,
         user: 'rpc',
         pass: 'rpc',
         ssl: false,
@@ -66,8 +67,8 @@ FW.WALLET_SERVER_INFO = {
         api_ssl: true
     },
     testnet: {
-        host: 'api.counterparty.io',
-        port: 14000,
+        host: 'api.unoparty.io',
+        port: 14120,
         user: 'rpc',
         pass: 'rpc',
         ssl: false,
@@ -77,13 +78,13 @@ FW.WALLET_SERVER_INFO = {
 };
 
 // Define the default and base markets for the Decentralized Exchange (DEX)
-FW.DEFAULT_MARKETS = ['BTC','XCP','BITCRYSTALS','PEPECASH','WILLCOIN'];
+FW.DEFAULT_MARKETS = ['UNO','XUP','WUNO'];
 FW.BASE_MARKETS    = JSON.parse(ls.getItem('walletMarkets')) || FW.DEFAULT_MARKETS;
 FW.MARKET_OPTIONS  = JSON.parse(ls.getItem('walletMarketOptions')) || [1,2]; // 1=named, 2=subasset, 3=numeric
 FW.BASE_MARKETS    = FW.BASE_MARKETS.slice(0, 10); // Limit exchange market list to 10
 
 // Define default dispenser watchlist assets
-FW.DEFAULT_DISPENSERS = ['XCP','PEPECASH'];
+FW.DEFAULT_DISPENSERS = ['XUP','WUNO'];
 FW.BASE_DISPENSERS    = JSON.parse(ls.getItem('walletDispensers')) || FW.DEFAULT_DISPENSERS;
 FW.DISPENSER_OPTIONS  = JSON.parse(ls.getItem('walletDispenserOptions')) || []; // 1=hide closed
 FW.BASE_DISPENSERS    = FW.BASE_DISPENSERS.slice(0, 10); // Limit dispenser watchlist to 10
@@ -335,7 +336,7 @@ function createWallet( passphrase, isBip39=false ){
                 a = bc.Address(d.publicKey, bcNet).toString();
                 //b = bitcoinjs.payments.p2wpkh({ pubkey: d.publicKey.toBuffer(), network: bjNet }).address;
             addWalletAddress(net, a, 'Address #' + (i + 1), 1, i);
-            addWalletAddress(net, b, 'Segwit Address #' + (i + 1), 7, i);
+            //addWalletAddress(net, b, 'Segwit Address #' + (i + 1), 7, i);
         }
     });
     // Set current address to first address in wallet
@@ -456,7 +457,7 @@ function lockWallet(){
 
 // Get wallet addresses using given index
 function getWalletAddress( index ){
-    // console.log('getWalletAddress index=',index);
+    console.log('getWalletAddress index=',index);
     // update network (used in UWBitcore)
     var net = (FW.WALLET_NETWORK==2) ? 'testnet' : 'mainnet',
     bcName = (net=='testnet') ? 'unotestnet' : 'unomainnet',
@@ -480,7 +481,7 @@ function getWalletAddress( index ){
 
 // Set wallet address
 function setWalletAddress( address, load=0 ){
-    // console.log('setWalletAddress address, load=',address,load);
+    console.log('setWalletAddress address, load=',address,load);
     FW.WALLET_ADDRESS = address;
     var info = getWalletAddressInfo(address);
     if(!info)
