@@ -324,13 +324,16 @@ function createWallet( passphrase, isBip39=false ){
     // Add the first 10 addresses to the wallet (both mainnet and testnet)
     var networks = ['mainnet','testnet'];
     networks.forEach(function(net){
-        var network = bc.Networks[net],
-            netname = (net=='testnet') ? 'testnet' : 'bitcoin';
-        var s = bc.HDPrivateKey.fromSeed(wallet, network);
+      var bcName = (net=='testnet') ? 'unotestnet' : 'unomainnet', // Network name in bitcore
+          bjName = (net=='testnet') ? 'unotestnet' : 'unomainnet', // Network name in bitcoinjs
+          bcNet  = bc.Networks[bcName], // Bitcore Network
+          bjNet  = bj.networks[bjName]; // BitcoinJS Network
+          console.log('bcName, bcNet=',bcName, bcNet);
+        var s = bc.HDPrivateKey.fromSeed(wallet, bcNet);
         for(var i=0;i<10;i++){
             var d = s.derive("m/0'/0/" + i),
-                a = bc.Address(d.publicKey, network).toString();
-                b = bitcoinjs.payments.p2wpkh({ pubkey: d.publicKey.toBuffer(), network: bitcoinjs.networks[netname] }).address;
+                a = bc.Address(d.publicKey, bcNet).toString();
+                //b = bitcoinjs.payments.p2wpkh({ pubkey: d.publicKey.toBuffer(), network: bjNet }).address;
             addWalletAddress(net, a, 'Address #' + (i + 1), 1, i);
             addWalletAddress(net, b, 'Segwit Address #' + (i + 1), 7, i);
         }
