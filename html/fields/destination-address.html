@@ -56,7 +56,7 @@ $(document).ready(function(){
             var asset = addr.toUpperCase();
             // Detect USER.BTC usernames and translate to BTCTAG.USER asset name
             if(addr.toUpperCase().endsWith('.BTC'))
-                asset = 'BTCTAG.' + addr.toUpperCase().replace(/\.BTC/i,'');
+                asset = 'UNOTAG.' + addr.toUpperCase().replace(/\.BTC/i,'');
             // Try to lookup asset and then use owner address as destination address
             $.getJSON(FW.XCHAIN_API + '/api/asset/' + asset, function(o){
                 if(o.owner)

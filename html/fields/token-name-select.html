@@ -16,9 +16,9 @@ $(document).ready(function(){
     var type = getFormType(),
         tip  = $('#token-name-select-tooltip');
 
-    // Stash current price info on BTC and XCP
-    btc_info = getAssetPrice('BTC',true),
-    xcp_info = getAssetPrice('XCP',true);
+    // Stash current price info on BTC and XUP
+    btc_info = getAssetPrice('UNO',true),
+    xcp_info = getAssetPrice('XUP',true);
 
     // Populate the token name / asset list
     var balances = getAddressBalance(FW.WALLET_ADDRESS),
@@ -34,7 +34,7 @@ $(document).ready(function(){
         if(balances && balances.data){
             balances.data.forEach(function(item){
                 // Skip BTC in some cases
-                if(item.asset=='BTC' && (type=='destroy'||type=='dispenser'))
+                if(item.asset=='UNO' && (type=='destroy'||type=='dispenser'))
                     return;
                 var asset = (item.asset_longname && item.asset_longname!='') ? item.asset_longname : item.asset;
                 html += '<option data-content="<img src=\'' + FW.XCHAIN_API + '/icon/' + item.asset + '.png\' class=\'fw-icon-20 margin-right-5\'>' + asset + '">' + asset + '</option>';
@@ -89,8 +89,8 @@ $(document).ready(function(){
         // Callback function to handle saving current asset information
         var cb = function(o){
             FW.ASSET_INFO = o;
-            btc_info = getAssetPrice('BTC',true);
-            xcp_info = getAssetPrice('XCP',true);
+            btc_info = getAssetPrice('UNO',true);
+            xcp_info = getAssetPrice('XUP',true);
             // Handle enabling/disabling the fiat field based on if we detect some estimated BTC value
             if(o.estimated_value.btc=='0.00000000'){
                 $('#amount-value').prop('disabled',true);
@@ -103,7 +103,7 @@ $(document).ready(function(){
             }
         }
         // If this is BTC, hardcode the values and skip getting asset info
-        if(val=='BTC'){
+        if(val=='UNO'){
             cb({
                 asset: "BTC",
                 estimated_value: {

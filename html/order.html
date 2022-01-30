@@ -124,7 +124,7 @@ $(document).ready(function(){
             $('#assetB-icon').attr('src', FW.XCHAIN_API + '/icon/' + assetB + '.png');
             $('.order-type').html(data.type.charAt(0).toUpperCase() + data.type.slice(1));
             // Display additional options for auto-signing the BTCpay transaction
-            if(data.give_asset=='BTC')
+            if(data.give_asset=='UNO')
                 $('#btcpay').show();
         }
 
@@ -179,7 +179,7 @@ $(document).ready(function(){
             $('#expires').closest('.form-group').addClass('has-error has-danger');
         }
         // Handle BTCpay valdidation
-        if(vals.give_asset=='BTC' && vals['autopay-confirm']!='Y'){
+        if(vals.give_asset=='UNO' && vals['autopay-confirm']!='Y'){
             errors.push('You must confirm that you understand the BTCPay requirements!');
             $('.dialog-autobtcpay-confirm').effect( "shake", { times: 3, direction: 'up' }, 1000);
         }
@@ -200,7 +200,7 @@ $(document).ready(function(){
                     dialogMessage('<i class="fa fa-lg fa-check"></i> Order Creation Successful', '<center>Your order has been broadcast to the network and should be placed shortly.' +
                                   '<br/><br/><a class="btn btn-success" href="' + FW.XCHAIN_API + '/tx/' + tx + '" target="_blank">View Transaction</a></center>');
                     // Add transaction to BTCpay monitoring list
-                    if(vals.give_asset=='BTC'){
+                    if(vals.give_asset=='UNO'){
                         if(!FW.BTCPAY_ORDERS[network])
                             FW.BTCPAY_ORDERS[network] = {};
                         if(!FW.BTCPAY_ORDERS[network][vals.source])

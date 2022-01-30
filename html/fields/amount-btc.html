@@ -31,14 +31,14 @@ function updateBTCAmount(val){
 
 $(document).ready(function(){
 
-    // Stash current price info on BTC and XCP
-    var btc_info = getAssetPrice('BTC',true);
-        xcp_info = getAssetPrice('XCP',true);
+    // Stash current price info on BTC and XUP
+    var btc_info = getAssetPrice('UNO',true);
+        xcp_info = getAssetPrice('XUP',true);
         type     = getFormType(),
         dust_sat = 5430,
         tip      = $('#btc-amount-tooltip');
 
-    // Set initial value 
+    // Set initial value
     if(type=='dispenser-buy'){
         $('#btc-amount').val(FW.DIALOG_DATA.satoshirate);
     }
@@ -46,7 +46,7 @@ $(document).ready(function(){
     // Wait a brief moment to allow things to initialize
     setTimeout(function(){
 
-        // Change toolip text based on form type 
+        // Change toolip text based on form type
         var txt = false;
         if(type=='dispenser')
             txt = 'This is the amount that you would like to charge per dispense';

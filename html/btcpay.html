@@ -57,9 +57,9 @@ $(document).ready(function(){
         // Handle loading any data from FW.DIALOG_DATA
         var data = FW.DIALOG_DATA;
         if(data){
-            var asset   = (data.forward_asset=='BTC') ? data.backward_asset : data.forward_asset,
-                amountA = (data.forward_asset=='BTC') ? data.forward_quantity : data.backward_quantity,
-                amountB = (data.forward_asset=='BTC') ? data.backward_quantity : data.forward_quantity,
+            var asset   = (data.forward_asset=='UNO') ? data.backward_asset : data.forward_asset,
+                amountA = (data.forward_asset=='UNO') ? data.forward_quantity : data.backward_quantity,
+                amountB = (data.forward_asset=='UNO') ? data.backward_quantity : data.forward_quantity,
                 format  = '0,0.00000000';
             $('#infoA').html(numeral(amountA).format(format) + '<br>BTC');
             $('#infoB').html(numeral(amountB).format(format) + '<br>' + asset);

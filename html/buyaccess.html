@@ -11,23 +11,23 @@
 </thead>
 <tr>
     <td rowspan="2"><img src="https://xchain.io/icon/FULLACCESS.png" class="margin-right-5"></td>
-    <td><a href="https://xchain.io/market/FULLACCESS/BTC" target="_blank">FULLACCESS / BTC</a></td>
+    <td><a href="https://xchain.io/market/FULLACCESS/UNO" target="_blank">FULLACCESS / UNO</a></td>
     <td id="fullaccess-btc-price">-</td>
     <td><a href="#" class="btn btn-sm btn-success pull-right" id="fullaccess-btc-buy">Buy Now</a></td>
 </tr>
 <tr>
-    <td><a href="https://xchain.io/market/FULLACCESS/XCP" target="_blank">FULLACCESS / XCP</a></td>
+    <td><a href="https://xchain.io/market/FULLACCESS/XUP" target="_blank">FULLACCESS / XUP</a></td>
     <td id="fullaccess-xcp-price">-</td>
     <td><a href="#" class="btn btn-sm btn-success pull-right" id="fullaccess-xcp-buy">Buy Now</a></td>
 </tr>
 <tr>
     <td rowspan="2"><img src="https://xchain.io/icon/XCHAINPEPE.png" class="margin-right-5"></td>
-    <td><a href="https://xchain.io/market/XCHAINPEPE/BTC" target="_blank">XCHAINPEPE / BTC</a></td>
+    <td><a href="https://xchain.io/market/XCHAINPEPE/UNO" target="_blank">XCHAINPEPE / UNO</a></td>
     <td id="xchainpepe-btc-price">-</td>
     <td><a href="#" class="btn btn-sm btn-success pull-right" id="xchainpepe-btc-buy">Buy Now</a></td>
 </tr>
 <tr>
-    <td><a href="https://xchain.io/market/XCHAINPEPE/XCP" target="_blank">XCHAINPEPE / XCP</a></td>
+    <td><a href="https://xchain.io/market/XCHAINPEPE/XUP" target="_blank">XCHAINPEPE / XUP</a></td>
     <td id="xchainpepe-xcp-price">-</td>
     <td><a href="#" class="btn btn-sm btn-success pull-right" id="xchainpepe-xcp-buy">Buy Now</a></td>
 </tr>
@@ -44,19 +44,19 @@ $(document).ready(function(){
         fmt_sat = '0,0.00000000',
         fmt_raw = '0.00000000',
         price = {
-            btc: getAssetPrice('BTC'),
-            xcp: getAssetPrice('XCP')
+            btc: getAssetPrice('UNO'),
+            xcp: getAssetPrice('XUP')
         };
 
     // Set the asset divisibility for the assets
     FW.ASSET_DIVISIBLE = {};
-    FW.ASSET_DIVISIBLE['BTC'] = true;
-    FW.ASSET_DIVISIBLE['XCP'] = true;
+    FW.ASSET_DIVISIBLE['UNO'] = true;
+    FW.ASSET_DIVISIBLE['XUP'] = true;
     FW.ASSET_DIVISIBLE['FULLACCESS'] = false;
     FW.ASSET_DIVISIBLE['XCHAINPEPE'] = false;
 
     // Get FULLACCESS/BTC Price info
-    $.getJSON('https://xchain.io/api/market/FULLACCESS/BTC/orderbook', function(o){
+    $.getJSON('https://xchain.io/api/market/FULLACCESS/UNO/orderbook', function(o){
         var txt = '-';
         if(o.asks && o.asks.length>0){
             var ask = numeral(o.asks[0][0]).format(fmt_sat),
@@ -66,19 +66,19 @@ $(document).ready(function(){
         $('#fullaccess-btc-buy').attr('price',ask);
     });
 
-    // Get FULLACCESS/XCP Price info
-    $.getJSON('https://xchain.io/api/market/FULLACCESS/XCP/orderbook', function(o){
+    // Get FULLACCESS/XUP Price info
+    $.getJSON('https://xchain.io/api/market/FULLACCESS/XUP/orderbook', function(o){
         var txt = '-';
         if(o.asks && o.asks.length>0){
             var ask = numeral(o.asks[0][0]).format(fmt_sat),
                 usd = numeral(o.asks[0][0] * price.xcp).format(fmt_usd);
         }
-        $('#fullaccess-xcp-price').text(ask + ' XCP ($' + usd + ')');
+        $('#fullaccess-xcp-price').text(ask + ' XUP ($' + usd + ')');
         $('#fullaccess-xcp-buy').attr('price',ask);
     });
 
     // Get XCHAINPEPE/BTC Price info
-    $.getJSON('https://xchain.io/api/market/XCHAINPEPE/BTC/orderbook', function(o){
+    $.getJSON('https://xchain.io/api/market/XCHAINPEPE/UNO/orderbook', function(o){
         var txt = '-';
         if(o.asks && o.asks.length>0){
             var ask = numeral(o.asks[0][0]).format(fmt_sat),
@@ -89,13 +89,13 @@ $(document).ready(function(){
     });
 
     // Get XCHAINPEPE/XCP Price info
-    $.getJSON('https://xchain.io/api/market/XCHAINPEPE/XCP/orderbook', function(o){
+    $.getJSON('https://xchain.io/api/market/XCHAINPEPE/XUP/orderbook', function(o){
         var txt = '-';
         if(o.asks && o.asks.length>0){
             var ask = numeral(o.asks[0][0]).format(fmt_sat),
                 usd = numeral(o.asks[0][0] * price.xcp).format(fmt_usd);
         }
-        $('#xchainpepe-xcp-price').text(ask + ' XCP ($' + usd + ')');
+        $('#xchainpepe-xcp-price').text(ask + ' XUP ($' + usd + ')');
         $('#xchainpepe-xcp-buy').attr('price',ask);
     });
 
@@ -106,7 +106,7 @@ $(document).ready(function(){
             market: 'FULLACCESS/BTC',
             type: 'buy',
             get_asset:   'FULLACCESS',
-            give_asset:  'BTC',
+            give_asset:  'UNO',
             get_amount:  1,
             give_amount: numeral(cost).format(fmt_raw)
         };
@@ -120,7 +120,7 @@ $(document).ready(function(){
             market: 'FULLACCESS/XCP',
             type: 'buy',
             get_asset:   'FULLACCESS',
-            give_asset:  'XCP',
+            give_asset:  'XUP',
             get_amount:  1,
             give_amount: numeral(cost).format(fmt_raw)
         };
@@ -134,7 +134,7 @@ $(document).ready(function(){
             market: 'XCHAINPEPE/BTC',
             type: 'buy',
             get_asset:   'XCHAINPEPE',
-            give_asset:  'BTC',
+            give_asset:  'UNO',
             get_amount:  1,
             give_amount: numeral(cost).format(fmt_raw)
         };
@@ -148,7 +148,7 @@ $(document).ready(function(){
             market: 'XCHAINPEPE/XCP',
             type: 'buy',
             get_asset:   'XCHAINPEPE',
-            give_asset:  'XCP',
+            give_asset:  'XUP',
             get_amount:  1,
             give_amount: numeral(cost).format(fmt_raw)
         };

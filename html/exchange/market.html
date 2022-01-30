@@ -30,8 +30,8 @@
                     </tr>
                     <tr>
                         <td colspan="5">
-                            24h Vol: 
-                            <span id="asset1-volume" class="bold"></span> <span class="asset1-name"></span> / 
+                            24h Vol:
+                            <span id="asset1-volume" class="bold"></span> <span class="asset1-name"></span> /
                             <span id="asset2-volume" class="bold"></span> <span class="asset2-name"></span>
                         </td>
                     </tr>
@@ -42,7 +42,7 @@
                     <div class="market-icon"><img src="images/icons/btc.png"></div>
                     <div class="market-name"></div>
                     <div class="market-pair">
-                        <img src="images/icons/btc.png" class="fw-icon-20"> <span></span> 
+                        <img src="images/icons/btc.png" class="fw-icon-20"> <span></span>
                         <a href="#" class="fa fa-lg fa-exchange" data-toggle="tooltip" data-placement="bottom" title="Reverse" id="market-swap-button"></a>
                         <a href="#" class="fa fa-lg fa-refresh"  data-toggle="tooltip" data-placement="bottom" title="Refresh" id="market-refresh-button"></a>
                     </div>
@@ -61,7 +61,7 @@
                             <li><a href="#" data-chart="average-true-range">ATR (Average True Range)</a></li>
                             <li><a href="#" data-chart="bollinger-bands">Bollinger Bands</a></li>
                             <li><a href="#" data-chart="commodity-channel-index">CCI (Commodity Channel Index)</a></li>
-                            <!-- Comment out CMF for now... lines are not showing up 
+                            <!-- Comment out CMF for now... lines are not showing up
                                 <li><a href="#" data-chart="chaikin-money-flow">CMF (Chaikin Money Flow)</a></li>
                             -->
                             <li><a href="#" data-chart="exponential-moving-average">EMA (Exponential Moving Average)</a></li>
@@ -100,7 +100,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label text-left" for="buy-price">
-                                        Price 
+                                        Price
                                     </label>
                                     <div class="input-group col-sm-9">
                                         <input type="text" class="form-control text-right" name="buy-price" id="buy-price" placeholder="0.00000000"  data-minlength="1"  required>
@@ -283,7 +283,7 @@
                             <div class="panel-heading panel-heading-lg">
                                 <img src="images/icons/btc.png" class="asset-icon fw-icon-20"> <span class="asset1-name"></span> Information
                                 <a href="#" class="btn btn-xs btn-success pull-right more-info" data-toggle="tooltip" data-placement="left" title="More Information" target="_blank"><i class="fa fa-lg auto-width fa-info-circle"></i></a>
-                            </div>                    
+                            </div>
                             <table class="table table-striped cell-border table-condensed no-bottom-margin" width="100%">
                             <tbody>
                             <tr>
@@ -292,7 +292,7 @@
                             </tr>
                             <tr>
                                 <th class="info">Last Price</th>
-                                <td><span class="last-price-xcp">0.00000000</span> XCP ($<span class="last-price-usd">0.00</span>)</td>
+                                <td><span class="last-price-xcp">0.00000000</span> XUP ($<span class="last-price-usd">0.00</span>)</td>
                             </tr>
                             <tr>
                                 <th class="info">Reputation</th>
@@ -306,7 +306,7 @@
                             <div class="panel-heading panel-middle panel-heading-lg">
                                 <img src="images/icons/btc.png" class="asset-icon fw-icon-20"> <span class="asset2-name"></span> Information
                                 <a href="#" class="btn btn-xs btn-success pull-right more-info" data-toggle="tooltip" data-placement="left" title="More Information" target="_blank"><i class="fa fa-lg auto-width fa-info-circle"></i></a>
-                            </div>                    
+                            </div>
                             <table class="table table-striped cell-border table-condensed no-bottom-margin" width="100%">
                             <tbody>
                             <tr>
@@ -315,7 +315,7 @@
                             </tr>
                             <tr>
                                 <th class="info">Last Price</th>
-                                <td><span class="last-price-xcp">0.00000000</span> XCP ($<span class="last-price-usd">0.00</span>)</td>
+                                <td><span class="last-price-xcp">0.00000000</span> XUP ($<span class="last-price-usd">0.00</span>)</td>
                             </tr>
                             <tr>
                                 <th class="info">Reputation</th>
@@ -353,7 +353,7 @@ FW.CHART_CONFIG = {
                 align: 'right',
                 y: -5,
                 x: 2
-            }                
+            }
         }
     },
     title: {
@@ -477,7 +477,7 @@ $(document).ready(function(){
     // Initialize some placeholders
     FW.RAW_CHART_DATA  = [];
     FW.CHART_DATA      = [];
-    FW.MARKET_NAME     = 'BTC/XCP';
+    FW.MARKET_NAME     = 'UNO/XUP';
     FW.ASSET_DIVISIBLE = {};
 
     // Load preferred market chart
@@ -505,7 +505,7 @@ $(document).ready(function(){
     // Reset dialog data so we don't reuse data in the future
     FW.DIALOG_DATA = {};
 
-     // Update market information 
+     // Update market information
     updateMarket(FW.MARKET_NAME);
 
     // Handle swapping the market when the user clicks the <-> swap button
@@ -590,7 +590,7 @@ $(document).ready(function(){
         $('#sell-price').val(numeral(price).format(fmt));
         $('#sell-amount').val(numeral(amount).format(fmt));
         $('#sell-total').val(numeral(total).format(fmt));
-    });    
+    });
 
     // Setup listeners on price/amount/total fields to recalculate as user types
     $.each(['buy','sell'], function(idx,id){
@@ -684,13 +684,13 @@ $(document).ready(function(){
                 $('#' + id + '-amount').closest('.form-group').addClass('has-error has-danger');
             }
             // Verify order total over BTC order minimum
-            if(asset2=='BTC' && numeral(vals[id + '-total']).value() < minbtc ){
-                errors.push('Order total is below order minimum of ' + numeral(minbtc).format('0.00000000') + ' BTC')                
+            if(asset2=='UNO' && numeral(vals[id + '-total']).value() < minbtc ){
+                errors.push('Order total is below order minimum of ' + numeral(minbtc).format('0.00000000') + ' BTC')
                 $('#' + id + '-total').closest('.form-group').addClass('has-error has-danger');
             }
             // Verify order amount over BTC order minimum
-            if(asset1=='BTC' && numeral(vals[id + '-amount']).value() < minbtc ){
-                errors.push('BTC amount is below order minimum of ' + numeral(minbtc).format('0.00000000') + ' BTC')                
+            if(asset1=='UNO' && numeral(vals[id + '-amount']).value() < minbtc ){
+                errors.push('UNO amount is below order minimum of ' + numeral(minbtc).format('0.00000000') + ' BTC')
                 $('#' + id + '-amount').closest('.form-group').addClass('has-error has-danger');
             }
             // Display any error message
@@ -729,7 +729,7 @@ $(document).ready(function(){
 
     // Unbind the event to prevent duplicate listeners
     $(window).unbind('resize');
-    // Detect any window resizes and resize datatables to fit 
+    // Detect any window resizes and resize datatables to fit
     $(window).resize($.debounce(10,function(e){
         var win    = $(window),
             height = win.height(),

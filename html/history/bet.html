@@ -103,13 +103,13 @@
         bet_types = [];
 
     // Define array of bet types
-    bet_types[0] = 'Bullish'; // CFD (deprecated), 
-    bet_types[1] = 'Bearish'; // CFD (deprecated), 
+    bet_types[0] = 'Bullish'; // CFD (deprecated),
+    bet_types[1] = 'Bearish'; // CFD (deprecated),
     bet_types[2] = 'Equal';
     bet_types[3] = 'Not Equal';
 
     $(document).ready(function(){
-        
+
         // Update 'more info' link to point to transaction url
         $('#history-info-more').attr('href', FW.XCHAIN_API + '/tx/' + tx);
 
@@ -127,7 +127,7 @@
                 $('#expiration').text(numeral(o.expiration).format('0,0'));
                 $('#expire-index').html(numeral(o.expire_index).format('0,0'));
                 $('#deadline').html('<span data-livestamp='  + o.deadline + ' class="nowrap"></span>');
-                var link = '&nbsp;XCP';
+                var link = '&nbsp;XUP';
                 $('#wager-quantity').html(o.wager_quantity + link);
                 $('#wager-remaining').html(o.wager_remaining + link);
                 $('#counterwager-quantity').html(o.counterwager_quantity + link);
@@ -141,8 +141,7 @@
                     $('#tx-index').text('-');
                 }
             }
-        });   
+        });
 
     });
 </script>
-

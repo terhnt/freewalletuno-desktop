@@ -62,7 +62,7 @@ function confirmDispenserPayment(vals){
             source  = FW.WALLET_ADDRESS,
             amt_sat = parseInt(numeral(vals['btc-amount']).multiply(100000000).value()),
             fee_sat = parseInt(numeral(vals['fee-amount']).multiply(100000000).value());
-        cpSend(network, source, data.destination, null, null, 'BTC', amt_sat, fee_sat, doneCb);
+        cpSend(network, source, data.destination, null, null, 'UNO', amt_sat, fee_sat, doneCb);
     }
     // Confirm the action with the user
     var data    = FW.DIALOG_DATA;
@@ -72,7 +72,7 @@ function confirmDispenserPayment(vals){
     dialogConfirm(title, '<center>' + msg + '</center>', false, true, confirmCb);
 }
 
-// Handle checking for any pending dispenser vends and determine if the dispenser still has quantity to dispense 
+// Handle checking for any pending dispenser vends and determine if the dispenser still has quantity to dispense
 function checkDispenserQuantity(vals){
     var asset = FW.DIALOG_DATA.asset;
     // Check mempool for any pending dispenser transactions
@@ -111,10 +111,10 @@ $(document).ready(function(){
     setTimeout(function(){
 
         // Initialize any tooltips
-        $('[data-toggle="tooltip"]').tooltip({ 
+        $('[data-toggle="tooltip"]').tooltip({
             html: true,
             placement: 'bottom'
-        }); 
+        });
 
     },100);
 
@@ -134,15 +134,15 @@ $(document).ready(function(){
     // Handle form validation and displaying any errors
     $('#dispenser-buy-form').validator().on('submit', function(e){
         // prevent form submission
-        e.preventDefault(); 
+        e.preventDefault();
         // Get object with form values
         var vals   = array2Object($(this).serializeArray()),
             errors = [];
         console.log('vals=',vals);
-        // Remove error indicators from any fields 
+        // Remove error indicators from any fields
         $('.form-group').removeClass('has-error has-danger');
 
-        // Verify we have valid fee amount 
+        // Verify we have valid fee amount
         if(numeral(vals['fee-amount']).value()==0){
             errors.push('You must enter a fee which is greater than 0.00000000!');
             $('#fee-amount').closest('.form-group').addClass('has-error has-danger');
@@ -150,13 +150,13 @@ $(document).ready(function(){
 
         // Verify BTC being paid will at least trigger one dispense
         if(numeral(vals['btc-amount']).value() < numeral(FW.DIALOG_DATA.satoshirate).value()){
-            errors.push('BTC Amount is lower than the requested dispenser amount!');
+            errors.push('UNO Amount is lower than the requested dispenser amount!');
             $('#btc-amount').closest('.form-group').addClass('has-error has-danger');
         }
 
         // Throw error if amount is below dust amount
         if(numeral(vals['btc-amount']).multiply(100000000).value()<=5430){
-            errors.push('BTC Amount must be greater than dust (0.00005430 BTC)!');
+            errors.push('UNO Amount must be greater than dust (0.00005430 UNO)!');
             $('#btc-amount').closest('.form-group').addClass('has-error has-danger');
         }
 

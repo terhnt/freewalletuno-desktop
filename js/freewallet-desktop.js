@@ -102,7 +102,7 @@ FW.BTCPAY_QUEUE   = JSON.parse(ls.getItem('btcpayQueue'))   || {}; // Array of b
 // We cache the data in order to reduce duplicate API calls as much as possible
 FW.ASSET_INFO  = {};
 // Example of cached asset data
-// FW.ASSET_INFO['BTC'] = {
+// FW.ASSET_INFO['UNO'] = {
 //     block:     0, // Block # when data was last updated
 //     ...
 // }
@@ -111,7 +111,7 @@ FW.ASSET_INFO  = {};
 // We cache the data in order to reduce duplicate API calls as much as possible
 FW.REPUTATION_INFO  = {};
 // Example of cached reputation data
-// FW.REPUTATION_INFO['BTC'] = {
+// FW.REPUTATION_INFO['UNO'] = {
 //     block:     0, // Block # when data was last updated
 //     ...
 // }
@@ -120,7 +120,7 @@ FW.REPUTATION_INFO  = {};
 // We cache the data in order to reduce duplicate API calls as much as possible
 FW.MARKET_DATA = {};
 // Example of cached market data
-// FW.MARKET_DATA['BTC/XCP'] = {
+// FW.MARKET_DATA['UNO/XUP'] = {
 //     block:      0, // Block # when data was last updated
 //     basics:    {}, // Basics (last price, high/low, volume)
 //     orderbook: {}, // Full Orderbook
@@ -1168,7 +1168,7 @@ function getBTCBalance(address, source, callback){
         });
     // Chain.so
     } else if(source=='chain.so'){
-        var net = (FW.WALLET_NETWORK==2) ? 'BTCTEST' : 'UNO';
+        var net = (FW.WALLET_NETWORK==2) ? 'UNOTEST' : 'UNO';
         $.getJSON('https://chain.so/api/v2/get_address_balance/' + net + '/' + addr, function( o ){
             if(o.status=='success')
                 bal = (parseFloat(o.data.confirmed_balance) + parseFloat(o.data.unconfirmed_balance)) * 100000000;
@@ -1196,9 +1196,9 @@ function updateWalletBalances( address, force ){
         info  = getAddressBalance(addr) || {},
         last  = info.lastUpdated || 0,
         ms    = 300000, // 5 minutes
-        btc   = false,  // Flag to indicate if BTC update is done
-        xcp   = false;  // Flag to indicate if XCP update is done
-    // Handle updating BTC and XCP asset balances
+        btc   = false,  // Flag to indicate if UNO update is done
+        xcp   = false;  // Flag to indicate if XUP update is done
+    // Handle updating BTC and XUP asset balances
     if((parseInt(last) + ms)  <= Date.now() || force){
         // console.log('updating wallet balances');
         // Callback to handle saving data when we are entirely done
@@ -1206,7 +1206,7 @@ function updateWalletBalances( address, force ){
             var info = FW.TEMP_BALANCES;
             if(btc && xcp){
                 // Sort array to show items in the following order
-                // BTC & XCP 1st and second
+                // UNO & XUP 1st and second
                 // Alphabetical order for asset name
                 info.data.sort(function(a,b){
                     if(a.asset.length==3 && b.asset.length>3)
@@ -1365,7 +1365,7 @@ function getBTCHistory(address, source, callback){
     }
     // Chain.so - uses FIFO and requires multiple calls, so not really helpful, but useful as a last resort
     if(source=='chain.so'){
-        var net = (FW.WALLET_NETWORK==2) ? 'BTCTEST' : 'BTC';
+        var net = (FW.WALLET_NETWORK==2) ? 'UNOTEST' : 'UNO';
         $.getJSON('https://chain.so/api/v2/get_tx_received/' + net + '/' + addr, function( o ){
             if(o.status=='success'){
                 data = [];
@@ -1408,7 +1408,7 @@ function updateWalletHistory( address, force ){
         xcp: false,    // Flag to indicate if XCP update is done
         mempool: false // Flag to indicate if mempool update is done
     }
-    // Handle updating BTC and XCP transaction history
+    // Handle updating BTC and XUP transaction history
     if((parseInt(last) + ms)  <= Date.now() || force){
         // console.log('updating wallet history');
         // Callback to handle saving data when we are entirely done
@@ -1674,7 +1674,7 @@ function updateBalancesList(){
             value: numeral(btc_val).format(fmt_usd),
             cls: 'active'
         });
-        // Display XCP balance if we have one
+        // Display XUP balance if we have one
         if(xcp_amt)
             display.push({
                 asset: 'XUP',
@@ -1746,7 +1746,7 @@ function getBalanceHtml(data){
 function updateHistoryList(){
     var html    = '',
         cnt     = 0,
-        active  = 'BTC', // default to BTC being active
+        active  = 'UNO', // default to BTC being active
         addr    = FW.WALLET_ADDRESS,
         search  = $('.history-list-search'),
         filter  = search.val(),
@@ -1816,7 +1816,7 @@ function getHistoryHtml(data){
         src = 'images/icons/dividend.png';
     } else if(type=='cancel'){
         src = 'images/icons/cancel.png';
-    } else if((type=='send'||type=='order'||type=='issuance'||type=='destruction') && data.asset!='BTC'){
+    } else if((type=='send'||type=='order'||type=='issuance'||type=='destruction') && data.asset!='UNO'){
         src = FW.XCHAIN_API + '/icon/'  + String(data.icon).toUpperCase() + '.png';
     } else if(type=='sweep'){
         src = 'images/icons/sweep.png';
@@ -1935,7 +1935,7 @@ function loadAssetInfo(asset){
                 } else {
                     lock.removeClass('fa-lock').addClass('fa-unlock');
                 }
-                // Only allow feedback on XCP and assets, not BTC
+                // Only allow feedback on XUP and assets, not UNO
                 if(asset=='UNO'){
                     feedback.hide();
                 } else {
@@ -1963,7 +1963,7 @@ function loadAssetInfo(asset){
                 // Handle loading enhanced asset info
                 if(re1.test(desc)){
                     loadExtendedInfo();
-                } else if(asset=='BTC'){
+                } else if(asset=='UNO'){
                     loadExtendedInfo({
                         name: 'Unobtanium (Uno)',
                         description: 'Unobtanium is rare digital money',
@@ -2493,7 +2493,7 @@ function cpCancel(network, source, tx_hash, fee, callback){
     });
 }
 
-// Handle creating/signing/broadcasting an 'BTCpay' transaction
+// Handle creating/signing/broadcasting an 'UNOpay' transaction
 function cpBtcpay(network, source, order_match_id, fee, callback){
     var cb  = (typeof callback === 'function') ? callback : false;
     updateTransactionStatus('pending', 'Generating unoparty transaction...');
@@ -3227,7 +3227,7 @@ function broadcastTransaction(network, tx, callback){
         }, 5000);
     }
     console.log('signed transaction=', tx);
-    var net  = (network=='testnet') ? 'BTCTEST' : 'BTC';
+    var net  = (network=='testnet') ? 'UNOTEST' : 'UNO';
     // First try to broadcast using the XChain API
     $.ajax({
         type: "POST",
@@ -3970,7 +3970,7 @@ function dialogSignTransaction(){
 // 'Burn' dialog box
 function dialogBurn(){
     // Make sure wallet is unlocked
-    if(dialogCheckLocked('burn BTC for XCP'))
+    if(dialogCheckLocked('burn UNO for XUP'))
         return;
     BootstrapDialog.show({
         type: 'type-default',
@@ -4037,7 +4037,7 @@ function dialogSweep(){
 }
 
 
-// 'BTCpay' dialog box
+// 'UNOpay' dialog box
 function dialogBTCpay(closable=true){
     // Make sure wallet is unlocked
     if(dialogCheckLocked('make a payment'))
@@ -4300,9 +4300,9 @@ function dialogLicenseAgreement(){
             msg.append( '<div class="well">' +
                             '<h3>1. GRANT OF LICENSE</h3>' +
                             '<p><b>1.1.</b> Subject to the terms and conditions contained within this end user agreement (the “Agreement“), Freewallet.io grants the “User” (or “you”) a non-exclusive, personal, non-transferable right to use the Services on your personal computer or other device that accesses the Internet, namely freewallet.io, FreeWallet Mobile, FreeWallet Desktop, and Counterparty federated nodes (together, the “Services“). By clicking the “I Agree“ button if and where provided and/or using the Service, you consent to the terms and conditions set forth in this Agreement.</p>' +
-                            '<p><b>1.2.</b> The Services are not for use by (i) individuals under 18 years of age, (ii) individuals under the legal age of majority in their jurisdiction and (iii) individuals accessing the Services from jurisdictions from which it is illegal to do so. Counterwallet.io and Counterwallet federated nodes are unable to verify the legality of the Services in each jurisdiction and it is the User\'s responsibility to ensure that their use of the Services is lawful. Freewallet.io, FreeWallet Mobile, and FreeWallet Desktop are neither banks nor regulated financial services. Operators do not have access to the Bitcoins stored on the platform, instead Freewallet.io, FreeWallet Mobile, and FreeWallet Desktop simply provide a means to access Bitcoins, Counterparty (XCP), and other digital assets recorded on the Bitcoin blockchain. Bitcoin private keys are encrypted using the BIP32 Hierarchical Deterministic Wallet algorithm such that Freewallet.io, FreeWallet Mobile, and FreeWallet Desktop cannot access or recover Bitcoins, Counterparty (XCP), or other digital assets in the event of lost or stolen password. </p>' +
+                            '<p><b>1.2.</b> The Services are not for use by (i) individuals under 18 years of age, (ii) individuals under the legal age of majority in their jurisdiction and (iii) individuals accessing the Services from jurisdictions from which it is illegal to do so. Unowallet.io and Unowallet federated nodes are unable to verify the legality of the Services in each jurisdiction and it is the User\'s responsibility to ensure that their use of the Services is lawful. Freewallet.io, FreeWallet Mobile, and FreeWallet Desktop are neither banks nor regulated financial services. Operators do not have access to the Bitcoins stored on the platform, instead Freewallet.io, FreeWallet Mobile, and FreeWallet Desktop simply provide a means to access Unobtaniums, Unoparty (XUP), and other digital assets recorded on the Bitcoin blockchain. Bitcoin private keys are encrypted using the BIP32 Hierarchical Deterministic Wallet algorithm such that Freewallet.io, FreeWallet Mobile, and FreeWallet Desktop cannot access or recover Bitcoins, Unoparty (XUP), or other digital assets in the event of lost or stolen password. </p>' +
                             '<h3>2. NO WARRANTIES.</h3>' +
-                            '<p><b>2.1.</b> COUNTERPARTY, FREEWALLET.IO, AND COUNTERPARTY FEDERATED NODES DISCLAIM ANY AND ALL WARRANTIES, EXPRESSED OR IMPLIED, IN CONNECTION WITH THE SERVICES WHICH ARE PROVIDED TO THE USER “AS IS“ AND NO WARRANTY OR REPRESENTATION IS PROVIDED WHATSOEVER REGARDING ITS QUALITY, FITNESS FOR PURPOSE, COMPLETENESS OR ACCURACY.</p>' +
+                            '<p><b>2.1.</b> UNOPARTY, FREEWALLET.IO, AND UNOPARTY FEDERATED NODES DISCLAIM ANY AND ALL WARRANTIES, EXPRESSED OR IMPLIED, IN CONNECTION WITH THE SERVICES WHICH ARE PROVIDED TO THE USER “AS IS“ AND NO WARRANTY OR REPRESENTATION IS PROVIDED WHATSOEVER REGARDING ITS QUALITY, FITNESS FOR PURPOSE, COMPLETENESS OR ACCURACY.</p>' +
                             '<p><b>2.2.</b> REGARDLESS OF BEST EFFORTS, WE MAKE NO WARRANTY THAT THE SERVICES WILL BE UNINTERRUPTED, TIMELY OR ERROR-FREE, OR THAT DEFECTS WILL BE CORRECTED.</p>' +
                             '<h3>3. YOUR REPRESENTATIONS AND WARRANTIES</h3>' +
                             '<p>Prior to your use of the Services and on an ongoing basis you represent, warrant, covenant and agree that:</p>' +
@@ -4470,7 +4470,7 @@ function displayContextMenu(event){
         mnu.append(new nw.MenuItem({
             label: 'View on Chain.so',
             click: function(){
-                var net = (FW.WALLET_NETWORK==2) ? 'BTCTEST' : 'BTC',
+                var net = (FW.WALLET_NETWORK==2) ? 'UNOTEST' : 'UNO',
                     url  = 'https://chain.so/tx/' + net + '/' + tx;
                 nw.Shell.openExternal(url);
             }
@@ -4529,7 +4529,7 @@ function displayContextMenu(event){
     if(el.length!=0){
         var mnu    = new nw.Menu(),
             market = el.attr('data-market');
-        if(market!='XCP' && market!='BTC'){
+        if(market!='XUP' && market!='UNO'){
             mnu.append(new nw.MenuItem({
                 label: 'Open ' + market + ' market',
                 click: function(){
@@ -4727,7 +4727,7 @@ function processURIData(data){
             // Show 'Send' tool and pass forward scanned
             FW.DIALOG_DATA = {
                 destination: o.address,
-                token: o.asset || 'BTC',
+                token: o.asset || 'UNO',
                 amount: o.amount || '',
                 message: o.message || ''
             }

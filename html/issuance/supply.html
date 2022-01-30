@@ -29,9 +29,9 @@ $(document).ready(function(){
     $('#amount-field').load('html/fields/amount.html');
     $('#tx-fee-field').load('html/fields/tx-fee.html');
 
-    // Stash current price info on BTC and XCP
-    var btc_info   = getAssetPrice('BTC',true),
-        xcp_info   = getAssetPrice('XCP',true);
+    // Stash current price info on BTC and XUP
+    var btc_info   = getAssetPrice('UNO',true),
+        xcp_info   = getAssetPrice('XUP',true);
 
     // Delay initializing some fields to give things a chance to load
     setTimeout(function(){
