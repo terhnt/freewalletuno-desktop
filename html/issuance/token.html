@@ -126,10 +126,10 @@ $(document).ready(function(){
     });
 
     // Disable meltable if asset is divisible
-    $('#asset-meltable').change(function(e)){
-        var resbool = ($('#asset-divisible').val()=='Yes') ? 'No' : ($('#asset-meltable').val());
-        $(this).val(resbool);
-    });
+    //$('#asset-meltable').change(function(e){
+    //    var resbool = ($('#asset-divisible').val()=='Yes') ? 'No' : ($('#asset-meltable').val());
+    //    $(this).val(resbool);
+    //});
 
     // Handle updating asset name when token type changes
     $('#token-type').change(function(e){
@@ -149,9 +149,12 @@ $(document).ready(function(){
     $('#token-type').selectpicker({ width: '100%' });
     $('#asset-divisible').selectpicker();
     $('#asset-meltable').selectpicker();
-    
+
     // Trigger change on token amount so we format it correctly
     $('#token-amount').change();
+
+    // Trigger change on meltable/divisible, so both are not picked at same time
+    //$('#asset-meltable').change();
 
     // Submit form when user 'Create Token' button
     $('#btn-submit').click($.debounce(100,function(e){
