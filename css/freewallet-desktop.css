@@ -8,7 +8,7 @@ html {
   width: 100%;
   overflow: auto;
 }
-html { 
+html {
   overflow: hidden;
 }
 
@@ -23,13 +23,13 @@ body:before {
     background-image: url('../images/logo.png');
     background-repeat: no-repeat;
     background-position: center center;
-    display: block; 
-    content:""; 
-    position: absolute; 
+    display: block;
+    content:"";
+    position: absolute;
     z-index:-1;
-    top:0; 
-    left: 0; 
-    right: 0; 
+    top:0;
+    left: 0;
+    right: 0;
     height: 100%;
     opacity:0.1;
 }
@@ -120,11 +120,11 @@ body:before {
     padding-top: 5px;
     padding-bottom: 0px;
 }
-.border-top-1 { 
-    border-top: 1px solid #ddd !important; 
+.border-top-1 {
+    border-top: 1px solid #ddd !important;
 }
-.border-bottom-1 { 
-    border-bottom: 1px solid #ddd !important; 
+.border-bottom-1 {
+    border-bottom: 1px solid #ddd !important;
 }
 
 .table-bordered>thead>tr>th {
@@ -149,7 +149,7 @@ body:before {
     padding-left: 10px;
     padding-right: 5px;
 }
-.header  ul.dropdown-menu, 
+.header  ul.dropdown-menu,
 .modal   ul.dropdown-menu,
 .left-dropdown-menu ul.dropdown-menu {
     padding: 0px 0px;
@@ -227,7 +227,7 @@ body:before {
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
 }
-/* 
+/*
  * Custom Icons
  */
 
@@ -242,13 +242,13 @@ body:before {
     background-size: 100%;
 }
 .fw-icon-btc {
-    background-image: url(../images/icons/btc.png);
+    background-image: url(../images/icons/uno.png);
 }
 .fw-icon-tbtc {
-    background-image: url(../images/icons/btc.png);
+    background-image: url(../images/icons/uno.png);
 }
 .fw-icon-xcp {
-    background-image: url(../images/icons/xcp.png);
+    background-image: url(../images/icons/xup.png);
 }
 .fw-coindaddy {
   background-image: url('../images/icons/coindaddy-coin-20.png');
@@ -256,7 +256,7 @@ body:before {
   width: 20px;
   height: 20px;
   position: relative;
-  top: -4px;  
+  top: -4px;
 }
 .fw-xchain {
   background-image: url('../images/icons/xchain-20.png');
@@ -264,7 +264,7 @@ body:before {
   width: 20px;
   height: 20px;
   position: relative;
-  top: -4px;  
+  top: -4px;
 }
 
 
@@ -295,7 +295,7 @@ body:before {
     padding: 10px;
     width: 100%;
     overflow-y: auto;
-    overflow-x: hidden;    
+    overflow-x: hidden;
     display: block;
     position: relative;
     background-color: #eee;
@@ -334,7 +334,7 @@ body:before {
 }
 .balances-list-assets {
     overflow-y: auto;
-    overflow-x: hidden;    
+    overflow-x: hidden;
     height: calc(100vh - 127px); /* 100% - header/footer/toolbar */
 }
 .balances-list-icon {
@@ -399,7 +399,7 @@ body:before {
     padding: 10px;
     width: 100%;
     overflow-y: auto;
-    overflow-x: hidden;    
+    overflow-x: hidden;
     display: block;
     position: relative;
     background-color: #eee;
@@ -436,7 +436,7 @@ body:before {
 }
 .history-list-transactions {
     overflow-y: auto;
-    overflow-x: hidden;    
+    overflow-x: hidden;
     height: calc(100vh - 127px); /* 100% - header/footer/toolbar */
 }
 .history-list-icon {
@@ -502,13 +502,13 @@ li.history-list-received .history-list-amount {
 .dialog-license-agreement .well {
     height: 200px;
     overflow-y: auto;
-    overflow-x: hidden;    
+    overflow-x: hidden;
 }
 .dialog-license-agreement .well h3 {
-    font-size: 1.4em; 
+    font-size: 1.4em;
 }
-.dialog-new-passphrase h3, 
-.dialog-view-passphrase h3, 
+.dialog-new-passphrase h3,
+.dialog-view-passphrase h3,
 .dialog-view-privkey h3 {
     margin-top: 0px;
 }
@@ -597,7 +597,7 @@ li.history-list-received .history-list-amount {
 .address-list-amount {
     display: inline-block;
     width: 175px;
-    margin-bottom: 5px;    
+    margin-bottom: 5px;
 }
 .address-list-empty {
     height: 100%;
@@ -629,8 +629,8 @@ li.history-list-received .history-list-amount {
 }
 #send-list {
     height:145px;
-    white-space: nowrap;  
-    overflow: auto; 
+    white-space: nowrap;
+    overflow: auto;
     margin-top: 10px
 }
 
@@ -677,7 +677,7 @@ form .tooltip {
 
 .fw-callback-hostname {
     font-size: 1.5em;
-    font-weight: bold;    
+    font-weight: bold;
 }
 
 .fw-callback-icon {
@@ -729,12 +729,12 @@ form .tooltip {
     padding-top: 0px !important;
 }
 
-.dataTables_wrapper .dataTables_paginate, 
-.dataTables_wrapper .dataTables_paginate .paginate_button, 
-.dataTables_wrapper .dataTables_paginate .paginate_button:hover, 
-.dataTables_wrapper .dataTables_paginate .paginate_button:active, 
-.dataTables_wrapper .dataTables_paginate .paginate_button.disabled, 
-.dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, 
+.dataTables_wrapper .dataTables_paginate,
+.dataTables_wrapper .dataTables_paginate .paginate_button,
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover,
+.dataTables_wrapper .dataTables_paginate .paginate_button:active,
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover,
 .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
     color: #fff !important;
 }
@@ -774,7 +774,7 @@ tr.text-right th {
     text-align: left;
 }
 .datatable-options .market-volume {
-    float: right;  
+    float: right;
     text-align: right;
 }
 .datatable-options {
@@ -883,7 +883,7 @@ table.tinytable tbody tr:last-child td {
     padding: 10px;
     width: 100%;
     overflow-y: auto;
-    overflow-x: hidden;    
+    overflow-x: hidden;
     display: block;
     position: relative;
 }
@@ -946,7 +946,7 @@ form .asset-name {
 }
 
 #market-chart {
-    height: 400px; 
+    height: 400px;
     width: 100%;
     margin-bottom: 15px;
     clear: both;
@@ -976,7 +976,7 @@ form .asset-name {
     height: 250px;
 }
 #market-depth-chart {
-    height: 200px; 
+    height: 200px;
     width: 100%;
     margin-bottom: 15px;
     clear: both;
@@ -1124,9 +1124,9 @@ a.red:hover {
 }
 
 
-#markets .dataTables_wrapper th, 
+#markets .dataTables_wrapper th,
 #markets .dataTables_wrapper td,
-#dispensers-lists .dataTables_wrapper th, 
+#dispensers-lists .dataTables_wrapper th,
 #dispensers-lists .dataTables_wrapper td {
     max-width: 200px;
     min-width: 5px;

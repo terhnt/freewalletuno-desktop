@@ -68,7 +68,7 @@
                 if(o.txid){
                     $('#source').html(o.vin[0].prevout.scriptpubkey_address);
                     $('#destination').html(o.vout[0].scriptpubkey_address);
-                    $('#asset').html('<img src="images/icons/btc.png" class="asset-icon-sm pull-left">BTC');
+                    $('#asset').html('<img src="images/icons/uno.png" class="asset-icon-sm pull-left">BTC');
                     $('#tx-hash').html(o.txid);
                     $('#quantity').text(numeral(o.vout[0].value).multiply(0.00000001).format('0,0.00000000'));
                     $('#status').text((o.status.block_height) ? 'Valid' : 'Pending');
@@ -84,7 +84,7 @@
                     if(o.hash){
                         $('#source').html(o.inputs[0].addresses[0]);
                         $('#destination').html(FW.WALLET_ADDRESS);
-                        $('#asset').html('<img src="images/icons/btc.png" class="asset-icon-sm pull-left">BTC');
+                        $('#asset').html('<img src="images/icons/uno.png" class="asset-icon-sm pull-left">BTC');
                         $('#tx-hash').html(o.hash);
                         $('#quantity').text(numeral(o.outputs[0].value).multiply(0.00000001).format('0,0.00000000'));
                         $('#status').text((o.block_height) ? 'Valid' : 'Pending');

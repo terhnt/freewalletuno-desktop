@@ -1669,7 +1669,7 @@ function updateBalancesList(){
         // Always display BTC balance
         display.push({
             asset: 'UNO',
-            icon: 'BTC',
+            icon: 'UNO',
             quantity: numeral(btc_amt).format(fmt),
             value: numeral(btc_val).format(fmt_usd),
             cls: 'active'
@@ -1678,7 +1678,7 @@ function updateBalancesList(){
         if(xcp_amt)
             display.push({
                 asset: 'XUP',
-                icon: 'XCP',
+                icon: 'XUP',
                 quantity: numeral(xcp_amt).format(fmt),
                 value: numeral(xcp_val).format(fmt_usd),
                 cls: ''
@@ -1807,9 +1807,9 @@ function updateHistoryList(){
 function getHistoryHtml(data){
     // Determine the correct icon to display based on type
     var type = data.type,
-        src  = 'images/icons/btc.png';
+        src  = 'images/icons/uno.png';
     if(type=='bet'){
-        src = 'images/icons/xcp.png';
+        src = 'images/icons/xup.png';
     } else if(type=='broadcast'){
         src = 'images/icons/broadcast.png';
     } else if(type=='dividend'){

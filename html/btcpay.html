@@ -9,7 +9,7 @@
     <!-- Order Information -->
     <div class="form-group">
         <label class="col-sm-3 control-label text-left order-type">
-            Pay 
+            Pay
         </label>
         <div class="col-sm-9">
             <table width="100%">
@@ -17,10 +17,10 @@
                 <td width="180">
                     <table border=0>
                     <tr>
-                        <td><img src="images/icons/btc.png" class="margin-right-5" id="assetA-icon"></td>
+                        <td><img src="images/icons/uno.png" class="margin-right-5" id="assetA-icon"></td>
                         <td id="infoA" class="bold"></td>
                     </tr>
-                    </table>                
+                    </table>
                 </td>
                 <td width="*%" class="text-center">for</td>
                 <td width="180">
@@ -68,7 +68,7 @@ $(document).ready(function(){
             getAssetInfo(asset, function(o){
                 var format = (o.divisible) ? '0,0.00000000' : '0,0';
                 $('#infoB').html(numeral(amountB).format(format) + '<br>' + asset);
-            });                
+            });
             console.log('data=',data);
             // Update form with data
             $('#source').val(data.source);
@@ -82,10 +82,10 @@ $(document).ready(function(){
         FW.DIALOG_DATA = {};
 
         // Initialize any tooltips
-        $('[data-toggle="tooltip"]').tooltip({ 
+        $('[data-toggle="tooltip"]').tooltip({
             html: true,
             placement: 'bottom'
-        }); 
+        });
 
     },100);
 
@@ -98,7 +98,7 @@ $(document).ready(function(){
     $('#btn-cancel').click($.debounce(100,function(e){
         var vals   = array2Object($('#btcpay-form').serializeArray());
         dialogClose('dialog-btcpay');
-        // Remove the order match from the queue and check the queue again after a brief delay to let the previous dialog box close 
+        // Remove the order match from the queue and check the queue again after a brief delay to let the previous dialog box close
         removeFromBtcpayQueue(vals.tx0_hash, vals.tx1_hash);
         setTimeout(function(){ processBtcpayQueue(); },1000);
     }));
@@ -106,14 +106,14 @@ $(document).ready(function(){
     // Handle form validation and displaying any errors
     $('#btcpay-form').validator().on('submit', function(e){
         // prevent form submission
-        e.preventDefault(); 
+        e.preventDefault();
         // Get object with form values
         var vals   = array2Object($(this).serializeArray()),
             errors = [];
         console.log('vals=',vals);
-        // Remove error indicators from any fields 
+        // Remove error indicators from any fields
         $('.form-group').removeClass('has-error has-danger');
-        // Verify we have valid fee amount 
+        // Verify we have valid fee amount
         if(numeral(vals['fee-amount']).value()==0){
             errors.push('You must enter a fee which is greater than 0.00000000!');
             $('#fee-amount').closest('.form-group').addClass('has-error has-danger');
@@ -130,7 +130,7 @@ $(document).ready(function(){
                     dialogClose('dialog-btcpay');
                     dialogMessage('<i class="fa fa-lg fa-check"></i> BTCPay Successful', '<center>Your BTC payment has been broadcast to the network and your order should complete shortly.' +
                                   '<br/><br/><a class="btn btn-success" href="' + FW.XCHAIN_API + '/tx/' + tx + '" target="_blank">View Transaction</a></center>');
-                    // Remove the order match from the queue and check the queue again after a brief delay to let the previous dialog box close 
+                    // Remove the order match from the queue and check the queue again after a brief delay to let the previous dialog box close
                     removeFromBtcpayQueue(vals.tx0_hash, vals.tx1_hash);
                     setTimeout(function(){ processBtcpayQueue(); },1000);
                 }
