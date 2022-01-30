@@ -1,16 +1,16 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.trezor = f()}})(function(){var define,module,exports;return (function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s}return e})()({1:[function(require,module,exports){
 /*
  * Custom functions used to communicate with the wallet
- * 
+ *
  * browserify index.js --standalone trezor > app.js
  *
- * TODO: Figure out why signing testnet transactions is not working correctly (change address is different) 
+ * TODO: Figure out why signing testnet transactions is not working correctly (change address is different)
  */
 
 let bitcoin = require('bitcoinjs-lib');
 
 
-// Handle setting the currency network 
+// Handle setting the currency network
 function setCurrency(net='mainnet'){
     var network = (net=='testnet') ? 'Testnet' : 'Bitcoin';
     console.log('setCurrency network=',network);
@@ -23,10 +23,10 @@ function getXpubkey(net='mainnet', callback){
     TrezorConnect.getXPubKey(null, function(response){
         if(typeof callback === 'function')
             callback(response);
-    });    
+    });
 }
 
-// Handle requesting a list of addresses 
+// Handle requesting a list of addresses
 function getAddressesFromXpub(net='mainnet', xpubkey,  limit=10, start=0){
     var network = (net=='testnet') ? 'testnet' : 'mainnet';
     const node = bitcoin.HDNode.fromBase58(xpubkey, bitcoin.networks[network]).neutered();
@@ -79,7 +79,7 @@ function signTx(net='mainnet', source, path, unsignedTx, callback){
         var tx_hash = input.hash.reverse().toString('hex');
         utxos[tx_hash] = -1; // set to -1 so we can determine which ones have been processed and which have not
     });
-    // Define callback to run when done with API calls 
+    // Define callback to run when done with API calls
     var doneCb = function(){
         // Check if we are truly done
         var done = true;
@@ -92,7 +92,7 @@ function signTx(net='mainnet', source, path, unsignedTx, callback){
             tx.ins.forEach(function(input, n){
                 var tx_hash = input.hash.toString('hex'); // no need to reverse since it was already done above
                 inputs.push({
-                    address_n: address,         // Address 
+                    address_n: address,         // Address
                     prev_hash: tx_hash,         // Previous transaction hash
                     prev_index: utxos[tx_hash]  // output to use from previous transaction
                 })
@@ -162,8 +162,8 @@ function broadcastTx(network, signedTx, callback){
     $.ajax({
         type: "POST",
         url: 'https://' + host +  '/api/send_tx',
-        data: { 
-            tx_hex: signedTx 
+        data: {
+            tx_hex: signedTx
         },
         complete: function(o){
             // console.log('o=',o);
@@ -179,8 +179,8 @@ function broadcastTx(network, signedTx, callback){
                 $.ajax({
                     type: "POST",
                     url: 'https://chain.so/api/v2/send_tx/' + net,
-                    data: { 
-                        tx_hex: signedTx 
+                    data: {
+                        tx_hex: signedTx
                     },
                     dataType: 'json',
                     complete: function(o){
@@ -195,7 +195,7 @@ function broadcastTx(network, signedTx, callback){
                             cbError('Error while trying to broadcast signed transaction',callback);
                         }
                     }
-                });                
+                });
             }
         }
     });
@@ -2430,13 +2430,13 @@ module.exports={
   "OP_CHECKMULTISIGVERIFY": 175,
 
   "OP_NOP1": 176,
-  
+
   "OP_NOP2": 177,
   "OP_CHECKLOCKTIMEVERIFY": 177,
 
   "OP_NOP3": 178,
   "OP_CHECKSEQUENCEVERIFY": 178,
-  
+
   "OP_NOP4": 179,
   "OP_NOP5": 180,
   "OP_NOP6": 181,
@@ -3254,7 +3254,7 @@ function HDNode (keyPair, chainCode) {
 
 HDNode.HIGHEST_BIT = 0x80000000
 HDNode.LENGTH = 78
-HDNode.MASTER_SECRET = Buffer.from('Bitcoin seed', 'utf8')
+HDNode.MASTER_SECRET = Buffer.from('Unobtanium seed', 'utf8')
 
 HDNode.fromSeedBuffer = function (seed, network) {
   typeforce(types.tuple(types.Buffer, types.maybe(types.Network)), arguments)

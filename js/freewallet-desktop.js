@@ -1830,13 +1830,13 @@ function getHistoryHtml(data){
     } else if(type=='bet'){
         str = 'Bet ';
     } else if(type=='broadcast'){
-        str = 'Counterparty Broadcast';
+        str = 'Unoparty Broadcast';
     } else if(type=='burn'){
         str = 'Burned ';
     } else if(type=='dividend'){
         str = 'Paid Dividend on ';
     } else if(type=='issuance'){
-        str = 'Counterparty Issuance';
+        str = 'Unoparty Issuance';
     } else if(type=='order'){
         str = 'Order - Buy ';
     } else if(type=='cancel'){
@@ -2214,7 +2214,7 @@ function array2Object(arr){
 }
 
 /*
- * Counterparty related functions
+ * Unoparty related functions
  */
 
 // Handle generating a send transaction
@@ -4250,7 +4250,7 @@ function dialogWelcome(){
         message: function(dialog){
             var msg = $('<div class="text-center"></div>');
             msg.append('<img src="images/logo.png" style="width:200px;margin-bottom:20px;">');
-            msg.append('<p>FreeWallet is a free wallet for Bitcoin and Counterparty, the world’s first protocol for decentralized financial tools.</p>')
+            msg.append('<p>FreeWallet is a free wallet for Unobtanium and Unoparty, the world’s first protocol for decentralized financial tools.</p>')
             msg.append( '<div class="row">' +
                             '<div class="col-xs-12 col-sm-6">' +
                                 '<h3><i class="fa fa-lock"></i> Secure</h3>'+
@@ -4299,14 +4299,14 @@ function dialogLicenseAgreement(){
             msg.append('<p>You must read and accept the following agreement in order to use FreeWallet:</p>')
             msg.append( '<div class="well">' +
                             '<h3>1. GRANT OF LICENSE</h3>' +
-                            '<p><b>1.1.</b> Subject to the terms and conditions contained within this end user agreement (the “Agreement“), Freewallet.io grants the “User” (or “you”) a non-exclusive, personal, non-transferable right to use the Services on your personal computer or other device that accesses the Internet, namely freewallet.io, FreeWallet Mobile, FreeWallet Desktop, and Counterparty federated nodes (together, the “Services“). By clicking the “I Agree“ button if and where provided and/or using the Service, you consent to the terms and conditions set forth in this Agreement.</p>' +
-                            '<p><b>1.2.</b> The Services are not for use by (i) individuals under 18 years of age, (ii) individuals under the legal age of majority in their jurisdiction and (iii) individuals accessing the Services from jurisdictions from which it is illegal to do so. Unowallet.io and Unowallet federated nodes are unable to verify the legality of the Services in each jurisdiction and it is the User\'s responsibility to ensure that their use of the Services is lawful. Freewallet.io, FreeWallet Mobile, and FreeWallet Desktop are neither banks nor regulated financial services. Operators do not have access to the Bitcoins stored on the platform, instead Freewallet.io, FreeWallet Mobile, and FreeWallet Desktop simply provide a means to access Unobtaniums, Unoparty (XUP), and other digital assets recorded on the Bitcoin blockchain. Bitcoin private keys are encrypted using the BIP32 Hierarchical Deterministic Wallet algorithm such that Freewallet.io, FreeWallet Mobile, and FreeWallet Desktop cannot access or recover Bitcoins, Unoparty (XUP), or other digital assets in the event of lost or stolen password. </p>' +
+                            '<p><b>1.1.</b> Subject to the terms and conditions contained within this end user agreement (the “Agreement“), Freewallet.io grants the “User” (or “you”) a non-exclusive, personal, non-transferable right to use the Services on your personal computer or other device that accesses the Internet, namely freewallet.io, FreeWallet Mobile, FreeWallet Desktop, and Unoparty federated nodes (together, the “Services“). By clicking the “I Agree“ button if and where provided and/or using the Service, you consent to the terms and conditions set forth in this Agreement.</p>' +
+                            '<p><b>1.2.</b> The Services are not for use by (i) individuals under 18 years of age, (ii) individuals under the legal age of majority in their jurisdiction and (iii) individuals accessing the Services from jurisdictions from which it is illegal to do so. Unowallet.io and Unowallet federated nodes are unable to verify the legality of the Services in each jurisdiction and it is the User\'s responsibility to ensure that their use of the Services is lawful. Freewallet.io, FreeWallet Mobile, and FreeWallet Desktop are neither banks nor regulated financial services. Operators do not have access to the Unobtaniums stored on the platform, instead Freewallet.io, FreeWallet Mobile, and FreeWallet Desktop simply provide a means to access Unobtaniums, Unoparty (XUP), and other digital assets recorded on the Unobtanium blockchain. Unobtanium private keys are encrypted using the BIP32 Hierarchical Deterministic Wallet algorithm such that Freewallet.io, FreeWallet Mobile, and FreeWallet Desktop cannot access or recover Unobtaniums, Unoparty (XUP), or other digital assets in the event of lost or stolen password. </p>' +
                             '<h3>2. NO WARRANTIES.</h3>' +
                             '<p><b>2.1.</b> UNOPARTY, FREEWALLET.IO, AND UNOPARTY FEDERATED NODES DISCLAIM ANY AND ALL WARRANTIES, EXPRESSED OR IMPLIED, IN CONNECTION WITH THE SERVICES WHICH ARE PROVIDED TO THE USER “AS IS“ AND NO WARRANTY OR REPRESENTATION IS PROVIDED WHATSOEVER REGARDING ITS QUALITY, FITNESS FOR PURPOSE, COMPLETENESS OR ACCURACY.</p>' +
                             '<p><b>2.2.</b> REGARDLESS OF BEST EFFORTS, WE MAKE NO WARRANTY THAT THE SERVICES WILL BE UNINTERRUPTED, TIMELY OR ERROR-FREE, OR THAT DEFECTS WILL BE CORRECTED.</p>' +
                             '<h3>3. YOUR REPRESENTATIONS AND WARRANTIES</h3>' +
                             '<p>Prior to your use of the Services and on an ongoing basis you represent, warrant, covenant and agree that:</p>' +
-                            '<p><b>3.1.</b> your use of the Services is at your sole option, discretion and risk, as neither Freewallet.io, Counterparty federated nodes, nor any individuals affiliated with the Freewallet or Counterparty teams can be held responsible for lost or stolen funds;</p>' +
+                            '<p><b>3.1.</b> your use of the Services is at your sole option, discretion and risk, as neither Freewallet.io, Unoparty federated nodes, nor any individuals affiliated with the Freewallet or Unoparty teams can be held responsible for lost or stolen funds;</p>' +
                             '<p><b>3.2.</b> you are solely responsible for satisfying any and all applicable legal rules and/or obligations, to include the requirements of your local tax authorities, arising from your use of the Services in a given jurisdiction; </p>' +
                             '<p><b>3.3.</b> the telecommunications networks and Internet access services required for you to access and use the Services are entirely beyond the control of the Services and neither FreeWallet nor the Services shall bear any liability whatsoever for any outages, slowness, capacity constraints or other deficiencies affecting the same; and</p>' +
                             '<p><b>3.4.</b> you are at least 18 years of age.</p>' +

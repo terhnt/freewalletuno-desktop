@@ -1,6 +1,6 @@
-FreeWallet - Desktop Wallet
+FreeWallet Uno - Desktop Wallet
 ---
-FreeWallet is a free wallet which supports Bitcoin and Counterparty.
+FreeWallet is a free wallet which supports Unobtanium and Unoparty.
 
 Build Notes
 ---
