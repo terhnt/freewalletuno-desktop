@@ -125,6 +125,12 @@ $(document).ready(function(){
         $('#token-amount').val(numeral(amt).format(fmt));
     });
 
+    // Disable meltable if asset is divisible
+    $('#asset-meltable').change(function(e)){
+        var resbool = ($('#asset-divisible').val()=='Yes') ? 'No' : ($('#asset-meltable').val());
+        $(this).val(resbool);
+    });
+
     // Handle updating asset name when token type changes
     $('#token-type').change(function(e){
         var val = $(this).val();
@@ -142,7 +148,8 @@ $(document).ready(function(){
     // Make selectpicker dropdowns work
     $('#token-type').selectpicker({ width: '100%' });
     $('#asset-divisible').selectpicker();
-
+    $('#asset-meltable').selectpicker();
+    
     // Trigger change on token amount so we format it correctly
     $('#token-amount').change();
 
