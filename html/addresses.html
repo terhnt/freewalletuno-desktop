@@ -20,8 +20,8 @@
     <input type="hidden" name="selected-address" class="selected-address" value="">
     <input type="text" class="form-control address-list-search pull-left" placeholder="Filter / Search">
     <div class="action-buttons pull-right">
-        <div id="btn-ok" class="btn btn-ok btn-success pull-right margin-left-5"><i class="fa fa-lg fa-fw fa-thumbs-up"></i> Ok</div>
-        <div id="btn-cancel" class="btn btn-ok btn-danger pull-right margin-left-5"><i class="fa fa-lg fa-fw fa-thumbs-down"></i> Cancel</div>
+        <div id="btn-ok" class="btn btn-ok btn-success pull-right margin-left-5"><i class="fa fa-lg fa-fuw fa-thumbs-up"></i> Ok</div>
+        <div id="btn-cancel" class="btn btn-ok btn-danger pull-right margin-left-5"><i class="fa fa-lg fa-fuw fa-thumbs-down"></i> Cancel</div>
         <div class="dropdown pull-right">
             <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
             <i class="fa fa-lg fa-cog"></i> Options
@@ -41,7 +41,7 @@
 $(document).ready(function(){
 
     // Default to showing all types
-    FW.WALLET_ADDRESS_TYPE = 0;
+    FUW.WALLET_ADDRESS_TYPE = 0;
 
     // Display address list
     updateAddressList();
@@ -56,7 +56,7 @@ $(document).ready(function(){
     $('.address-list-type button').click($.debounce(100,function(e){
         $('.address-list-type button').removeClass('active');
         $(this).addClass('active');
-        FW.WALLET_ADDRESS_TYPE = $(this).val();
+        FUW.WALLET_ADDRESS_TYPE = $(this).val();
         updateAddressList();
     }));
 
@@ -69,9 +69,9 @@ $(document).ready(function(){
     // When user clicks the ok button, update the address and close the dialog box
     $('#btn-ok').click($.debounce(100,function(e){
         var addr = $('.selected-address').val();
-        if(addr && addr!=FW.WALLET_ADDRESS){
+        if(addr && addr!=FUW.WALLET_ADDRESS){
             setWalletAddress(addr, true);
-            dialogMessage('<i class="fa fa-lg fa-fw fa-info-circle"></i> Wallet address changed', 'Your wallet address has been changed to ' + addr + '.');
+            dialogMessage('<i class="fa fa-lg fa-fuw fa-info-circle"></i> Wallet address changed', 'Your wallet address has been changed to ' + addr + '.');
         }
         dialogClose('dialog-change-address');
     }));
@@ -81,10 +81,10 @@ $(document).ready(function(){
         // Make sure wallet is unlocked
         if(dialogCheckLocked('generate a normal address'))
             return;
-        addr = addNewWalletAddress(FW.WALLET_NETWORK);
+        addr = addNewWalletAddress(FUW.WALLET_NETWORK);
         // Only display confirmation message if we have an address
         if(addr)
-            dialogMessage('<i class="fa fa-lg fa-fw fa-info-circle"></i> New Wallet Address', 'Address ' + addr + ' has been added to your wallet.');
+            dialogMessage('<i class="fa fa-lg fa-fuw fa-info-circle"></i> New Wallet Address', 'Address ' + addr + ' has been added to your wallet.');
         updateAddressList();
     }));
 
@@ -93,10 +93,10 @@ $(document).ready(function(){
         // Make sure wallet is unlocked
         if(dialogCheckLocked('generate a segwit address'))
             return;
-        addr = addNewWalletAddress(FW.WALLET_NETWORK, 'segwit');
+        addr = addNewWalletAddress(FUW.WALLET_NETWORK, 'segwit');
         // Only display confirmation message if we have an address
         if(addr)
-            dialogMessage('<i class="fa fa-lg fa-fw fa-info-circle"></i> New Wallet Address', 'Address ' + addr + ' has been added to your wallet.');
+            dialogMessage('<i class="fa fa-lg fa-fuw fa-info-circle"></i> New Wallet Address', 'Address ' + addr + ' has been added to your wallet.');
         updateAddressList();
     }));
 

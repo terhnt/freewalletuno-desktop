@@ -16,8 +16,8 @@
 
     <div id="transaction-status"></div>
     <div class="text-right">
-        <div id="btn-submit" class="btn btn-success"><i class="fa fa-lg fa-fw fa-btc"></i> Buy Now</div>
-        <div id="btn-cancel" class="btn btn-danger margin-right-5"><i class="fa fa-lg fa-fw fa-ban"></i> Cancel</div>
+        <div id="btn-submit" class="btn btn-success"><i class="fa fa-lg fa-fuw fa-btc"></i> Buy Now</div>
+        <div id="btn-cancel" class="btn btn-danger margin-right-5"><i class="fa fa-lg fa-fuw fa-ban"></i> Cancel</div>
     </div>
 </form>
 
@@ -29,17 +29,17 @@ function doneCb(tx){
     if(tx){
         dialogClose('dialog-dispenser-buy');
         dialogMessage('<i class="fa fa-lg fa-truck"></i> Dispenser Buy Successful', '<center>Your buy transaction has been sent to the network and should be included to a block shortly.' +
-                      '<br/><br/><a class="btn btn-success" href="' + FW.XCHAIN_API + '/tx/' + tx + '" target="_blank">View Transaction</a></center>');
+                      '<br/><br/><a class="btn btn-success" href="' + FUW.XCHAIN_API + '/tx/' + tx + '" target="_blank">View Transaction</a></center>');
     }
 }
 
 // Confirm with user that they understand the purchase amount is less than 1.0
 // This should hopefully prevent some users from losing funds because they are not aware they are purchasing less than 1 token
 function dialogWarnGiveQuantityAmount(vals){
-    var asset = FW.DIALOG_DATA.name;
+    var asset = FUW.DIALOG_DATA.name;
     var message = '<div class="alert alert-danger" role="alert"><strong><center>You are attempting to make a UNO purchase from a dispenser which is selling less than 1 ' + asset + ' token per dispense!<br><br>Please make sure this is an action that you would like to perform, as it may result in you getting less ' + asset + ' tokens from the dispenser than expected!</center></strong></div>';
     message += '<center>Are you sure you want to continue purchasing from this dispenser?'
-    dialogConfirm('<i class="fa fa-lg fa-fw fa-exclamation-circle"></i> Warning', message, false, true, function(){
+    dialogConfirm('<i class="fa fa-lg fa-fuw fa-exclamation-circle"></i> Warning', message, false, true, function(){
         checkDispenserQuantity(vals);
     });
 }
@@ -49,7 +49,7 @@ function dialogWarnGiveQuantityAmount(vals){
 function dialogWarnEmptyDispenser(vals){
     var message = '<div class="alert alert-danger" role="alert"><strong><center>This dispenser already has pending dispense transactions which will empty this dispenser!<br><br>Are you sure you want to make this payment, as it may result in you losing your UNO funds and getting no token dispensed from the dispenser!</center></strong></div>';
     message += '<center>Are you sure you want to continue purchasing from this dispenser?'
-    dialogConfirm('<i class="fa fa-lg fa-fw fa-exclamation-circle"></i> Warning', message, false, true, function(){
+    dialogConfirm('<i class="fa fa-lg fa-fuw fa-exclamation-circle"></i> Warning', message, false, true, function(){
         confirmDispenserPayment(vals);
     });
 }
@@ -58,15 +58,15 @@ function dialogWarnEmptyDispenser(vals){
 function confirmDispenserPayment(vals){
     // Callback to run if user confirms action
     var confirmCb = function(){
-        var network = (FW.WALLET_NETWORK==2) ? 'testnet' : 'mainnet',
-            source  = FW.WALLET_ADDRESS,
+        var network = (FUW.WALLET_NETWORK==2) ? 'testnet' : 'mainnet',
+            source  = FUW.WALLET_ADDRESS,
             amt_sat = parseInt(numeral(vals['btc-amount']).multiply(100000000).value()),
             fee_sat = parseInt(numeral(vals['fee-amount']).multiply(100000000).value());
         cpSend(network, source, data.destination, null, null, 'UNO', amt_sat, fee_sat, doneCb);
     }
     // Confirm the action with the user
-    var data    = FW.DIALOG_DATA;
-    var title = '<img src="' + FW.XCHAIN_API + '/icon/' + data.asset + '.png" class="fw-icon-20 margin-right-5"> Confirm Buy ' + data.name + '?';
+    var data    = FUW.DIALOG_DATA;
+    var title = '<img src="' + FUW.XCHAIN_API + '/icon/' + data.asset + '.png" class="fuw-icon-20 margin-right-5"> Confirm Buy ' + data.name + '?';
     var msg  = 'Buy <b>' + vals.amount + ' ' + data.name + '</b>';
         msg += ' <br/>for <b>' + vals['btc-amount'] + ' UNO</b>';
     dialogConfirm(title, '<center>' + msg + '</center>', false, true, confirmCb);
@@ -74,10 +74,10 @@ function confirmDispenserPayment(vals){
 
 // Handle checking for any pending dispenser vends and determine if the dispenser still has quantity to dispense
 function checkDispenserQuantity(vals){
-    var asset = FW.DIALOG_DATA.asset;
+    var asset = FUW.DIALOG_DATA.asset;
     // Check mempool for any pending dispenser transactions
-    $.getJSON(FW.XCHAIN_API + '/api/mempool/' + FW.DIALOG_DATA.destination, function(o){
-        var give_remaining = numeral(FW.DIALOG_DATA.give_remaining);
+    $.getJSON(FUW.XCHAIN_API + '/api/mempool/' + FUW.DIALOG_DATA.destination, function(o){
+        var give_remaining = numeral(FUW.DIALOG_DATA.give_remaining);
         if(o.data){
             // Loop through any pending dispenses and determine how many dispenser has left to dispense
             o.data.forEach(function(json){
@@ -119,7 +119,7 @@ $(document).ready(function(){
     },100);
 
     // Clear the dialog data
-    // FW.DIALOG_DATA = {};
+    // FUW.DIALOG_DATA = {};
 
     // Submit form if user clicks 'Submit' button
     $('#btn-submit').click($.debounce(100,function(e){
@@ -149,7 +149,7 @@ $(document).ready(function(){
         }
 
         // Verify UNO being paid will at least trigger one dispense
-        if(numeral(vals['btc-amount']).value() < numeral(FW.DIALOG_DATA.satoshirate).value()){
+        if(numeral(vals['btc-amount']).value() < numeral(FUW.DIALOG_DATA.satoshirate).value()){
             errors.push('UNO Amount is lower than the requested dispenser amount!');
             $('#btc-amount').closest('.form-group').addClass('has-error has-danger');
         }
@@ -162,10 +162,10 @@ $(document).ready(function(){
 
         // Display any error message
         if(errors.length){
-            dialogMessage('<i class="fa fa-lg fa-fw fa-exclamation-circle"></i> Error(s)', errors.join('<br/>') );
+            dialogMessage('<i class="fa fa-lg fa-fuw fa-exclamation-circle"></i> Error(s)', errors.join('<br/>') );
         } else {
             // Check for cases where give_amount is less than 1 and throw warning and confirm with user
-            if(numeral(FW.DIALOG_DATA.give_quantity).value() < 1){
+            if(numeral(FUW.DIALOG_DATA.give_quantity).value() < 1){
                 dialogWarnGiveQuantityAmount(vals);
             }  else {
                 // Verify that dispenser still has some tokens to sell (check mempool)

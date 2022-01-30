@@ -28,7 +28,7 @@ $(document).ready(function(){
         $('#destination-address-label').text('Dispenser');
         $('#destination-address').attr('placeholder','Dispenser Address')
         // Set destination address to current wallet address
-        $('#destination-address').val(FW.WALLET_ADDRESS);
+        $('#destination-address').val(FUW.WALLET_ADDRESS);
     }
 
     // Wait a brief moment to allow things to initialize
@@ -58,7 +58,7 @@ $(document).ready(function(){
             if(addr.toUpperCase().endsWith('.UNO'))
                 asset = 'UNOTAG.' + addr.toUpperCase().replace(/\.UNO/i,'');
             // Try to lookup asset and then use owner address as destination address
-            $.getJSON(FW.XCHAIN_API + '/api/asset/' + asset, function(o){
+            $.getJSON(FUW.XCHAIN_API + '/api/asset/' + asset, function(o){
                 if(o.owner)
                     me.val(o.owner);
             });

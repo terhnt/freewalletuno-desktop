@@ -3,8 +3,8 @@
         <!-- Token Name Field -->
     </div>
     <div class="text-right">
-        <div id="btn-cancel" class="btn btn-danger margin-right-5"><i class="fa fa-lg fa-fw fa-ban"></i> Cancel</div>
-        <div id="btn-submit" class="btn btn-success "><i class="fa fa-lg fa-fw fa-eye"></i> Add Watchlist</div>
+        <div id="btn-cancel" class="btn btn-danger margin-right-5"><i class="fa fa-lg fa-fuw fa-ban"></i> Cancel</div>
+        <div id="btn-submit" class="btn btn-success "><i class="fa fa-lg fa-fuw fa-eye"></i> Add Watchlist</div>
     </div>
 </form>
 
@@ -51,16 +51,16 @@ $(document).ready(function(){
             $('#token-name').closest('.form-group').addClass('has-error has-danger');
         }
         // Limit dispenser watchlist to 10
-        var cnt = FW.BASE_DISPENSERS.length;
+        var cnt = FUW.BASE_DISPENSERS.length;
         if(cnt>=10)
             errors.push('You can only create 10 dispenser watchlists!');
         // Display any error message
         if(errors.length){
-            dialogMessage('<i class="fa fa-lg fa-fw fa-exclamation-circle"></i> Error(s)', errors.join('<br/>') );
+            dialogMessage('<i class="fa fa-lg fa-fuw fa-exclamation-circle"></i> Error(s)', errors.join('<br/>') );
         } else {
             var asset = vals.name,
                 found = false;
-            FW.BASE_DISPENSERS.forEach(function(item){
+            FUW.BASE_DISPENSERS.forEach(function(item){
                 if(item==asset)
                     found = true;
             });
@@ -79,8 +79,8 @@ $(document).ready(function(){
                 autoCollapseWatchlistTabs();
 
                 // Add the market to the base markets array and save to disk
-                FW.BASE_DISPENSERS.push(asset);
-                ls.setItem('walletDispensers', JSON.stringify(FW.BASE_DISPENSERS));
+                FUW.BASE_DISPENSERS.push(asset);
+                ls.setItem('walletDispensers', JSON.stringify(FUW.BASE_DISPENSERS));
 
                 // Update the market data and view
                 updateDispensersLists();

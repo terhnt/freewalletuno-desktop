@@ -52,13 +52,13 @@
 
 <!-- Code to load/update data -->
 <script type="text/javascript">
-    var testnet = (FW.WALLET_NETWORK==2) ? true : false,
-        tx      = FW.CURRENT_TRANSACTION.tx;
+    var testnet = (FUW.WALLET_NETWORK==2) ? true : false,
+        tx      = FUW.CURRENT_TRANSACTION.tx;
 
     $(document).ready(function(){
 
-        if(FW.CURRENT_TRANSACTION.asset=='UNO'){
-            var net = (FW.WALLET_NETWORK==2) ? '/testnet' : '';
+        if(FUW.CURRENT_TRANSACTION.asset=='UNO'){
+            var net = (FUW.WALLET_NETWORK==2) ? '/testnet' : '';
 
             // Update 'more info' link to point to transaction url
             $('#history-info-more').attr('href','https://blockstream.info' + net + '/tx/' + tx);
@@ -78,12 +78,12 @@
                 }
             }).fail(function(){
                 // Request transaction info from blockcypher
-                var net = (FW.WALLET_NETWORK==2) ? 'test3' : 'main',
-                    net2 = (FW.WALLET_NETWORK==2) ? 'btc-testnet' : 'btc';
+                var net = (FUW.WALLET_NETWORK==2) ? 'test3' : 'main',
+                    net2 = (FUW.WALLET_NETWORK==2) ? 'btc-testnet' : 'btc';
                 $.getJSON('https://api.blockcypher.com/v1/btc/' + net + '/txs/' + tx, function(o){
                     if(o.hash){
                         $('#source').html(o.inputs[0].addresses[0]);
-                        $('#destination').html(FW.WALLET_ADDRESS);
+                        $('#destination').html(FUW.WALLET_ADDRESS);
                         $('#asset').html('<img src="images/icons/uno.png" class="asset-icon-sm pull-left">UNO');
                         $('#tx-hash').html(o.hash);
                         $('#quantity').text(numeral(o.outputs[0].value).multiply(0.00000001).format('0,0.00000000'));
@@ -97,10 +97,10 @@
             });
         } else {
             // Update 'more info' link to point to transaction url
-            $('#history-info-more').attr('href', FW.XCHAIN_API + '/tx/' + tx);
+            $('#history-info-more').attr('href', FUW.XCHAIN_API + '/tx/' + tx);
 
             // Request transaction information from xchain.io
-            $.getJSON(FW.XCHAIN_API + '/api/tx/' + tx, function( o ){
+            $.getJSON(FUW.XCHAIN_API + '/api/tx/' + tx, function( o ){
                 if(!o.error){
                     var asset = (o.asset_longname && o.asset_longname!='') ? o.asset_longname : o.asset;
                     $('#source').html(o.source);

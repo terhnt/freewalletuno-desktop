@@ -15,8 +15,8 @@
 // Function to handle updating the 'Available' information
 function updateExpirationBlock(){
     var expires = $('#expires').val().replace(',',''),
-        network = (FW.WALLET_NETWORK==2) ? 'testnet' : 'mainnet',
-        current = FW.NETWORK_INFO.network_info[network].block_height;
+        network = (FUW.WALLET_NETWORK==2) ? 'testnet' : 'mainnet',
+        current = FUW.NETWORK_INFO.network_info[network].block_height;
         block   = parseInt(current) + parseInt(expires) + 1;
     $('#expires_block').val(numeral(block).format('0,0'));
 }

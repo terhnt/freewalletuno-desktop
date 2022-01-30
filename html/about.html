@@ -2,7 +2,7 @@
 <center>
     <p>FreeWallet is a free wallet which supports Bitcoin and Counterparty.</p>
     <a href="https://freewallet.io"><img src="images/logo.png" height="100" style="margin-bottom: 5px"></a>
-    <div id="fw_version"></div>
+    <div id="fuw_version"></div>
     <hr size=1 class="spacer">
     <p>Freewallet uses public APIs available from the following providers:</p>
     <div>
@@ -31,9 +31,9 @@ hr.spacer {
 </style>
 
 <div class="text-right">
-    <div id="btn-debug" class="btn btn-info pull-left"><i class="fa fa-lg fa-fw fa-bug"></i> Debug</div>
-    <div id="btn-update" class="btn btn-primary pull-left" style="margin-left: 5px"><i class="fa fa-lg fa-fw fa-download"></i> Check for Update</div>
-    <div id="btn-donate" class="btn btn-info"><i class="fa fa-lg fa-fw fa-bitcoin"></i> Donate</div>
+    <div id="btn-debug" class="btn btn-info pull-left"><i class="fa fa-lg fa-fuw fa-bug"></i> Debug</div>
+    <div id="btn-update" class="btn btn-primary pull-left" style="margin-left: 5px"><i class="fa fa-lg fa-fuw fa-download"></i> Check for Update</div>
+    <div id="btn-donate" class="btn btn-info"><i class="fa fa-lg fa-fuw fa-bitcoin"></i> Donate</div>
 </div>
 
 <script>
@@ -46,7 +46,7 @@ $(document).ready(function(){
         version = (is_nwjs()) ? 'Version ' + nw.App.manifest.version : 'Development Build';
 
     // Display current version number
-    $('#fw_version').html(version);
+    $('#fuw_version').html(version);
 
     // Handle showing/hiding the debug button
     if(is_nwjs()){
@@ -63,7 +63,7 @@ $(document).ready(function(){
 
     // When a user clicks the donate now button, save bounty address and launch 'Send Funds' window
     $('#btn-donate').click($.debounce(100, function(e){
-        FW.DIALOG_DATA = {
+        FUW.DIALOG_DATA = {
             destination: address
         };
         dialogSend();

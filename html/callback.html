@@ -6,9 +6,9 @@
             <a href="#" data-toggle="tooltip" title='This is the name of the server where the data will be sent' class="pull-right"><i class="fa fa-lg fa-question-circle-o margin-top-5" ></i></a>
         </label>
         <div class="col-sm-9">
-            <img class="fw-callback-icon pull-left">
-            <div class="fw-callback-hostname nowrap"></div>
-            <div class="fw-callback-protocol"></div>
+            <img class="fuw-callback-icon pull-left">
+            <div class="fuw-callback-hostname nowrap"></div>
+            <div class="fuw-callback-protocol"></div>
         </div>
     </div>
 
@@ -34,8 +34,8 @@
         </div>
     </div>
     <div class="text-right">
-        <div id="btn-no" class="btn btn-danger margin-right-5"><i class="fa fa-lg fa-fw fa-thumbs-down"></i> No</div>
-        <div id="btn-yes" class="btn btn-success "><i class="fa fa-lg fa-fw fa-thumbs-up"></i> Yes</div>
+        <div id="btn-no" class="btn btn-danger margin-right-5"><i class="fa fa-lg fa-fuw fa-thumbs-down"></i> No</div>
+        <div id="btn-yes" class="btn btn-success "><i class="fa fa-lg fa-fuw fa-thumbs-up"></i> Yes</div>
     </div>
 </form>
 
@@ -60,7 +60,7 @@ var getColor = function(url){
 
 $(document).ready(function(){
 
-    var data = FW.DIALOG_DATA;
+    var data = FUW.DIALOG_DATA;
 
     // Load form field
     $('#source-address-field').load('html/fields/source-address.html');
@@ -68,13 +68,13 @@ $(document).ready(function(){
     // Delay initializing some fields to give things a chance to load
     setTimeout(function(){
 
-        // Handle loading any data from FW.DIALOG_DATA
-        var icon = $('.fw-callback-icon');
+        // Handle loading any data from FUW.DIALOG_DATA
+        var icon = $('.fuw-callback-icon');
 
         // Display the hostname and protocol of the remote server
-        $('.fw-callback-hostname').html(getHostname(data.callback));
-        $('.fw-callback-protocol').html(getProtocol(data.callback));
-        $('.fw-callback-protocol').addClass(getColor(data.callback));
+        $('.fuw-callback-hostname').html(getHostname(data.callback));
+        $('.fuw-callback-protocol').html(getProtocol(data.callback));
+        $('.fuw-callback-protocol').addClass(getColor(data.callback));
 
         if(data.address)
             $('#source-address').val(data.address);
@@ -89,7 +89,7 @@ $(document).ready(function(){
         }
 
         // Reset dialog data so we don't reuse data on form in the future
-        FW.DIALOG_DATA = {};
+        FUW.DIALOG_DATA = {};
 
         // Initialize any tooltips
         $('[data-toggle="tooltip"]').tooltip({ 

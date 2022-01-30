@@ -21,15 +21,15 @@ $(document).ready(function(){
     xcp_info = getAssetPrice('XUP',true);
 
     // Populate the token name / asset list
-    var balances = getAddressBalance(FW.WALLET_ADDRESS),
+    var balances = getAddressBalance(FUW.WALLET_ADDRESS),
         html     = '',
         el       = $('#token-name-select');
     // Force "UNO" to be the only option for burning
     if(type=='burn'){
-        html += '<option data-content="<img src=\'' + FW.XCHAIN_API + '/icon/UNO.png\' class=\'fw-icon-20 margin-right-5\'>UNO">UNO</option>';
+        html += '<option data-content="<img src=\'' + FUW.XCHAIN_API + '/icon/UNO.png\' class=\'fuw-icon-20 margin-right-5\'>UNO">UNO</option>';
     } else if(type=='dispenser-buy'){
-        var o = FW.DIALOG_DATA;
-        html += '<option data-content="<img src=\'' + FW.XCHAIN_API + '/icon/' + o.asset + '.png\' class=\'fw-icon-20 margin-right-5\'>' + o.name +'">' + o.name + '</option>';
+        var o = FUW.DIALOG_DATA;
+        html += '<option data-content="<img src=\'' + FUW.XCHAIN_API + '/icon/' + o.asset + '.png\' class=\'fuw-icon-20 margin-right-5\'>' + o.name +'">' + o.name + '</option>';
     } else {
         if(balances && balances.data){
             balances.data.forEach(function(item){
@@ -37,7 +37,7 @@ $(document).ready(function(){
                 if(item.asset=='UNO' && (type=='destroy'||type=='dispenser'))
                     return;
                 var asset = (item.asset_longname && item.asset_longname!='') ? item.asset_longname : item.asset;
-                html += '<option data-content="<img src=\'' + FW.XCHAIN_API + '/icon/' + item.asset + '.png\' class=\'fw-icon-20 margin-right-5\'>' + asset + '">' + asset + '</option>';
+                html += '<option data-content="<img src=\'' + FUW.XCHAIN_API + '/icon/' + item.asset + '.png\' class=\'fuw-icon-20 margin-right-5\'>' + asset + '">' + asset + '</option>';
             });
         }
 
@@ -88,7 +88,7 @@ $(document).ready(function(){
             updateAvailableQuantity();
         // Callback function to handle saving current asset information
         var cb = function(o){
-            FW.ASSET_INFO = o;
+            FUW.ASSET_INFO = o;
             btc_info = getAssetPrice('UNO',true);
             xcp_info = getAssetPrice('XUP',true);
             // Handle enabling/disabling the fiat field based on if we detect some estimated UNO value

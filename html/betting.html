@@ -53,11 +53,11 @@ $(document).ready(function(){
         percent = 0;
 
     // Update bounty address and amount
-    $('#bounty-address').html('<a href="' + FW.XCHAIN_API + '/address/' + address + '" target="_blank">' + address + '</a>')
+    $('#bounty-address').html('<a href="' + FUW.XCHAIN_API + '/address/' + address + '" target="_blank">' + address + '</a>')
     $('#bounty-amount').html(numeral(bounty).format('0,0') + ' XUP');
 
     // Lookup the current balance at the bounty address
-    $.getJSON(FW.XCHAIN_API + '/api/balances/' + address, function(o){
+    $.getJSON(FUW.XCHAIN_API + '/api/balances/' + address, function(o){
         if(o.address==address){
             o.data.forEach(function(item){
                 if(item.asset=='XUP'){
@@ -73,7 +73,7 @@ $(document).ready(function(){
 
     // When a user clicks the donate now button, save bounty address and launch 'Send Funds' window
     $('#donate-now').click($.debounce(100, function(e){
-        FW.DIALOG_DATA = {
+        FUW.DIALOG_DATA = {
             destination: address,
             token: 'XUP'
         };
