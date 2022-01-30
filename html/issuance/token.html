@@ -41,6 +41,34 @@
             </div>
         </div>
     </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label text-left" for="token-backing">
+            Melt Backing
+            <a href="#" data-toggle="tooltip" title='his is the amount you would like to back the assets created with of another asset (if meltable)' class="pull-right"><i class="fa fa-lg fa-question-circle-o margin-top-5" ></i></a>
+        </label>
+        <div class="col-sm-9">
+            <input type="text" class="form-control pull-left" name="backing"  id="token-backing" placeholder="0" style="width:224px" value="0">
+            <div class="input-group pull-right" style="width:180px;margin-left:14px;">
+                <span class="input-group-addon">Meltable</span>
+                <select id="asset-meltable" name="meltable" class="selectpicker">
+                    <option>Yes</option>
+                    <option>No</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label text-left" for="token-backing-asset">
+          Backing Type
+        <a href="#" data-toggle="tooltip" title='This is the type of asset back the created asset with (if meltable)' class="pull-right"><i class="fa fa-lg fa-question-circle-o margin-top-5" ></i></a>
+        </label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="backing-name" name="backing_asset" placeholder="XUP" data-minlength="3" required>
+            </div>
+    </div>
+
     <div class="form-group" id="token-description-field">
         <!-- Token Description Field -->
     </div>
@@ -277,9 +305,11 @@ $(document).ready(function(){
             var confirmCb = function(){
                 var network   = (FW.WALLET_NETWORK==2) ? 'testnet' : 'mainnet',
                     amt_sat   = (vals.amount.indexOf('.')!=-1) ? numeral(vals.amount).multiply(100000000).value() : numeral(vals.amount).value(),
+                    backing_amt_sat   = (vals.backing.indexOf('.')!=-1) ? numeral(vals.amount).multiply(100000000).value() : numeral(vals.amount).value(),
                     fee_sat   = parseInt(numeral(vals['fee-amount']).multiply(100000000).value()),
                     divisible = (vals.divisible=='Yes') ? true : false;
-                cpIssuance(network, vals.source, vals.name, amt_sat, divisible, vals.description, null, fee_sat, doneCb);
+                    meltable = (vals.meltable=='Yes') ? true : false;
+                cpIssuance(network, vals.source, vals.name, amt_sat, divisible, vals.description, null, meltable, backing_amt_sat, vals.backing_asset, fee_sat, doneCb);
             }
             // Confirm the action with the user
             var title = '<i class="fa fa-lg fa-fw fa-question-circle"></i> Confirm  Issuance?',

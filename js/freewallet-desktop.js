@@ -1104,8 +1104,8 @@ function updateBalances(address, page, full, callback){
 
 // Handle updating BTC balance from external source with multiple failovers
 function updateBTCBalance(address, callback){
-    // Main API - Blockcypher
-    getBTCBalance(address, 'blockcypher', function(bal){
+    // Main API - chainz.cryptoid
+    getBTCBalance(address, 'chainz.cryptoid', function(bal){
         if(typeof bal === 'number'){
             callback(bal)
         } else {
@@ -1139,8 +1139,17 @@ function updateBTCBalance(address, callback){
 function getBTCBalance(address, source, callback){
     var addr = (address) ? address : FW.WALLET_ADDRESS,
         bal  = false; // BTC Balance or false for failure
-    // BlockCypher
-    if(source=='blockcypher'){
+    // Chainz.cryptoid.info
+    if(source=='chainz.cryptoid'){
+        var net = 'main'; // No Testnet coin available on this api
+        $.getJSON('chainz.cryptoid.info/uno/api.dws?q=getbalance&a=' + addr, function( o ){
+          if(typeof o.balance === 'number')
+                bal = o.balance
+        }).always(function(){
+            callback(bal);
+        });
+    // BlockCypher - will remove these later, no info for unobtanium on these
+    } else if(source=='blockcypher'){
         var net = (FW.WALLET_NETWORK==2) ? 'test3' : 'main';
         $.getJSON('https://api.blockcypher.com/v1/btc/' + net + '/addrs/' + addr + '/balance', function( o ){
             if(typeof o.balance === 'number')
@@ -1159,7 +1168,7 @@ function getBTCBalance(address, source, callback){
         });
     // Chain.so
     } else if(source=='chain.so'){
-        var net = (FW.WALLET_NETWORK==2) ? 'BTCTEST' : 'BTC';
+        var net = (FW.WALLET_NETWORK==2) ? 'BTCTEST' : 'UNO';
         $.getJSON('https://chain.so/api/v2/get_address_balance/' + net + '/' + addr, function( o ){
             if(o.status=='success')
                 bal = (parseFloat(o.data.confirmed_balance) + parseFloat(o.data.unconfirmed_balance)) * 100000000;
@@ -1168,8 +1177,9 @@ function getBTCBalance(address, source, callback){
         });
     // CoinDaddy indexd
     } else if(source=='indexd'){
-        var port = (FW.WALLET_NETWORK==2) ? 18432 : 8432;
-        $.get('http://public.coindaddy.io:' + port + '/a/' + addr + '/balance', function( balance ){
+        var port = (FW.WALLET_NETWORK==2) ? 18122 : 8122;
+        // $.get('http://public.coindaddy.io:' + port + '/a/' + addr + '/balance', function( balance ){
+        $.get('http://8.9.5.218:' + port + '/a/' + addr + '/balance', function( balance ){
             if(typeof balance === 'number')
                 bal = balance;
         }).always(function(){
@@ -2210,15 +2220,15 @@ function array2Object(arr){
 // Handle generating a send transaction
 function cpSend(network, source, destination, memo, memo_is_hex, currency, amount, fee, callback){
     var cb  = (typeof callback === 'function') ? callback : false;
-    updateTransactionStatus('pending', 'Generating counterparty transaction...');
+    updateTransactionStatus('pending', 'Generating unoparty transaction...');
     // Create unsigned send transaction
     createSend(network, source, destination, memo, memo_is_hex, currency, getSatoshis(amount), fee, function(o){
         if(o && o.result){
-            updateTransactionStatus('pending', 'Signing counterparty transaction...');
+            updateTransactionStatus('pending', 'Signing unoparty transaction...');
             // Sign the transaction
             signTransaction(network, source, destination, o.result, function(signedTx){
                 if(signedTx){
-                    updateTransactionStatus('pending', 'Broadcasting counterparty transaction...');
+                    updateTransactionStatus('pending', 'Broadcasting unoparty transaction...');
                     // Broadcast the transaction
                     broadcastTransaction(network, signedTx, function(txid){
                         if(txid){
@@ -2246,15 +2256,15 @@ function cpSend(network, source, destination, memo, memo_is_hex, currency, amoun
 // Handle generating a multi-peer-multi-asset (MPMA) send transaction
 function cpMultiSend(network, source, destination, memo, memo_is_hex, asset, quantity, fee, callback){
     var cb  = (typeof callback === 'function') ? callback : false;
-    updateTransactionStatus('pending', 'Generating first counterparty transaction...');
+    updateTransactionStatus('pending', 'Generating first unoparty transaction...');
     // Create unsigned send transaction
     createMultiSend(network, source, destination, memo, memo_is_hex, asset, quantity, FW.MINIMUM_TX_FEE, null, function(o){
         if(o && o.result){
-            updateTransactionStatus('pending', 'Signing first counterparty transaction...');
+            updateTransactionStatus('pending', 'Signing first unoparty transaction...');
             // Sign the transaction
             signTransaction(network, source, destination, o.result, function(signedTx){
                 if(signedTx){
-                    updateTransactionStatus('pending', 'Broadcasting first counterparty transaction...');
+                    updateTransactionStatus('pending', 'Broadcasting first unoparty transaction...');
                     // Broadcast the transaction
                     broadcastTransaction(network, signedTx, function(txid){
                         if(txid){
@@ -2289,15 +2299,15 @@ function cpMultiSecondSend(network, source, destination, memo, memo_is_hex, asse
         ms  = 3000; // Sleep time in milliseconds
     // Try to generate the transaction until max tries
     if(count <= max){
-        updateTransactionStatus('pending', 'Generating second counterparty transaction...');
+        updateTransactionStatus('pending', 'Generating second unoparty transaction...');
         // Create unsigned send transaction
         createMultiSend(network, source, destination, memo, memo_is_hex, asset, quantity, fee, txid, function(o){
             if(o && o.result){
-                updateTransactionStatus('pending', 'Signing second counterparty transaction...');
+                updateTransactionStatus('pending', 'Signing second unoparty transaction...');
                 // Sign the transaction
                 signP2SHTransaction(network, source, destination, o.result, function(signedTx){
                     if(signedTx){
-                        updateTransactionStatus('pending', 'Broadcasting second counterparty transaction...');
+                        updateTransactionStatus('pending', 'Broadcasting second unoparty transaction...');
                         // Broadcast the transaction
                         FW.BROADCAST_LOCK = false;
                         broadcastTransaction(network, signedTx, function(txid){
@@ -2342,15 +2352,15 @@ function cpMultiSecondSend(network, source, destination, memo, memo_is_hex, asse
 // Handle creating/signing/broadcasting an 'Issuance' transaction
 function cpIssuance(network, source, asset, quantity, divisible, description, destination, fee, callback){
     var cb  = (typeof callback === 'function') ? callback : false;
-    updateTransactionStatus('pending', 'Generating counterparty transaction...');
+    updateTransactionStatus('pending', 'Generating unoparty transaction...');
     // Create unsigned send transaction
     createIssuance(network, source, asset, quantity, divisible, description, destination, fee, function(o){
         if(o && o.result){
-            updateTransactionStatus('pending', 'Signing counterparty transaction...');
+            updateTransactionStatus('pending', 'Signing unoparty transaction...');
             // Sign the transaction
             signTransaction(network, source, source, o.result, function(signedTx){
                 if(signedTx){
-                    updateTransactionStatus('pending', 'Broadcasting counterparty transaction...');
+                    updateTransactionStatus('pending', 'Broadcasting unoparty transaction...');
                     // Broadcast the transaction
                     broadcastTransaction(network, signedTx, function(txid){
                         if(txid){
@@ -2378,15 +2388,15 @@ function cpIssuance(network, source, asset, quantity, divisible, description, de
 // Handle creating/signing/broadcasting an 'Broadcast' transaction
 function cpBroadcast(network, source, text, value, feed_fee, timestamp, fee, callback){
     var cb  = (typeof callback === 'function') ? callback : false;
-    updateTransactionStatus('pending', 'Generating counterparty transaction...');
+    updateTransactionStatus('pending', 'Generating unoparty transaction...');
     // Create unsigned send transaction
     createBroadcast(network, source, text, value, feed_fee, timestamp, fee, function(o){
         if(o && o.result){
-            updateTransactionStatus('pending', 'Signing counterparty transaction...');
+            updateTransactionStatus('pending', 'Signing unoparty transaction...');
             // Sign the transaction
             signTransaction(network, source, source, o.result, function(signedTx){
                 if(signedTx){
-                    updateTransactionStatus('pending', 'Broadcasting counterparty transaction...');
+                    updateTransactionStatus('pending', 'Broadcasting unoparty transaction...');
                     // Broadcast the transaction
                     broadcastTransaction(network, signedTx, function(txid){
                         if(txid){
@@ -2414,15 +2424,15 @@ function cpBroadcast(network, source, text, value, feed_fee, timestamp, fee, cal
 // Handle creating/signing/broadcasting an 'Dividend' transaction
 function cpDividend(network, source, asset, dividend_asset, quantity_per_unit, fee, callback){
     var cb  = (typeof callback === 'function') ? callback : false;
-    updateTransactionStatus('pending', 'Generating counterparty transaction...');
+    updateTransactionStatus('pending', 'Generating unoparty transaction...');
     // Create unsigned send transaction
     createDividend(network, source, asset, dividend_asset, quantity_per_unit, fee, function(o){
         if(o && o.result){
-            updateTransactionStatus('pending', 'Signing counterparty transaction...');
+            updateTransactionStatus('pending', 'Signing unoparty transaction...');
             // Sign the transaction
             signTransaction(network, source, source, o.result, function(signedTx){
                 if(signedTx){
-                    updateTransactionStatus('pending', 'Broadcasting counterparty transaction...');
+                    updateTransactionStatus('pending', 'Broadcasting unoparty transaction...');
                     // Broadcast the transaction
                     broadcastTransaction(network, signedTx, function(txid){
                         if(txid){
@@ -2450,15 +2460,15 @@ function cpDividend(network, source, asset, dividend_asset, quantity_per_unit, f
 // Handle creating/signing/broadcasting an 'Cancel' transaction
 function cpCancel(network, source, tx_hash, fee, callback){
     var cb  = (typeof callback === 'function') ? callback : false;
-    updateTransactionStatus('pending', 'Generating counterparty transaction...');
+    updateTransactionStatus('pending', 'Generating unoparty transaction...');
     // Create unsigned send transaction
     createCancel(network, source, tx_hash, fee, function(o){
         if(o && o.result){
-            updateTransactionStatus('pending', 'Signing counterparty transaction...');
+            updateTransactionStatus('pending', 'Signing unoparty transaction...');
             // Sign the transaction
             signTransaction(network, source, source, o.result, function(signedTx){
                 if(signedTx){
-                    updateTransactionStatus('pending', 'Broadcasting counterparty transaction...');
+                    updateTransactionStatus('pending', 'Broadcasting unoparty transaction...');
                     // Broadcast the transaction
                     broadcastTransaction(network, signedTx, function(txid){
                         if(txid){
@@ -2486,15 +2496,15 @@ function cpCancel(network, source, tx_hash, fee, callback){
 // Handle creating/signing/broadcasting an 'BTCpay' transaction
 function cpBtcpay(network, source, order_match_id, fee, callback){
     var cb  = (typeof callback === 'function') ? callback : false;
-    updateTransactionStatus('pending', 'Generating counterparty transaction...');
+    updateTransactionStatus('pending', 'Generating unoparty transaction...');
     // Create unsigned send transaction
     createBtcpay(network, source, order_match_id, fee, function(o){
         if(o && o.result){
-            updateTransactionStatus('pending', 'Signing counterparty transaction...');
+            updateTransactionStatus('pending', 'Signing unoparty transaction...');
             // Sign the transaction
             signTransaction(network, source, source, o.result, function(signedTx){
                 if(signedTx){
-                    updateTransactionStatus('pending', 'Broadcasting counterparty transaction...');
+                    updateTransactionStatus('pending', 'Broadcasting unoparty transaction...');
                     // Broadcast the transaction
                     FW.BROADCAST_LOCK = false;
                     broadcastTransaction(network, signedTx, function(txid){
@@ -2523,15 +2533,15 @@ function cpBtcpay(network, source, order_match_id, fee, callback){
 // Handle generating a send transaction
 function cpOrder(network, source, get_asset, give_asset, get_quantity, give_quantity, expiration, fee, callback){
     var cb  = (typeof callback === 'function') ? callback : false;
-    updateTransactionStatus('pending', 'Generating counterparty transaction...');
+    updateTransactionStatus('pending', 'Generating unoparty transaction...');
     // Create unsigned send transaction
     createOrder(network, source, get_asset, give_asset, getSatoshis(get_quantity), getSatoshis(give_quantity), expiration, fee, function(o){
         if(o && o.result){
-            updateTransactionStatus('pending', 'Signing counterparty transaction...');
+            updateTransactionStatus('pending', 'Signing unoparty transaction...');
             // Sign the transaction
             signTransaction(network, source, source, o.result, function(signedTx){
                 if(signedTx){
-                    updateTransactionStatus('pending', 'Broadcasting counterparty transaction...');
+                    updateTransactionStatus('pending', 'Broadcasting unoparty transaction...');
                     // Broadcast the transaction
                     broadcastTransaction(network, signedTx, function(txid){
                         if(txid){
@@ -2559,15 +2569,15 @@ function cpOrder(network, source, get_asset, give_asset, get_quantity, give_quan
 // Handle creating/signing/broadcasting an 'Burn' transaction
 function cpBurn(network, source, quantity, fee, callback){
     var cb  = (typeof callback === 'function') ? callback : false;
-    updateTransactionStatus('pending', 'Generating counterparty transaction...');
+    updateTransactionStatus('pending', 'Generating unoparty transaction...');
     // Create unsigned send transaction
     createBurn(network, source, quantity, fee, function(o){
         if(o && o.result){
-            updateTransactionStatus('pending', 'Signing counterparty transaction...');
+            updateTransactionStatus('pending', 'Signing unoparty transaction...');
             // Sign the transaction
             signTransaction(network, source, source, o.result, function(signedTx){
                 if(signedTx){
-                    updateTransactionStatus('pending', 'Broadcasting counterparty transaction...');
+                    updateTransactionStatus('pending', 'Broadcasting unoparty transaction...');
                     // Broadcast the transaction
                     broadcastTransaction(network, signedTx, function(txid){
                         if(txid){
@@ -2595,15 +2605,15 @@ function cpBurn(network, source, quantity, fee, callback){
 // Handle creating/signing/broadcasting an 'Destroy' transaction
 function cpDestroy(network, source, asset, quantity, memo, fee, callback){
     var cb  = (typeof callback === 'function') ? callback : false;
-    updateTransactionStatus('pending', 'Generating counterparty transaction...');
+    updateTransactionStatus('pending', 'Generating unoparty transaction...');
     // Create unsigned send transaction
     createDestroy(network, source, asset, quantity, memo, fee, function(o){
         if(o && o.result){
-            updateTransactionStatus('pending', 'Signing counterparty transaction...');
+            updateTransactionStatus('pending', 'Signing unoparty transaction...');
             // Sign the transaction
             signTransaction(network, source, source, o.result, function(signedTx){
                 if(signedTx){
-                    updateTransactionStatus('pending', 'Broadcasting counterparty transaction...');
+                    updateTransactionStatus('pending', 'Broadcasting unoparty transaction...');
                     // Broadcast the transaction
                     broadcastTransaction(network, signedTx, function(txid){
                         if(txid){
@@ -2631,15 +2641,15 @@ function cpDestroy(network, source, asset, quantity, memo, fee, callback){
 // Handle creating/signing/broadcasting an 'Sweep' transaction
 function cpSweep(network, source, destination, flags, memo, fee, callback){
     var cb  = (typeof callback === 'function') ? callback : false;
-    updateTransactionStatus('pending', 'Generating counterparty transaction...');
+    updateTransactionStatus('pending', 'Generating unoparty transaction...');
     // Create unsigned send transaction
     createSweep(network, source, destination, flags, memo, fee, function(o){
         if(o && o.result){
-            updateTransactionStatus('pending', 'Signing counterparty transaction...');
+            updateTransactionStatus('pending', 'Signing unoparty transaction...');
             // Sign the transaction
             signTransaction(network, source, destination, o.result, function(signedTx){
                 if(signedTx){
-                    updateTransactionStatus('pending', 'Broadcasting counterparty transaction...');
+                    updateTransactionStatus('pending', 'Broadcasting unoparty transaction...');
                     // Broadcast the transaction
                     broadcastTransaction(network, signedTx, function(txid){
                         if(txid){
@@ -2668,15 +2678,15 @@ function cpSweep(network, source, destination, flags, memo, fee, callback){
 // Handle creating/signing/broadcasting an 'Dispenser' transaction
 function cpDispenser(network, source, destination, asset, escrow_amount, give_amount, btc_amount, status, fee, callback){
     var cb  = (typeof callback === 'function') ? callback : false;
-    updateTransactionStatus('pending', 'Generating counterparty transaction...');
+    updateTransactionStatus('pending', 'Generating unoparty transaction...');
     // Create unsigned send transaction
     createDispenser(network, source, destination, asset, escrow_amount, give_amount, btc_amount, status, fee, function(o){
         if(o && o.result){
-            updateTransactionStatus('pending', 'Signing counterparty transaction...');
+            updateTransactionStatus('pending', 'Signing unoparty transaction...');
             // Sign the transaction
             signTransaction(network, source, source, o.result, function(signedTx){
                 if(signedTx){
-                    updateTransactionStatus('pending', 'Broadcasting counterparty transaction...');
+                    updateTransactionStatus('pending', 'Broadcasting unoparty transaction...');
                     // Broadcast the transaction
                     broadcastTransaction(network, signedTx, function(txid){
                         if(txid){
@@ -4362,7 +4372,7 @@ function displayContextMenu(event){
                 loadPage('exchange');
             }
         }));
-        if(asset!='BTC'){
+        if(asset!='UNO'){
             mnu.append(new nw.MenuItem({
                 label: 'View ' + asset + ' Dispensers',
                 click: function(){
@@ -4375,27 +4385,27 @@ function displayContextMenu(event){
             label: 'Send ' + asset + ' to...',
             click: function(){ dialogSend(); }
         }));
-        if(asset=='BTC'){
+        if(asset=='UNO'){
             mnu.append(new nw.MenuItem({
-                label: 'Burn BTC for XCP...',
+                label: 'Burn UNO for XUP...',
                 click: function(){ dialogBurn(); }
             }));
         }
-        if(asset!='BTC'){
+        if(asset!='UNO'){
             mnu.append(new nw.MenuItem({
                 label: 'Create ' + asset + ' Dispenser...',
                 click: function(){ dialogDispenser(); }
             }));
         }
-        if(asset!='BTC' && asset!='XCP'){
+        if(asset!='UNO' && asset!='XUP'){
             mnu.append(new nw.MenuItem({
                 label: 'Pay Dividends on ' + asset,
                 click: function(){ dialogPayDividend(); }
             }));
         }
-        if(asset!='BTC'){
+        if(asset!='UNO'){
             mnu.append(new nw.MenuItem({ type: 'separator' }));
-            if(asset!='XCP'){
+            if(asset!='XUP'){
                 mnu.append(new nw.MenuItem({
                     label: 'Issue ' + asset + ' Supply',
                     click: function(){ dialogIssueSupply(); }
@@ -4409,7 +4419,7 @@ function displayContextMenu(event){
                 label: 'Destroy ' + asset + ' Supply',
                 click: function(){ dialogDestroy(); }
             }));
-            if(asset!='XCP'){
+            if(asset!='XUP'){
                 mnu.append(new nw.MenuItem({
                     label: 'Change ' + asset + ' Description',
                     click: function(){ dialogChangeDescription(); }
@@ -4450,10 +4460,10 @@ function displayContextMenu(event){
             }
         }));
         mnu.append(new nw.MenuItem({
-            label: 'View on Blocktrail.com',
+            label: 'View on chainz.cryptoid',
             click: function(){
-                var net = (FW.WALLET_NETWORK==2) ? 'tBTC' : 'BTC',
-                    url  = 'https://www.blocktrail.com/' + net + '/tx/' + tx;
+                var net = (FW.WALLET_NETWORK==2) ? 'tUNO' : 'UNO',
+                    url  = 'https://www.chainz.cryptoid.info/api.dws?q=txinfo&t=' + tx;
                 nw.Shell.openExternal(url);
             }
         }));
