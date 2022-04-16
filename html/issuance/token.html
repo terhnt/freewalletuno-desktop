@@ -42,6 +42,7 @@
         </div>
     </div>
 
+<!--  MeltableAssetCode-backing
     <div class="form-group">
         <label class="col-sm-3 control-label text-left" for="token-backing">
             Melt Backing
@@ -68,6 +69,7 @@
               <input type="text" class="form-control" id="backing-name" name="backing_asset" placeholder="XUP" data-minlength="3" required>
             </div>
     </div>
+-->
 
     <div class="form-group" id="token-description-field">
         <!-- Token Description Field -->
@@ -148,7 +150,8 @@ $(document).ready(function(){
     // Make selectpicker dropdowns work
     $('#token-type').selectpicker({ width: '100%' });
     $('#asset-divisible').selectpicker();
-    $('#asset-meltable').selectpicker();
+    //MeltableAssetCode-Meltable
+    // $('#asset-meltable').selectpicker();
 
     // Trigger change on token amount so we format it correctly
     $('#token-amount').change();
@@ -315,11 +318,14 @@ $(document).ready(function(){
             var confirmCb = function(){
                 var network   = (FUW.WALLET_NETWORK==2) ? 'testnet' : 'mainnet',
                     amt_sat   = (vals.amount.indexOf('.')!=-1) ? numeral(vals.amount).multiply(100000000).value() : numeral(vals.amount).value(),
-                    backing_amt_sat   = (vals.backing.indexOf('.')!=-1) ? numeral(vals.amount).multiply(100000000).value() : numeral(vals.amount).value(),
+                    //MeltableAssetCode-backing-pt2
+                    //backing_amt_sat   = (vals.backing.indexOf('.')!=-1) ? numeral(vals.amount).multiply(100000000).value() : numeral(vals.amount).value(),
                     fee_sat   = parseInt(numeral(vals['fee-amount']).multiply(100000000).value()),
                     divisible = (vals.divisible=='Yes') ? true : false;
-                    meltable = (vals.meltable=='Yes') ? true : false;
-                cpIssuance(network, vals.source, vals.name, amt_sat, divisible, vals.description, null, meltable, backing_amt_sat, vals.backing_asset, fee_sat, doneCb);
+                    //MeltableAssetCode-backing-pt3
+                    //meltable = (vals.meltable=='Yes') ? true : false;
+                //cpIssuance(network, vals.source, vals.name, amt_sat, divisible, vals.description, null, meltable, backing_amt_sat, vals.backing_asset, fee_sat, doneCb);
+                cpIssuance(network, vals.source, vals.name, amt_sat, divisible, vals.description, null, fee_sat, doneCb);
             }
             // Confirm the action with the user
             var title = '<i class="fa fa-lg fa-fuw fa-question-circle"></i> Confirm  Issuance?',

@@ -107,7 +107,9 @@ $(document).ready(function(){
                 var network = (FUW.WALLET_NETWORK==2) ? 'testnet' : 'mainnet',
                     fee_sat = parseInt(numeral(vals['fee-amount']).multiply(100000000).value()),
                     info    = FUW.ASSET_INFO;
-                cpIssuance(network, vals.source, vals.name, 0, info.divisible, vals.description, null, False, 0, 'XUP', fee_sat, doneCb);
+                //MeltableAssetCode-Description
+                //cpIssuance(network, vals.source, vals.name, 0, info.divisible, vals.description, null, False, 0, 'XUP', fee_sat, doneCb);
+                cpIssuance(network, vals.source, vals.name, 0, info.divisible, vals.description, null, fee_sat, doneCb);
             }
             // Confirm the action with the user
             var title = '<i class="fa fa-lg fa-fuw fa-question-circle"></i> Confirm Description Change?',
