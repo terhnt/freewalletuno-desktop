@@ -157,7 +157,7 @@ function signTx(net='mainnet', source, path, unsignedTx, callback){
 // @callback = Callback function
 function broadcastTx(network, signedTx, callback){
     var net  = (network=='testnet') ? 'UNOTEST' : 'UNO',
-        host = (network=='testnet') ? 'testnet.xchain.io' : 'xchain.io';
+        host = (network=='testnet') ? 'unoparty-testnet.xchain.io' : 'unoparty.xchain.io';
     // First try to broadcast using the XChain API
     $.ajax({
         type: "POST",

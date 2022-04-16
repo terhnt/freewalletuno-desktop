@@ -60,19 +60,19 @@ FUW.WALLET_SERVER_INFO = {
     mainnet: {
         host: 'api.unoparty.io',
         port: 4120,
-        user: 'rpc',
+        user: 'unobtaniumrpc',
         pass: 'rpc',
         ssl: false,
-        api_host: 'xchain.io',
+        api_host: 'unoparty.xchain.io',
         api_ssl: true
     },
     testnet: {
         host: 'api.unoparty.io',
         port: 14120,
-        user: 'rpc',
+        user: 'unobtaniumrpc',
         pass: 'rpc',
         ssl: false,
-        api_host: 'testnet.xchain.io',
+        api_host: 'unoparty-testnet.xchain.io',
         api_ssl: true
     }
 };
