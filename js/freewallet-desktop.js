@@ -664,7 +664,7 @@ function isValidAddress(addr){
       bcNet  = bc.Networks[bcName]; // Bitcore Network
   // update network (used in DWBitcore)
   NETWORK  = bcNet;
-  if(UNBitcore.isValidAddress(addr))
+  if(UWBitcore.isValidAddress(addr))
         return true;
     return false;
 }
@@ -1140,14 +1140,25 @@ function getBTCBalance(address, source, callback){
     var addr = (address) ? address : FUW.WALLET_ADDRESS,
         bal  = false; // BTC Balance or false for failure
     // Chainz.cryptoid.info
+    var net = (FUW.WALLET_NETWORK==2) ? 'test3' : 'main';
     if(source=='chainz.cryptoid'){
-        var net = 'main'; // No Testnet coin available on this api
-        $.getJSON('chainz.cryptoid.info/uno/api.dws?q=getbalance&a=' + addr, function( o ){
-          if(typeof o.balance === 'number')
-                bal = o.balance
-        }).always(function(){
-            callback(bal);
-        });
+        if(net=="test3"){
+          $.getJSON('http://explorer.medleytechnologies.com/ext/getaddress/' + addr + '/0/100', function( o ){
+            if(typeof o.balance === 'number')
+                  flt = Number(o.balance)
+                  flt = Math.ceil(flt * 100000000)
+                  bal = flt.toString()
+          }).always(function(){
+              callback(bal);
+          });
+        }else{
+          $.getJSON('chainz.cryptoid.info/uno/api.dws?q=getbalance&a=' + addr, function( o ){
+            if(typeof o.balance === 'number')
+                  bal = o.balance
+          }).always(function(){
+              callback(bal);
+          });
+        }
     // BlockCypher - will remove these later, no info for unobtanium on these
     } else if(source=='blockcypher'){
         var net = (FUW.WALLET_NETWORK==2) ? 'test3' : 'main';
@@ -1939,7 +1950,7 @@ function loadAssetInfo(asset){
                 if(asset=='UNO'){
                     feedback.hide();
                 } else {
-                    feedback.attr('href','https://reputation.coindaddy.io/xcp/asset/' + asset);
+                    feedback.attr('href','https://reputation.coindaddy.io/xup/asset/' + asset);
                     feedback.show();
                 }
                 // Display the description info if we have it

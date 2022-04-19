@@ -36,8 +36,8 @@ bitcore.Networks.unotestnet = bitcore.Networks.add({
 });
 
 // this 'global' is overwritten by tests!
-var NETWORK = (USE_TESTNET || USE_REGTEST) ? 'unotestnet' : 'unolivenet';
-//var NETWORK = 'dogelivenet';
+//var NETWORK = (USE_TESTNET || USE_REGTEST) ? 'unotestnet' : 'unolivenet';
+var NETWORK = 'unotestnet';
 
 var CWHierarchicalKey = function(passphrase, password) {
   checkArgType(passphrase, "string");

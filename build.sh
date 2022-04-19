@@ -16,7 +16,7 @@ nwjs=/Applications/nwjs.app/Contents/MacOS/nwjs
 
 # Verify we are building on a mac
 if [ "$OSTYPE" != "darwin" ] ; then
-    if ["$OSTYPE" != "darwin19" ] ; then
+    if [ "$OSTYPE" != "darwin19" ] ; then
       echo "Build script is meant to be run on MacOS!"
       exit
     fi
