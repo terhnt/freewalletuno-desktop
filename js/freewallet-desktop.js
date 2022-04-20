@@ -1144,17 +1144,15 @@ function getBTCBalance(address, source, callback){
     if(source=='chainz.cryptoid'){
         if(net=="test3"){
           $.getJSON('http://explorer.medleytechnologies.com/ext/getaddress/' + addr + '/0/100', function( o ){
-            if(typeof o.balance === 'number')
-                  flt = Number(o.balance)
-                  flt = Math.ceil(flt * 100000000)
-                  bal = flt.toString()
+            if(typeof o.sent === 'number')
+                  bal = Math.ceil((o.received-o.sent) * 100000000)
           }).always(function(){
               callback(bal);
           });
         }else{
-          $.getJSON('chainz.cryptoid.info/uno/api.dws?q=getbalance&a=' + addr, function( o ){
+          $.getJSON('chainz.cryptoid.info/uno/api.dws?q=addressinfo&a=' + addr, function( o ){
             if(typeof o.balance === 'number')
-                  bal = o.balance
+                  bal = Math.ceil(o.balance*100000000)
           }).always(function(){
               callback(bal);
           });
@@ -1284,25 +1282,26 @@ function updateWalletBalances( address, force ){
 // Handle updating UNO history from external source with multiple failovers
 function updateBTCHistory(address, callback){
     // Main API - Blockcypher
-    getBTCHistory(address, 'blockcypher', function(txs){
+    getBTCHistory(address, 'medley', function(txs){
         if(txs instanceof Array){
             callback(txs)
         } else {
+          callback([]);
             // Failover #1 - Blockstream
-            getBTCHistory(address, 'blockstream', function(txs){
-                if(txs instanceof Array){
-                    callback(txs)
-                } else {
-                    // Failover #2 - Chain.so
-                    getBTCHistory(address, 'chain.so', function(txs){
-                        if(txs instanceof Array){
-                            callback(txs)
-                        } else {
-                            callback([]);
-                        }
-                    });
-                }
-            });
+            //getBTCHistory(address, 'blockstream', function(txs){
+            //    if(txs instanceof Array){
+            //        callback(txs)
+            //    } else {
+            //        // Failover #2 - Chain.so
+            //        getBTCHistory(address, 'chain.so', function(txs){
+            //            if(txs instanceof Array){
+            //                callback(txs)
+            //            } else {
+            //                callback([]);
+            //            }
+            //        });
+            //    }
+            //});
         }
     });
 }
@@ -1312,6 +1311,30 @@ function getBTCHistory(address, source, callback){
     var addr = (address) ? address : FUW.WALLET_ADDRESS,
         data = false; // Array of history transactions
     // BlockCypher - Last 50 transactions
+    if(source=='medley'){
+      var net = (FUW.WALLET_NETWORK==2) ? 'UNOTEST' : 'UNO';
+      $.getJSON('http://explorer.medleytechnologies.com/ext/getaddresstxs/' + addr + '0/1', function( o ){
+          data = [];
+          o.forEach(function(tx){
+              data.push({
+                  hash: tx.txid,
+                  timestamp: tx.timestamp,
+                  quantity: tx.balance
+              });
+          });
+      //}).always(function(){
+        //  $.getJSON('https://chain.so/api/v2/get_tx_spent/' + net + '/' + addr, function( o ){
+        //      o.data.txs.forEach(function(tx){
+        //          data.push({
+        //              hash: tx.txid,
+        //              timestamp: tx.time,
+        //              quantity: '-' + 0//tx.value
+        //          });
+        //      });
+          }).always(function(){
+              callback(data);
+          });
+    }
     if(source=='blockcypher'){
         var net = (FUW.WALLET_NETWORK==2) ? 'test3' : 'main';
         $.getJSON('https://api.blockcypher.com/v1/btc/' + net + '/addrs/' + addr + '/full?limit=50', function( o ){
