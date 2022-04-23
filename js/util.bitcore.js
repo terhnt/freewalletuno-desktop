@@ -39,7 +39,7 @@ bitcore.Networks.unotestnet = bitcore.Networks.add({
 //var NETWORK = (USE_TESTNET || USE_REGTEST) ? 'unotestnet' : 'unolivenet';
 var NETWORK = 'unotestnet';
 
-var CWHierarchicalKey = function(passphrase, password) {
+var UWHierarchicalKey = function(passphrase, password) {
   checkArgType(passphrase, "string");
   if (password) {
     checkArgType(password, "string");
@@ -52,7 +52,7 @@ var CWHierarchicalKey = function(passphrase, password) {
   this.init(passphrase);
 }
 
-CWHierarchicalKey.prototype.init = function(passphrase) {
+UWHierarchicalKey.prototype.init = function(passphrase) {
   this.passphrase = passphrase;
 
   var words = $.trim(passphrase.toLowerCase()).split(' ');
@@ -67,7 +67,7 @@ CWHierarchicalKey.prototype.init = function(passphrase) {
     }
   }
 
-  var seed = CWHierarchicalKey.wordsToSeed(words);
+  var seed = UWHierarchicalKey.wordsToSeed(words);
 
   /*
    * for historical reasons we create an 'old' HDPrivateKey where the seed is used as a string and wrangled a bit
@@ -77,39 +77,39 @@ CWHierarchicalKey.prototype.init = function(passphrase) {
   this.HierarchicalKey = this.useOldHierarchicalKey ? this.oldHierarchicalKey : bitcore.HDPrivateKey.fromSeed(seed, NETWORK);
 }
 
-CWHierarchicalKey.wordsToSeed = function(words) {
+UWHierarchicalKey.wordsToSeed = function(words) {
   var m = new Mnemonic(words);
   return m.toHex();
 }
 
-CWHierarchicalKey.prototype.getOldAddressesInfos = function(callback) {
+UWHierarchicalKey.prototype.getOldAddressesInfos = function(callback) {
   var addresses = [];
-  var cwkeys = {};
+  var uwkeys = {};
 
   for (var i = 0; i <= 9; i++) {
 
     var derivedKey = this.oldHierarchicalKey.derive(this.basePath + i);
 
-    var cwk = new UWPrivateKey(derivedKey.privateKey);
-    var address = cwk.getAddress();
+    var uwk = new UWPrivateKey(derivedKey.privateKey);
+    var address = uwk.getAddress();
     addresses.push(address);
-    cwkeys[address] = cwk;
+    uwkeys[address] = uwk;
   }
 
-  Counterblock.getBalances(addresses, cwkeys, callback);
+  Unoblock.getBalances(addresses, uwkeys, callback);
 }
 
-CWHierarchicalKey.prototype.getAddressKey = function(index) {
+UWHierarchicalKey.prototype.getAddressKey = function(index) {
   checkArgType(index, "number");
   var derivedKey = this.HierarchicalKey.derive(this.basePath + index);
   return new UWPrivateKey(derivedKey.privateKey);
 }
 
-CWHierarchicalKey.prototype.cryptPassphrase = function(password) {
+UWHierarchicalKey.prototype.cryptPassphrase = function(password) {
   return UWBitcore.encrypt(this.passphrase, password);
 }
 
-CWHierarchicalKey.prototype.getQuickUrl = function(password) {
+UWHierarchicalKey.prototype.getQuickUrl = function(password) {
   var url = location.protocol + '//' + location.hostname + '/#cp=';
   url += this.cryptPassphrase(password);
   return url;

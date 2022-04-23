@@ -2043,7 +2043,7 @@ function loadAssetInfo(asset){
                 estimated_value: {
                     btc: 1,
                     usd: btc.market_cap_usd,
-                    xcp: 1/xcp.price_btc
+                    xcp: 1/xcp.price_uno
                 },
                 supply: btc.total_supply
             });
@@ -3258,14 +3258,14 @@ function broadcastTransaction(network, tx, callback){
     if(FUW.BROADCAST_LOCK==true){
         cbError('Broadcasting another transaction too quickly',callback);
         return;
-    } else {1665207
+    } else {
         FUW.BROADCAST_LOCK = true;
         setTimeout(function(){
             FUW.BROADCAST_LOCK = false;
         }, 5000);
     }
     console.log('signed transaction=', tx);
-    var net  = (network=='testnet') ? 'UNOTEST' : 'UNO';
+    //var net  = (network=='testnet') ? 'UNOTEST' : 'UNO';
     // First try to broadcast using the XChain API
     $.ajax({
         type: "POST",
