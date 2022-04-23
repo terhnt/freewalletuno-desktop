@@ -3266,48 +3266,72 @@ function broadcastTransaction(network, tx, callback){
         }, 5000);
     }
     console.log('signed transaction=', tx);
-    //var net  = (network=='testnet') ? 'UNOTEST' : 'UNO';
-    // First try to broadcast using the XChain API
+    // Attempt to query unobtanium node.
+    var queryurl = (network=='testnet') ? 'http://unobtaniumrpc:rpc@unoparty.io:65531' : 'http://unobtaniumrpc:rpc@unoparty.io:65535';
     $.ajax({
-        type: "POST",
-        url: FUW.XCHAIN_API +  '/api/send_tx',
-        data: {
-            tx_hex: tx
-        },
-        complete: function(o){
-            // console.log('o=',o);
-            // Handle successful broadcast
-            if(o.responseJSON.tx_hash){
-                var txid = o.responseJSON.tx_hash;
+        url: queryurl,
+        dataType: 'json',
+        type: 'POST',
+        contentType: 'application/json',
+        data: '{ "method": "sendrawtransaction", "params": [' + '"' + tx + '"]}',
+        timeout: 15000,
+        complete: function(data) {
+            if(data.responseJSON.result){
+                var txid = data.responseJSON.result;
                 if(callback)
-                    callback(txid);
+                    callback(txid)
                 if(txid)
-                    console.log('Broadcasted transaction hash=',txid);
-            } else {
-                // If the request to XChain API failed, fallback to chain.so API
-                console.log('failed to broadcast transaction');
-                var net  = (network=='testnet') ? 'UNOTEST' : 'UNO';
-                $.ajax({
-                    type: "POST",
-                    url: 'https://chain.so/api/v2/send_tx/' + net,
-                    data: {
-                        tx_hex: tx
-                    },
-                    dataType: 'json',
-                    complete: function(o){
-                        // console.log('o=',o);
-                        if(o.responseJSON.data && o.responseJSON.data.txid){
-                            var txid = o.responseJSON.data.txid;
-                            if(callback)
-                                callback(txid);
-                            if(txid)
-                                console.log('Broadcast transaction tx_hash=',txid);
-                        } else {
-                            cbError('Error while trying to broadcast signed transaction',callback);
-                        }
-                    }
-                });
+                    console.log('Broadcasted transaction hash=', data.responseJSON.result);
+            }else{
+              console.log('failed to broadcast transaction using node.');
             }
+        },
+        error: function(oops) {
+          // Second try to broadcast using the XChain API
+          console.log("error: " + oops.statusText.toString());
+          console.log("trying to use XCHAIN api");
+          $.ajax({
+              type: "POST",
+              url: FUW.XCHAIN_API +  '/api/send_tx',
+              data: {
+                  tx_hex: tx
+              },
+              complete: function(o){
+                  // console.log('o=',o);
+                  // Handle successful broadcast
+                  if(o.responseJSON.tx_hash){
+                      var txid = o.responseJSON.tx_hash;
+                      if(callback)
+                          callback(txid);
+                      if(txid)
+                          console.log('Broadcasted transaction hash=',txid);
+                  } else {
+                      // If the request to XChain API failed, fallback to chain.so API
+                      console.log('failed to broadcast transaction');
+                      var net  = (network=='testnet') ? 'UNOTEST' : 'UNO';
+                      $.ajax({
+                          type: "POST",
+                          url: 'https://chain.so/api/v2/send_tx/' + net,
+                          data: {
+                              tx_hex: tx
+                          },
+                          dataType: 'json',
+                          complete: function(o){
+                              // console.log('o=',o);
+                              if(o.responseJSON.data && o.responseJSON.data.txid){
+                                  var txid = o.responseJSON.data.txid;
+                                  if(callback)
+                                      callback(txid);
+                                  if(txid)
+                                      console.log('Broadcast transaction tx_hash=',txid);
+                              } else {
+                                  cbError('Error while trying to broadcast signed transaction',callback);
+                              }
+                          }
+                      });
+                  }
+              }
+          });
         }
     });
 }
