@@ -58,7 +58,7 @@ FUW.WALLET_HISTORY  = JSON.parse(ls.getItem('walletHistory'))  || [];
 // Define default server info
 FUW.WALLET_SERVER_INFO = {
     mainnet: {
-        host: 'api.unoparty.io',
+        host: 'unoparty.io',
         port: 4120,
         user: 'unobtaniumrpc',
         pass: 'rpc',
@@ -67,7 +67,7 @@ FUW.WALLET_SERVER_INFO = {
         api_ssl: true
     },
     testnet: {
-        host: 'api.unoparty.io',
+        host: 'unoparty.io',
         port: 14120,
         user: 'unobtaniumrpc',
         pass: 'rpc',
