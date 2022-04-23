@@ -86,14 +86,13 @@ function dialogWarnSameAddress(vals){
 $(document).ready(function(){
 
     // Load any field content
-    // temporarily comment this out
-    // $('#source-address-field').load('html/fields/source-address.html');
-    // $('#destination-address-field').load('html/fields/destination-address.html');
-    // $('#token-name-select-field').load('html/fields/token-name-select.html');
-    // $('#available-field').load('html/fields/available.html');
-    // $('#escrow-amount-field').load('html/fields/amount-escrow.html');
-    // $('#give-amount-field').load('html/fields/amount-give.html');
-    // $('#btc-amount-field').load('html/fields/amount-btc.html');
+    $('#source-address-field').load('html/fields/source-address.html');
+    $('#destination-address-field').load('html/fields/destination-address.html');
+    $('#token-name-select-field').load('html/fields/token-name-select.html');
+    $('#available-field').load('html/fields/available.html');
+    $('#escrow-amount-field').load('html/fields/amount-escrow.html');
+    $('#give-amount-field').load('html/fields/amount-give.html');
+    $('#btc-amount-field').load('html/fields/amount-btc.html');
     $('#tx-fee-field').load('html/fields/tx-fee.html');
 
     // Delay initializing some fields to give things a chance to load
