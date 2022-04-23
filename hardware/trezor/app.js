@@ -68,7 +68,7 @@ function signTx(net='mainnet', source, path, unsignedTx, callback){
     var inputs  = [],
         outputs = [],
         network = (net=='testnet') ? '0x80000001' : '0x80000000', // default to mainnet
-        api_net = (net=='testnet') ? 'tbtc' : 'btc',
+        api_net = (net=='testnet') ? 'tuno' : 'uno',
         tx      = bitcoin.Transaction.fromHex(unsignedTx),
         utxos   = {}; // object containing utxo hashes and specific output indexes to use
     // Convert BIP44 path into usable Trezor address_n
