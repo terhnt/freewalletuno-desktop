@@ -1264,7 +1264,7 @@ function updateWalletBalances( address, force ){
         // Update UNO Balance
         updateBTCBalance(address, function(sat){
             var qty = numeral(sat * 0.00000001).format('0,0.00000000');
-            var ptemp = '0.0004'
+            var ptemp = '2500'
             if(xcp_info.price_uno != '0.00000000') {
               ptemp = xcp_info.price_uno
             }
@@ -2037,13 +2037,14 @@ function loadAssetInfo(asset){
         if(asset=='UNO'){
             var btc = getAssetPrice('UNO',true),
                 xcp = getAssetPrice('XUP',true);
+                tprice = (xcp.price_uno === '0.00000000') ? '2500' : xcp;
             cb({
                 asset: 'UNO',
                 description: "Unobtanium is rare digital money",
                 estimated_value: {
                     btc: 1,
                     usd: btc.market_cap_usd,
-                    xcp: 1/xcp.price_uno
+                    xcp: 1/tprice
                 },
                 supply: btc.total_supply
             });
