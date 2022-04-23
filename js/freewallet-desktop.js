@@ -742,7 +742,7 @@ function getAssetPrice(id, full){
             if(full)
                 price = item;
             else
-                price = item.price_usd;
+                price = (item.price_usd==='0.00') ? '0.01' : item.price_usd;
         }
     }
     return price;
@@ -1264,12 +1264,16 @@ function updateWalletBalances( address, force ){
         // Update UNO Balance
         updateBTCBalance(address, function(sat){
             var qty = numeral(sat * 0.00000001).format('0,0.00000000');
+            var ptemp = '0.0004'
+            if(xcp_info.price_uno != '0.00000000') {
+              ptemp = xcp_info.price_uno
+            }
             FUW.TEMP_BALANCES.data.push({
                 asset: "UNO",
                 estimated_value: {
                     btc: numeral(qty).format('0,0.00000000'),
                     usd: numeral(parseFloat(btc_info.price_usd) * qty).format('0.00'),
-                    xcp: numeral(qty / parseFloat(xcp_info.price_btc)).format('0.00000000'),
+                    xcp: numeral(qty / parseFloat(ptemp)).format('0.00000000'),
                 },
                 quantity: qty
             });
@@ -1313,13 +1317,13 @@ function getBTCHistory(address, source, callback){
     // BlockCypher - Last 50 transactions
     if(source=='medley'){
       var net = (FUW.WALLET_NETWORK==2) ? 'UNOTEST' : 'UNO';
-      $.getJSON('http://explorer.medleytechnologies.com/ext/getaddresstxs/' + addr + '0/1', function( o ){
+      $.getJSON('http://explorer.medleytechnologies.com/ext/getaddresstxs/' + addr + '/0/25', function( o ){
           data = [];
           o.forEach(function(tx){
               data.push({
                   hash: tx.txid,
                   timestamp: tx.timestamp,
-                  quantity: tx.balance
+                  quantity: tx.sent-tx.received
               });
           });
       //}).always(function(){
