@@ -1755,9 +1755,9 @@ function updateBalancesList(){
               item.isGrail = isGrail;
 
               // Init cache for the asset and cache the collapsed state
-              if(!FW.ASSET_INFO[asset])
-                  FW.ASSET_INFO[asset] = {};
-              FW.ASSET_INFO[asset].collapsed = item.collapsed;
+              if(!FUW.ASSET_INFO[asset])
+                  FUW.ASSET_INFO[asset] = {};
+              FUW.ASSET_INFO[asset].collapsed = item.collapsed;
           }
 
             var show = (filter!='') ? false : true;
@@ -1790,7 +1790,7 @@ function updateBalancesList(){
       var target = $(e.target);
       if (target.is('a.balances-list-collapsible')) {
           var grail = $(this).attr('data-asset'),
-              isCollapsed = FW.ASSET_INFO[grail].collapsed,
+              isCollapsed = FUW.ASSET_INFO[grail].collapsed,
               subs = $('.balances-list ul li[data-grail="' + grail + '"]');
 
           if (isCollapsed) {
@@ -1803,10 +1803,10 @@ function updateBalancesList(){
           info.data.filter(obj => {
               if (obj.asset == grail) {
                   obj.collapsed = !obj.collapsed;
-                  FW.ASSET_INFO[grail].collapsed = obj.collapsed;
+                  FUW.ASSET_INFO[grail].collapsed = obj.collapsed;
               }
           });
-          ls.setItem('walletBalances',JSON.stringify(FW.WALLET_BALANCES));
+          ls.setItem('walletBalances',JSON.stringify(FUW.WALLET_BALANCES));
 
           console.log('test')
 
@@ -1825,7 +1825,7 @@ function getBalanceHtml(data){
     var isCollapsed = data.collapsed ? '&#8211;' : '+';
     var isGrail = data.isGrail;
     var grail = data.grail;
-    var grailInfo = FW.ASSET_INFO[grail];
+    var grailInfo = FUW.ASSET_INFO[grail];
     var html_collapse = isGrail ? '            <td align="right"><a href="#" class="balances-list-collapsible" >' + isCollapsed + '</a></td>' : '';
     var html =  '<li class="balances-list-item ' + data.cls + '" data-asset="' + data.asset + '" data-grail="' + grail + '" style="' + (grail && (grailInfo && grailInfo.collapsed == false) ? 'display: none;' : '') + '">' +
                 '    <div class="balances-list-icon' + (grailInfo ? ' indented' : '') + '">' +
