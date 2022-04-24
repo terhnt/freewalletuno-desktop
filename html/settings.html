@@ -473,7 +473,7 @@ $(document).ready(function(){
     // Handle allowing large tx fee
     $('#settings-largefee').change(function(){
       var allow = $(this).val();
-      setAllowLargeTXFee(allow);
+      setAllowLargeTXFee(allow ? true : false);
     });
 
 });
