@@ -672,7 +672,7 @@ function isValidAddress(addr){
       bcName = (net=='testnet') ? 'unotestnet' : 'unomainnet', // Network name in bitcore
       bcNet  = bc.Networks[bcName]; // Bitcore Network
   // update network (used in DWBitcore)
-  NETWORK  = bcNet;
+  NETWORK  = net;
   if(UWBitcore.isValidAddress(addr))
         return true;
     return false;
