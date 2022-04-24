@@ -58,22 +58,22 @@
     $(document).ready(function(){
 
         if(FUW.CURRENT_TRANSACTION.asset=='UNO'){
-            var net = (FUW.WALLET_NETWORK==2) ? '/testnet' : '';
+            var net = (FUW.WALLET_NETWORK==2) ? 'tuno' : 'uno';
 
             // Update 'more info' link to point to transaction url
-            $('#history-info-more').attr('href','https://blockstream.info' + net + '/tx/' + tx);
+            $('#history-info-more').attr('href','http://' + net + '.medleytechnologies.com/tx/' + tx);
 
             // Request transaction information from blockstream
-            $.getJSON('https://blockstream.info' + net + '/api/tx/' + tx, function(o){
+            $.getJSON('http://' + net + '.medleytechnologies.com/ext/tx/' + tx, function(o){
                 if(o.txid){
-                    $('#source').html(o.vin[0].prevout.scriptpubkey_address);
-                    $('#destination').html(o.vout[0].scriptpubkey_address);
+                    $('#source').html(o.tx.vin[0].addresses);
+                    $('#destination').html(o.tx.vout[0].addresses);
                     $('#asset').html('<img src="images/icons/uno.png" class="asset-icon-sm pull-left">UNO');
-                    $('#tx-hash').html(o.txid);
-                    $('#quantity').text(numeral(o.vout[0].value).multiply(0.00000001).format('0,0.00000000'));
-                    $('#status').text((o.status.block_height) ? 'Valid' : 'Pending');
-                    $('#timestamp').html('<span data-livestamp='  + o.status.block_time + ' class="nowrap"></span>');
-                    $('#block').html(numeral(o.status.block_height).format('0,0'));
+                    $('#tx-hash').html(o.tx.txid);
+                    $('#quantity').text(numeral(o.tx.vout[0].amount).multiply(0.00000001).format('0,0.00000000'));
+                    $('#status').text((o.tx.blockindex > o.tx.blockcount) ? 'Valid' : 'Pending');
+                    $('#timestamp').html('<span data-livestamp='  + o.tx.timestamp + ' class="nowrap"></span>');
+                    $('#block').html(numeral(o.tx.blockindex).format('0,0'));
                     $('#tx-index').text('-');
                 }
             }).fail(function(){
