@@ -1153,7 +1153,7 @@ function getBTCBalance(address, source, callback){
     var net = (FUW.WALLET_NETWORK==2) ? 'tuno' : 'uno';
     if(source=='chainz.cryptoid'){
         if(net=="test3"){
-          $.getJSON('http://'' + net + 'medleytechnologies.com/ext/getaddress/' + addr + '/0/100', function( o ){
+          $.getJSON('http://'' + net + '.medleytechnologies.com/ext/getaddress/' + addr + '/0/100', function( o ){
             if(typeof o.sent === 'number')
                   bal = Math.ceil((o.received-o.sent) * 100000000)
           }).always(function(){
@@ -1327,7 +1327,7 @@ function getBTCHistory(address, source, callback){
     // BlockCypher - Last 50 transactions
     if(source=='medley'){
       var net = (FUW.WALLET_NETWORK==2) ? 'tuno' : 'uno';
-      $.getJSON('http://' + net + 'medleytechnologies.com/ext/getaddresstxs/' + addr + '/0/25', function( o ){
+      $.getJSON('http://' + net + '.medleytechnologies.com/ext/getaddresstxs/' + addr + '/0/25', function( o ){
           data = [];
           o.forEach(function(tx){
               data.push({
