@@ -73,6 +73,16 @@
                                 <option value="2">Unobtanium Core (Testnet)</option>
                             </select>
                         </div>
+                        <div class="form-group">
+                            <label for="settings-largefee" class="col-sm-3 control-label no-right-padding">
+                              Large Fees
+                              <a href="#" data-toggle="tooltip" title="This allows broadcasted tx's to have a high cost. When set to 'false' tx fee's set to high will cause the tx to fail" class="pull-right"><i class="fa fa-lg fa-question-circle-o margin-top-5" ></i></a>
+                            </label>
+                            <select class="col-sm-9" selectpicker" name="settings-largefee" id="settings-largefee">
+                                <option value="false">False</option>
+                                <option value="true">True</option>
+                            </select>
+                        </div>
                     </fieldset>
                 </div>
                 <!-- General Preferences -->
@@ -303,6 +313,7 @@ $(document).ready(function(){
     $('#settings-address').val(FUW.WALLET_ADDRESS);
     $('#settings-network').val(FUW.WALLET_NETWORK);
     $('#settings-address-label').val(FUW.WALLET_ADDRESS_LABEL);
+    $('#settings-largefee').val(FUW.ALLOW_LARGEFEE);
 
     // Define possible networks
     var networks = ['mainnet','testnet'];
@@ -457,6 +468,12 @@ $(document).ready(function(){
             return;
         var net = $(this).val();
         setWalletNetwork(net);
+    });
+
+    // Handle allowing large tx fee
+    $('#settings-largefee').change(function(){
+      var allow = $(this).val();
+      setAllowLargeTXFee(allow) {
     });
 
 });

@@ -22,6 +22,8 @@ FUW.API_KEYS = {};
 // Load wallet network (1=Mainnet, 2=Testnet)
 FUW.WALLET_NETWORK = ls.getItem('walletNetwork') || 1;
 
+FUW.ALLOW_LARGEFEE = ls.getItem('largeTXFee') || false;
+
 // Load latest network information (btc/xcp price, fee info, block info)
 FUW.NETWORK_INFO =  JSON.parse(ls.getItem('networkInfo')) || {};
 
@@ -78,13 +80,13 @@ FUW.WALLET_SERVER_INFO = {
 };
 
 // Define the default and base markets for the Decentralized Exchange (DEX)
-FUW.DEFAULT_MARKETS = ['UNO','XUP','WUNO'];
+FUW.DEFAULT_MARKETS = ['UNO','XUP'];
 FUW.BASE_MARKETS    = JSON.parse(ls.getItem('walletMarkets')) || FUW.DEFAULT_MARKETS;
 FUW.MARKET_OPTIONS  = JSON.parse(ls.getItem('walletMarketOptions')) || [1,2]; // 1=named, 2=subasset, 3=numeric
 FUW.BASE_MARKETS    = FUW.BASE_MARKETS.slice(0, 10); // Limit exchange market list to 10
 
 // Define default dispenser watchlist assets
-FUW.DEFAULT_DISPENSERS = ['XUP','WUNO'];
+FUW.DEFAULT_DISPENSERS = ['XUP'];
 FUW.BASE_DISPENSERS    = JSON.parse(ls.getItem('walletDispensers')) || FUW.DEFAULT_DISPENSERS;
 FUW.DISPENSER_OPTIONS  = JSON.parse(ls.getItem('walletDispenserOptions')) || []; // 1=hide closed
 FUW.BASE_DISPENSERS    = FUW.BASE_DISPENSERS.slice(0, 10); // Limit dispenser watchlist to 10
@@ -566,6 +568,12 @@ function setWalletAddressLabel( address, label ){
     ls.setItem('walletAddressLabel', label);
     // Save updated wallet addresses array to disk
     ls.setItem('walletAddresses', JSON.stringify(FUW.WALLET_ADDRESSES));
+}
+
+// Handle Allowing large tx fee's
+function setAllowLargeTXFee(allow=true) {
+  ls.setItem('largeTXFee', allow);
+  FUW.ALLOW_LARGEFEE = allow;
 }
 
 // Handle setting the wallet network (1=mainnet/2=testnet)
@@ -3273,7 +3281,7 @@ function broadcastTransaction(network, tx, callback){
         dataType: 'json',
         type: 'POST',
         contentType: 'application/json',
-        data: '{ "method": "sendrawtransaction", "params": [' + '"' + tx + '"]}',
+        data: '{ "method": "sendrawtransaction", "params": [' + '"' + tx + '",' + FUW.ALLOW_LARGEFEE + ']}',
         timeout: 15000,
         complete: function(data) {
             if(data.responseJSON.result){
