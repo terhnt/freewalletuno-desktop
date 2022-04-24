@@ -313,7 +313,7 @@ $(document).ready(function(){
     $('#settings-address').val(FUW.WALLET_ADDRESS);
     $('#settings-network').val(FUW.WALLET_NETWORK);
     $('#settings-address-label').val(FUW.WALLET_ADDRESS_LABEL);
-    $('#settings-largefee').val(FUW.ALLOW_LARGEFEE);
+    $('#settings-largefee').val(FUW.ALLOW_LARGEFEE ? "1" : "0");
 
     // Define possible networks
     var networks = ['mainnet','testnet'];

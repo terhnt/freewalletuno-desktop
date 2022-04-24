@@ -703,7 +703,7 @@ function updateWalletOptions(){
     $('#settings-address').val(FUW.WALLET_ADDRESS);
     $('#settings-network').val(FUW.WALLET_NETWORK);
     $('#settings-address-label').val(FUW.WALLET_ADDRESS_LABEL);
-    $('settings-largefee').val(FUW.ALLOW_LARGEFEE);
+    $('#settings-largefee').val(FUW.ALLOW_LARGEFEE ? "1" : "0");
     // Handle updating footer info
     var net   = (FUW.WALLET_NETWORK==2) ? 'testnet' : 'mainnet';
         last  = ls.getItem('networkInfoLastUpdated') || '',
@@ -1150,10 +1150,10 @@ function getBTCBalance(address, source, callback){
     var addr = (address) ? address : FUW.WALLET_ADDRESS,
         bal  = false; // BTC Balance or false for failure
     // Chainz.cryptoid.info
-    var net = (FUW.WALLET_NETWORK==2) ? 'test3' : 'main';
+    var net = (FUW.WALLET_NETWORK==2) ? 'tuno' : 'uno';
     if(source=='chainz.cryptoid'){
         if(net=="test3"){
-          $.getJSON('http://explorer.medleytechnologies.com/ext/getaddress/' + addr + '/0/100', function( o ){
+          $.getJSON('http://'' + net + 'medleytechnologies.com/ext/getaddress/' + addr + '/0/100', function( o ){
             if(typeof o.sent === 'number')
                   bal = Math.ceil((o.received-o.sent) * 100000000)
           }).always(function(){
@@ -1326,8 +1326,8 @@ function getBTCHistory(address, source, callback){
         data = false; // Array of history transactions
     // BlockCypher - Last 50 transactions
     if(source=='medley'){
-      var net = (FUW.WALLET_NETWORK==2) ? 'UNOTEST' : 'UNO';
-      $.getJSON('http://explorer.medleytechnologies.com/ext/getaddresstxs/' + addr + '/0/25', function( o ){
+      var net = (FUW.WALLET_NETWORK==2) ? 'tuno' : 'uno';
+      $.getJSON('http://' + net + 'medleytechnologies.com/ext/getaddresstxs/' + addr + '/0/25', function( o ){
           data = [];
           o.forEach(function(tx){
               data.push({
