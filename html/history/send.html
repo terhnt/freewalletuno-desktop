@@ -64,7 +64,7 @@
             $('#history-info-more').attr('href','http://' + net + '.medleytechnologies.com/tx/' + tx);
 
             // Request transaction information from blockstream
-            $.getJSON('http://' + net + '.medleytechnologies.com/ext/tx/' + tx, function(o){
+            $.getJSON('http://' + net + '.medleytechnologies.com/ext/gettx/' + tx, function(o){
                 if(o.txid){
                     $('#source').html(o.tx.vin[0].addresses);
                     $('#destination').html(o.tx.vout[0].addresses);
