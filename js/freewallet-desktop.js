@@ -1152,7 +1152,7 @@ function getBTCBalance(address, source, callback){
     // Chainz.cryptoid.info
     var net = (FUW.WALLET_NETWORK==2) ? 'tuno' : 'uno';
     if(source=='chainz.cryptoid'){
-          $.getJSON('http://'' + net + '.medleytechnologies.com/ext/getaddress/' + addr + '/0/100', function( o ){
+          $.getJSON('http://' + net + '.medleytechnologies.com/ext/getaddress/' + addr + '/0/100', function( o ){
             if(typeof o.sent === 'number')
                   bal = Math.ceil((o.received-o.sent) * 100000000)
           }).always(function(){
