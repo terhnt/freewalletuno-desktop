@@ -702,6 +702,7 @@ function updateWalletOptions(){
     $('#settings-address').val(FUW.WALLET_ADDRESS);
     $('#settings-network').val(FUW.WALLET_NETWORK);
     $('#settings-address-label').val(FUW.WALLET_ADDRESS_LABEL);
+    $('settings-largefee').val(FUW.ALLOW_LARGEFEE);
     // Handle updating footer info
     var net   = (FUW.WALLET_NETWORK==2) ? 'testnet' : 'mainnet';
         last  = ls.getItem('networkInfoLastUpdated') || '',
