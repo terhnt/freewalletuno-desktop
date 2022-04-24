@@ -76,7 +76,7 @@
                         <div class="form-group">
                             <label for="settings-largefee" class="col-sm-3 control-label no-right-padding">
                               Fees
-                              <a href="#" data-toggle="tooltip" title="This can enable tx to succeed with a high fee. When disabled, a high TX fee will cause the tx to fail' class="pull-right"><i class="fa fa-lg fa-question-circle-o margin-top-5" ></i></a>
+                              <a href="#" data-toggle="tooltip" title="This can enable tx to succeed with a high fee. When disabled, a high TX fee will cause the tx to fail" class="pull-right"><i class="fa fa-lg fa-question-circle-o margin-top-5" ></i></a>
                             </label>
                             <select class="col-sm-9" selectpicker" name="settings-largefee" id="settings-largefee">
                                 <option value="0">Disable Large Fees</option>
@@ -472,8 +472,9 @@ $(document).ready(function(){
 
     // Handle allowing large tx fee
     $('#settings-largefee').change(function(){
-      var allow = $(this).val();
-      setAllowLargeTXFee(allow ? true : false);
+      var allow = Boolean($(this).val()) || false;
+      console.log("Allow Value: " + allow.toString())
+      setAllowLargeTXFee(allow);
     });
 
 });

@@ -22,7 +22,7 @@ FUW.API_KEYS = {};
 // Load wallet network (1=Mainnet, 2=Testnet)
 FUW.WALLET_NETWORK = ls.getItem('walletNetwork') || 1;
 
-FUW.ALLOW_LARGEFEE = ls.getItem('largeTXFee') || false;
+FUW.ALLOW_LARGEFEE = Boolean(ls.getItem('largeTXFee')) || false;
 
 // Load latest network information (btc/xcp price, fee info, block info)
 FUW.NETWORK_INFO =  JSON.parse(ls.getItem('networkInfo')) || {};
@@ -262,6 +262,7 @@ function resetWallet(){
     ls.removeItem('walletFormat');
     ls.removeItem('walletHistory');
     ls.removeItem('walletNetwork');
+    ls.removeItem('largeTXFee');
     ls.removeItem('walletMarkets');
     ls.removeItem('walletMarketOptions');
     ls.removeItem('walletDispeners');
@@ -571,7 +572,7 @@ function setWalletAddressLabel( address, label ){
 }
 
 // Handle Allowing large tx fee's
-function setAllowLargeTXFee(allow=true) {
+function setAllowLargeTXFee(allow) {
   ls.setItem('largeTXFee', allow);
   FUW.ALLOW_LARGEFEE = allow;
 }
