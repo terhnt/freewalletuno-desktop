@@ -52,39 +52,39 @@
 
 <!-- Code to load/update data -->
 <script type="text/javascript">
-    var testnet = (FW.WALLET_NETWORK==2) ? true : false,
-        tx      = FW.CURRENT_TRANSACTION.tx;
+    var testnet = (FUW.WALLET_NETWORK==2) ? true : false,
+        tx      = FUW.CURRENT_TRANSACTION.tx;
 
     $(document).ready(function(){
 
-        if(FW.CURRENT_TRANSACTION.asset=='BTC'){
-            var net = (FW.WALLET_NETWORK==2) ? '/testnet' : '';
+        if(FUW.CURRENT_TRANSACTION.asset=='UNO'){
+            var net = (FUW.WALLET_NETWORK==2) ? 'tuno' : 'uno';
 
             // Update 'more info' link to point to transaction url
-            $('#history-info-more').attr('href','https://blockstream.info' + net + '/tx/' + tx);
+            $('#history-info-more').attr('href','http://' + net + '.medleytechnologies.com/tx/' + tx);
 
-            // Request transaction information from blockstream
-            $.getJSON('https://blockstream.info' + net + '/api/tx/' + tx, function(o){
-                if(o.txid){
-                    $('#source').html(o.vin[0].prevout.scriptpubkey_address);
-                    $('#destination').html(o.vout[0].scriptpubkey_address);
-                    $('#asset').html('<img src="images/icons/btc.png" class="asset-icon-sm pull-left">BTC');
-                    $('#tx-hash').html(o.txid);
-                    $('#quantity').text(numeral(o.vout[0].value).multiply(0.00000001).format('0,0.00000000'));
-                    $('#status').text((o.status.block_height) ? 'Valid' : 'Pending');
-                    $('#timestamp').html('<span data-livestamp='  + o.status.block_time + ' class="nowrap"></span>');
-                    $('#block').html(numeral(o.status.block_height).format('0,0'));
+            // Request transaction information from medleytechnologies
+            $.getJSON('http://' + net + '.medleytechnologies.com/ext/gettx/' + tx, function(o){
+                if(o.tx.txid){
+                    $('#source').html(o.tx.vin[0].addresses);
+                    $('#destination').html(o.tx.vout[0].addresses);
+                    $('#asset').html('<img src="images/icons/uno.png" class="asset-icon-sm pull-left">UNO');
+                    $('#tx-hash').html(o.tx.txid);
+                    $('#quantity').text(numeral(o.tx.vout[0].amount).multiply(0.00000001).format('0,0.00000000'));
+                    $('#status').text((o.tx.blockindex < o.blockcount) ? 'Valid' : 'Pending');
+                    $('#timestamp').html('<span data-livestamp='  + o.tx.timestamp + ' class="nowrap"></span>');
+                    $('#block').html(numeral(o.tx.blockindex).format('0,0'));
                     $('#tx-index').text('-');
                 }
             }).fail(function(){
                 // Request transaction info from blockcypher
-                var net = (FW.WALLET_NETWORK==2) ? 'test3' : 'main',
-                    net2 = (FW.WALLET_NETWORK==2) ? 'btc-testnet' : 'btc';
+                var net = (FUW.WALLET_NETWORK==2) ? 'test3' : 'main',
+                    net2 = (FUW.WALLET_NETWORK==2) ? 'btc-testnet' : 'btc';
                 $.getJSON('https://api.blockcypher.com/v1/btc/' + net + '/txs/' + tx, function(o){
                     if(o.hash){
                         $('#source').html(o.inputs[0].addresses[0]);
-                        $('#destination').html(FW.WALLET_ADDRESS);
-                        $('#asset').html('<img src="images/icons/btc.png" class="asset-icon-sm pull-left">BTC');
+                        $('#destination').html(FUW.WALLET_ADDRESS);
+                        $('#asset').html('<img src="images/icons/uno.png" class="asset-icon-sm pull-left">UNO');
                         $('#tx-hash').html(o.hash);
                         $('#quantity').text(numeral(o.outputs[0].value).multiply(0.00000001).format('0,0.00000000'));
                         $('#status').text((o.block_height) ? 'Valid' : 'Pending');
@@ -94,18 +94,18 @@
                         $('#history-info-more').attr('href','https://live.blockcypher.com/' + net2 + '/tx/' + tx);
                     }
                 });
-            });             
+            });
         } else {
             // Update 'more info' link to point to transaction url
-            $('#history-info-more').attr('href', FW.XCHAIN_API + '/tx/' + tx);
+            $('#history-info-more').attr('href', FUW.XCHAIN_API + '/tx/' + tx);
 
             // Request transaction information from xchain.io
-            $.getJSON(FW.XCHAIN_API + '/api/tx/' + tx, function( o ){
+            $.getJSON(FUW.XCHAIN_API + '/api/tx/' + tx, function( o ){
                 if(!o.error){
                     var asset = (o.asset_longname && o.asset_longname!='') ? o.asset_longname : o.asset;
                     $('#source').html(o.source);
                     $('#destination').html(o.destination);
-                    $('#asset').html('<img src="https://xchain.io/icon/' + o.asset + '.png" class="asset-icon-sm pull-left">' + asset);
+                    $('#asset').html('<img src="' + FUW.XCHAIN_API + '/icon/' + o.asset + '.png" class="asset-icon-sm pull-left">' + asset);
                     $('#tx-hash').html(o.tx_hash);
                     var fmt = (String(o.quantity).indexOf('.')==-1) ? '0,0' : '0,0.00000000';
                     $('#quantity').text(numeral(o.quantity).format(fmt));
@@ -119,7 +119,7 @@
                         $('#tx-index').text('-');
                     }
                 }
-            });   
+            });
         }
 
     });

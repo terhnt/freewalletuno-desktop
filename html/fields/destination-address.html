@@ -2,7 +2,7 @@
 <label class="col-sm-3 control-label text-left" for="destination-address">
     <span id="destination-address-label">Destination</span>
     <a href="#" data-toggle="tooltip" title='This is the destination address you would like to use' class="pull-right" id="destination-address-tooltip"><i class="fa fa-lg fa-question-circle-o margin-top-5" ></i></a>
-</label>            
+</label>
 <div class="col-sm-9">
     <div class="input-group">
         <input type="text" class="form-control" name="destination" id="destination-address" placeholder="Destination Address" autocomplete="off" data-minlength="24" required >
@@ -28,13 +28,13 @@ $(document).ready(function(){
         $('#destination-address-label').text('Dispenser');
         $('#destination-address').attr('placeholder','Dispenser Address')
         // Set destination address to current wallet address
-        $('#destination-address').val(FW.WALLET_ADDRESS);
+        $('#destination-address').val(FUW.WALLET_ADDRESS);
     }
 
     // Wait a brief moment to allow things to initialize
     setTimeout(function(){
 
-        // Change toolip text based on form type 
+        // Change toolip text based on form type
         var txt = false;
         if(type=='send')
             txt = 'This is the address which will be receiving funds from you';
@@ -55,10 +55,10 @@ $(document).ready(function(){
         if(!isValidAddress(addr) && addr.length >= 4){
             var asset = addr.toUpperCase();
             // Detect USER.BTC usernames and translate to BTCTAG.USER asset name
-            if(addr.toUpperCase().endsWith('.BTC'))
-                asset = 'BTCTAG.' + addr.toUpperCase().replace(/\.BTC/i,'');
+            if(addr.toUpperCase().endsWith('.UNO'))
+                asset = 'UNOTAG.' + addr.toUpperCase().replace(/\.UNO/i,'');
             // Try to lookup asset and then use owner address as destination address
-            $.getJSON(FW.XCHAIN_API + '/api/asset/' + asset, function(o){
+            $.getJSON(FUW.XCHAIN_API + '/api/asset/' + asset, function(o){
                 if(o.owner)
                     me.val(o.owner);
             });

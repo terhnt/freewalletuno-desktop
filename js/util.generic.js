@@ -79,7 +79,7 @@ function noExponents(n) {
 
 //Dynamic array sort, allows for things like: People.sortBy("Name", "-Surname");
 //Won't work below IE9, but totally safe otherwise
-//From http://stackoverflow.com/a/4760279 
+//From http://stackoverflow.com/a/4760279
 !function() {
   function _dynamicSortMultiple(attr) {
     var props = arguments;
@@ -141,7 +141,7 @@ function deepCompare() {
       return true;
     }
 
-    // Compare primitives and functions.     
+    // Compare primitives and functions.
     // Check if both arguments link to the same object.
     // Especially useful on step when comparing prototypes
     if (x === y) {
@@ -247,8 +247,8 @@ function currency(amount, unit) {
   return smartFormat(normalizeQuantity(amount), 4, 4) + ' ' + unit;
 }
 
-function satoshiToXCP(amount) {
-  return currency(amount, 'XCP');
+function satoshiToXUP(amount) {
+  return currency(amount, 'XUP');
 }
 
 function round(amount, decimals) {

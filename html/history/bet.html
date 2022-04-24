@@ -99,22 +99,22 @@
 
 <!-- Code to detect JSON file, request it, and load certain data into page -->
 <script type="text/javascript">
-    var tx        = FW.CURRENT_TRANSACTION.tx,
+    var tx        = FUW.CURRENT_TRANSACTION.tx,
         bet_types = [];
 
     // Define array of bet types
-    bet_types[0] = 'Bullish'; // CFD (deprecated), 
-    bet_types[1] = 'Bearish'; // CFD (deprecated), 
+    bet_types[0] = 'Bullish'; // CFD (deprecated),
+    bet_types[1] = 'Bearish'; // CFD (deprecated),
     bet_types[2] = 'Equal';
     bet_types[3] = 'Not Equal';
 
     $(document).ready(function(){
-        
+
         // Update 'more info' link to point to transaction url
-        $('#history-info-more').attr('href', FW.XCHAIN_API + '/tx/' + tx);
+        $('#history-info-more').attr('href', FUW.XCHAIN_API + '/tx/' + tx);
 
         // Handle requesting block information
-        $.getJSON(FW.XCHAIN_API + '/api/tx/' + tx, function( o ){
+        $.getJSON(FUW.XCHAIN_API + '/api/tx/' + tx, function( o ){
             if(!o.error){
                 $('#source').html(o.source);
                 $('#feed-address').html(o.feed_address );
@@ -127,7 +127,7 @@
                 $('#expiration').text(numeral(o.expiration).format('0,0'));
                 $('#expire-index').html(numeral(o.expire_index).format('0,0'));
                 $('#deadline').html('<span data-livestamp='  + o.deadline + ' class="nowrap"></span>');
-                var link = '&nbsp;XCP';
+                var link = '&nbsp;XUP';
                 $('#wager-quantity').html(o.wager_quantity + link);
                 $('#wager-remaining').html(o.wager_remaining + link);
                 $('#counterwager-quantity').html(o.counterwager_quantity + link);
@@ -141,8 +141,7 @@
                     $('#tx-index').text('-');
                 }
             }
-        });   
+        });
 
     });
 </script>
-

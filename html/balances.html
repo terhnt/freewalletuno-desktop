@@ -5,7 +5,7 @@
             <a href="#" class="balances-list-refresh"><i class="fa fa-refresh pull-left"></i></a></li>
             <input type="text" class="form-control balances-list-search" placeholder="Enter search here">
             <div style="clear:both;"></div>
-        </div>        
+        </div>
         <div class="balances-list-assets">
             <ul class="nav">
             </ul>
@@ -21,7 +21,7 @@
             </div>
             <table width="100%" class="table table-condensed table-bordered no-bottom-margin">
             <tr>
-                <td width="75" rowspan="2" valign="middle" align="center" style="vertical-align:middle;"><img src="images/icons/xcp.png" id="asset-icon" border="0"></td>
+                <td width="75" rowspan="2" valign="middle" align="center" style="vertical-align:middle;"><img src="images/icons/xup.png" id="asset-icon" border="0"></td>
                 <th width="*%" class="info">Name</th>
                 <th width="33%" class="info text-center">Current Balance</th>
             </tr>
@@ -38,8 +38,8 @@
             <table class="table table-condensed table-striped table-bordered no-bottom-margin table-centered text-center">
             <thead>
                 <tr class="info">
-                    <th width="33%">Bitcoin (BTC)</th>
-                    <th width="34%">Counterparty (XCP)</th>
+                    <th width="33%">Unobtanium (UNO)</th>
+                    <th width="34%">Unoparty (XUP)</th>
                     <th width="33%">US Dollars (USD)</th>
                 </tr>
             </thead>
@@ -48,7 +48,7 @@
                 <td id="asset-value-btc">&nbsp;</td>
                 <td id="asset-value-xcp">&nbsp;</td>
                 <td id="asset-value-usd">&nbsp;</td>
-            </tr>                
+            </tr>
             </tbody>
             </table>
 
@@ -60,7 +60,7 @@
             <thead>
                 <tr class="info">
                     <th width="33%">Total Supply <i id="asset-locked-status" class="fa fa-lg fa-unlock"></i></th>
-                    <th width="34%">Last Trade Price (XCP)</th>
+                    <th width="34%">Last Trade Price (XUP)</th>
                     <th width="33%">Market Cap. (USD)</th>
                 </tr>
             </thead>
@@ -147,11 +147,11 @@
 <script>
 $(document).ready(function(){
 
-    // Display balances list        
+    // Display balances list
     updateBalancesList();
 
     // Display BTC asset info
-    loadAssetInfo('BTC');
+    loadAssetInfo('UNO');
 
     // Handle detecting keyup events and filter the balances list to show matches
     // buffer the event by 250ms so we can allow for additional keystrokes before processing

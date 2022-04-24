@@ -69,8 +69,18 @@
                                 <a href="#" data-toggle="tooltip" title='This determines which bitcoin network you would prefer to use' class="pull-right"><i class="fa fa-lg fa-question-circle-o margin-top-5" ></i></a>
                             </label>
                             <select class="col-sm-9 selectpicker" name="network" id="settings-network">
-                                <option value="1">Bitcoin Core (Mainnet)</option>
-                                <option value="2">Bitcoin Core (Testnet)</option>
+                                <option value="1">Unobtanium Core (Mainnet)</option>
+                                <option value="2">Unobtanium Core (Testnet)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="settings-largefee" class="col-sm-3 control-label no-right-padding">
+                              Fees
+                              <a href="#" data-toggle="tooltip" title="This can enable tx to succeed with a high fee. When disabled, a high TX fee will cause the tx to fail" class="pull-right"><i class="fa fa-lg fa-question-circle-o margin-top-5" ></i></a>
+                            </label>
+                            <select class="col-sm-9 selectpicker" name="settings-largefee" id="settings-largefee">
+                                <option value="0">Disable Large Fees</option>
+                                <option value="1">Enable Large Fees</option>
                             </select>
                         </div>
                     </fieldset>
@@ -119,7 +129,7 @@
                                 <option>Low</option>
                                 <option>Custom</option>
                             </select>
-                        </div>                
+                        </div>
                         <div class="form-group">
                             <label for="minimum-tx-fee" class="col-sm-3 control-label no-right-padding">
                                 Minimum Fee
@@ -132,7 +142,7 @@
                                 </div>
                             </div>
                         </div>
-                    </fieldset>            
+                    </fieldset>
                 </div>
                 <!-- API Keys -->
                 <div id="apikeys" class="tab-pane">
@@ -147,7 +157,7 @@
                             </div>
                         </div>
                     </fieldset>
-                </div>                
+                </div>
                 <!-- Server Settings -->
                 <div id="servers" class="tab-pane">
                     <fieldset>
@@ -174,7 +184,7 @@
                         <div class="form-group">
                             <label for="mainnet-cp-host" class="col-sm-3 control-label no-right-padding">
                                 CP Host
-                                <a href="#" data-toggle="tooltip" title='This is the hostname where the Counterparty API can be accessed' class="pull-right"><i class="fa fa-lg fa-question-circle-o margin-top-5" ></i></a>
+                                <a href="#" data-toggle="tooltip" title='This is the hostname where the Unoparty API can be accessed' class="pull-right"><i class="fa fa-lg fa-question-circle-o margin-top-5" ></i></a>
                             </label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control" name="mainnet-cp-host" id="mainnet-cp-host" placeholder="public.coindaddy.io" required>
@@ -183,7 +193,7 @@
                         <div class="form-group">
                             <label for="mainnet-cp-port" class="col-sm-3 control-label no-right-padding">
                                 CP Port
-                                <a href="#" data-toggle="tooltip" title='This is the port to use when communicating with the Counterparty API' class="pull-right"><i class="fa fa-lg fa-question-circle-o margin-top-5" ></i></a>
+                                <a href="#" data-toggle="tooltip" title='This is the port to use when communicating with the Unoparty API' class="pull-right"><i class="fa fa-lg fa-question-circle-o margin-top-5" ></i></a>
                             </label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control" name="mainnet-cp-port" id="mainnet-cp-port" placeholder="4000" required>
@@ -192,7 +202,7 @@
                         <div class="form-group">
                             <label for="mainnet-cp-user" class="col-sm-3 control-label no-right-padding">
                                 CP User
-                                <a href="#" data-toggle="tooltip" title='This is the username used to authenticate to the Counterparty API' class="pull-right"><i class="fa fa-lg fa-question-circle-o margin-top-5" ></i></a>
+                                <a href="#" data-toggle="tooltip" title='This is the username used to authenticate to the Unoparty API' class="pull-right"><i class="fa fa-lg fa-question-circle-o margin-top-5" ></i></a>
                             </label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control" name="mainnet-cp-user" id="mainnet-cp-user" placeholder="rpc" required>
@@ -201,7 +211,7 @@
                         <div class="form-group">
                             <label for="mainnet-cp-pass" class="col-sm-3 control-label no-right-padding">
                                 CP Pass
-                                <a href="#" data-toggle="tooltip" title='This is the password used to authenticate to the Counterparty API' class="pull-right"><i class="fa fa-lg fa-question-circle-o margin-top-5" ></i></a>
+                                <a href="#" data-toggle="tooltip" title='This is the password used to authenticate to the Unoparty API' class="pull-right"><i class="fa fa-lg fa-question-circle-o margin-top-5" ></i></a>
                             </label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control" name="mainnet-cp-pass" id="mainnet-cp-pass" placeholder="1234" required>
@@ -210,7 +220,7 @@
                         <div class="form-group">
                             <label for="mainnet-cp-ssl" class="col-sm-3 control-label no-right-padding">
                                 CP SSL
-                                <a href="#" data-toggle="tooltip" title='This determines if requests to the Counterparty API use http or https (ssl)' class="pull-right"><i class="fa fa-lg fa-question-circle-o margin-top-5" ></i></a>
+                                <a href="#" data-toggle="tooltip" title='This determines if requests to the Unoparty API use http or https (ssl)' class="pull-right"><i class="fa fa-lg fa-question-circle-o margin-top-5" ></i></a>
                             </label>
                             <select class="col-sm-9 selectpicker" name="mainnet-cp-ssl" id="mainnet-cp-ssl">
                                 <option value="1">Yes</option>
@@ -226,7 +236,7 @@
                                 <a href="#" data-toggle="tooltip" title='This is the hostname where the XChain API can be accessed' class="pull-right"><i class="fa fa-lg fa-question-circle-o margin-top-5" ></i></a>
                             </label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" name="testnet-api-host" id="testnet-api-host" placeholder="testnet.xchain.io" required>
+                                <input type="text" class="form-control" name="testnet-api-host" id="testnet-api-host" placeholder="unoparty-testnet.xchain.io" required>
                             </div>
                         </div>
                         <div class="form-group">
@@ -242,7 +252,7 @@
                         <div class="form-group">
                             <label for="testnet-cp-host" class="col-sm-3 control-label no-right-padding">
                                 CP Host
-                                <a href="#" data-toggle="tooltip" title='This is the hostname where the Counterparty API can be accessed' class="pull-right"><i class="fa fa-lg fa-question-circle-o margin-top-5" ></i></a>
+                                <a href="#" data-toggle="tooltip" title='This is the hostname where the Unoparty API can be accessed' class="pull-right"><i class="fa fa-lg fa-question-circle-o margin-top-5" ></i></a>
                             </label>
                             <div class="col-sm-9">
                               <input type="text" class="form-control" name="testnet-cp-host" id="testnet-cp-host" placeholder="public.coindaddy.io" required>
@@ -251,7 +261,7 @@
                         <div class="form-group">
                             <label for="testnet-cp-port" class="col-sm-3 control-label no-right-padding">
                                 CP Port
-                                <a href="#" data-toggle="tooltip" title='This is the port to use when communicating with the Counterparty API' class="pull-right"><i class="fa fa-lg fa-question-circle-o margin-top-5" ></i></a>
+                                <a href="#" data-toggle="tooltip" title='This is the port to use when communicating with the Unoparty API' class="pull-right"><i class="fa fa-lg fa-question-circle-o margin-top-5" ></i></a>
                             </label>
                             <div class="col-sm-9">
                               <input type="text" class="form-control" name="testnet-cp-port" id="testnet-cp-port" placeholder="14000" required>
@@ -260,7 +270,7 @@
                         <div class="form-group">
                             <label for="testnet-cp-user" class="col-sm-3 control-label no-right-padding">
                                 CP User
-                                <a href="#" data-toggle="tooltip" title='This is the username used to authenticate to the Counterparty API' class="pull-right"><i class="fa fa-lg fa-question-circle-o margin-top-5" ></i></a>
+                                <a href="#" data-toggle="tooltip" title='This is the username used to authenticate to the Unoparty API' class="pull-right"><i class="fa fa-lg fa-question-circle-o margin-top-5" ></i></a>
                             </label>
                             <div class="col-sm-9">
                               <input type="text" class="form-control" name="testnet-cp-user" id="testnet-cp-user" placeholder="rpc" required>
@@ -269,7 +279,7 @@
                         <div class="form-group">
                             <label for="testnet-cp-pass" class="col-sm-3 control-label no-right-padding">
                                 CP Pass
-                                <a href="#" data-toggle="tooltip" title='This is the password used to authenticate to the Counterparty API' class="pull-right"><i class="fa fa-lg fa-question-circle-o margin-top-5" ></i></a>
+                                <a href="#" data-toggle="tooltip" title='This is the password used to authenticate to the Unoparty API' class="pull-right"><i class="fa fa-lg fa-question-circle-o margin-top-5" ></i></a>
                             </label>
                             <div class="col-sm-9">
                               <input type="text" class="form-control" name="testnet-cp-pass" id="testnet-cp-pass" placeholder="1234" required>
@@ -278,7 +288,7 @@
                         <div class="form-group">
                             <label for="testnet-cp-ssl" class="col-sm-3 control-label no-right-padding">
                                 Use SSL
-                                <a href="#" data-toggle="tooltip" title='This determines if requests to the Counterparty API use http or https (ssl)' class="pull-right"><i class="fa fa-lg fa-question-circle-o margin-top-5" ></i></a>
+                                <a href="#" data-toggle="tooltip" title='This determines if requests to the Unoparty API use http or https (ssl)' class="pull-right"><i class="fa fa-lg fa-question-circle-o margin-top-5" ></i></a>
                             </label>
                             <select class="col-sm-9 selectpicker" name="testnet-cp-ssl" id="testnet-cp-ssl">
                                 <option value="1">Yes</option>
@@ -287,7 +297,7 @@
                         </div>
                     </fieldset>
                 </div>
-            </div>            
+            </div>
         </div>
     </div>
     </form>
@@ -300,16 +310,17 @@ $(document).ready(function(){
         ss = sessionStorage;
 
     // Load the wallet address information
-    $('#settings-address').val(FW.WALLET_ADDRESS);
-    $('#settings-network').val(FW.WALLET_NETWORK);
-    $('#settings-address-label').val(FW.WALLET_ADDRESS_LABEL);
+    $('#settings-address').val(FUW.WALLET_ADDRESS);
+    $('#settings-network').val(FUW.WALLET_NETWORK);
+    $('#settings-address-label').val(FUW.WALLET_ADDRESS_LABEL);
+    $('#settings-largefee').val(FUW.ALLOW_LARGEFEE ? "1" : "0");
 
     // Define possible networks
     var networks = ['mainnet','testnet'];
 
     // Populate the server info fields
     $.each(networks,function(idx, name){
-        var o = FW.WALLET_SERVER_INFO[name];
+        var o = FUW.WALLET_SERVER_INFO[name];
         $('#' + name + '-cp-host').val(o.host);
         $('#' + name + '-cp-port').val(o.port);
         $('#' + name + '-cp-user').val(o.user);
@@ -320,10 +331,10 @@ $(document).ready(function(){
     });
 
     // Initialize any tooltips
-    $('[data-toggle="tooltip"]').tooltip({ 
+    $('[data-toggle="tooltip"]').tooltip({
         html: true,
         placement: 'bottom'
-    }); 
+    });
 
     // Detect any server settings changes and treat as if user submited form
     $('#servers input, #servers select').change(function(){
@@ -334,7 +345,7 @@ $(document).ready(function(){
     var val = ls.getItem('feePriority') || 'High';
     $('#current-priority').val(val);
 
-    var fee = numeral(FW.MINIMUM_TX_FEE * 0.00000001).format('0.00000000');
+    var fee = numeral(FUW.MINIMUM_TX_FEE * 0.00000001).format('0.00000000');
     $('#minimum-tx-fee').val(fee);
 
     // Restore any API keys
@@ -361,8 +372,8 @@ $(document).ready(function(){
 
     // Handle resetting the minimum fee
     $('#reset-min-fee').click(function(){
-        FW.MINIMUM_TX_FEE = FW.MINIMUM_TX_FEE_DEFAULT;
-        var fee = numeral(FW.MINIMUM_TX_FEE * 0.00000001).format('0.00000000');
+        FUW.MINIMUM_TX_FEE = FUW.MINIMUM_TX_FEE_DEFAULT;
+        var fee = numeral(FUW.MINIMUM_TX_FEE * 0.00000001).format('0.00000000');
         $('#minimum-tx-fee').val(fee);
         ls.removeItem('feeMinimum');
     });
@@ -383,15 +394,15 @@ $(document).ready(function(){
             errors.push('Minimum Fee is above maximum of ' + numeral(max).format('0,0') + ' satoshis!');
         // Display any error message
         if(errors.length){
-            dialogMessage('<i class="fa fa-lg fa-fw fa-exclamation-circle"></i> Error(s)', errors.join('<br/>'));
+            dialogMessage('<i class="fa fa-lg fa-fuw fa-exclamation-circle"></i> Error(s)', errors.join('<br/>'));
             // Reset displayed fee to current setting
-            var fee = numeral(FW.MINIMUM_TX_FEE * 0.00000001).format('0.00000000');
+            var fee = numeral(FUW.MINIMUM_TX_FEE * 0.00000001).format('0.00000000');
             $('#minimum-tx-fee').val(fee);
         } else {
             // Update minimum fee and save setting
-            FW.MINIMUM_TX_FEE = sats;
+            FUW.MINIMUM_TX_FEE = sats;
             ls.setItem('feeMinimum', sats);
-            dialogMessage('<i class="fa fa-lg fa-fw fa-floppy-o"></i> Minimum Fee Saved', 'Your minimum fee information has been successfully saved.');
+            dialogMessage('<i class="fa fa-lg fa-fuw fa-floppy-o"></i> Minimum Fee Saved', 'Your minimum fee information has been successfully saved.');
         }
     });
 
@@ -399,7 +410,7 @@ $(document).ready(function(){
     $('#settings-form').validator().on('submit', function(e){
         // handle the invalid form
         if(e.isDefaultPrevented()){
-            dialogMessage('<i class="fa fa-lg fa-fw fa-info-circle"></i> Error', 'Please fill out all required fields indicated in red.');
+            dialogMessage('<i class="fa fa-lg fa-fuw fa-info-circle"></i> Error', 'Please fill out all required fields indicated in red.');
         } else {
             e.preventDefault();
             // Loop through form data and build out data array
@@ -422,11 +433,11 @@ $(document).ready(function(){
                 };
             });
             // Save updated server information
-            FW.WALLET_SERVER_INFO = o;
+            FUW.WALLET_SERVER_INFO = o;
             ls.setItem('serverInfo',JSON.stringify(o));
             // Handle setting the xchain URL
             setXChainAPI();
-            // dialogMessage('<i class="fa fa-lg fa-fw fa-info-circle"></i> Information Saved', 'Your server information has been successfully saved.');
+            // dialogMessage('<i class="fa fa-lg fa-fuw fa-info-circle"></i> Information Saved', 'Your server information has been successfully saved.');
         }
     });
 
@@ -435,11 +446,11 @@ $(document).ready(function(){
         dialogChangeAddress();
     }));
 
-    // Show change/edit address list form when user clicks the qrcode/address 
+    // Show change/edit address list form when user clicks the qrcode/address
     $('#settings-address-label').change(function(e){
         var label = $(this).val();
-        setWalletAddressLabel(FW.WALLET_ADDRESS, label);
-        dialogMessage('<i class="fa fa-lg fa-fw fa-floppy-o"></i> Address Label Saved', 'Your address label information has been successfully saved.');
+        setWalletAddressLabel(FUW.WALLET_ADDRESS, label);
+        dialogMessage('<i class="fa fa-lg fa-fuw fa-floppy-o"></i> Address Label Saved', 'Your address label information has been successfully saved.');
     });
 
     // Show passphrase dialog box when user clicks passphrase view button
@@ -457,6 +468,12 @@ $(document).ready(function(){
             return;
         var net = $(this).val();
         setWalletNetwork(net);
+    });
+
+    // Handle allowing large tx fee
+    $('#settings-largefee').change(function(){
+       var allow = $(this).val() || 0;
+       setAllowLargeTXFee(allow);
     });
 
 });

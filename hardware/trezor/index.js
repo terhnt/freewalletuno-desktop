@@ -155,8 +155,8 @@ function signTx(net='mainnet', source, path, unsignedTx, callback){
 // @signedTx = Signed Transaction in hex format
 // @callback = Callback function
 function broadcastTx(network, signedTx, callback){
-    var net  = (network=='testnet') ? 'BTCTEST' : 'BTC',
-        host = (network=='testnet') ? 'testnet.xchain.io' : 'xchain.io';
+    var net  = (network=='testnet') ? 'UNOTEST' : 'UNO',
+        host = (network=='testnet') ? 'unoparty-testnet.xchain.io' : 'unoparty.xchain.io';
     // First try to broadcast using the XChain API
     $.ajax({
         type: "POST",

@@ -1,6 +1,6 @@
 <!-- BTC Amount Field -->
 <label class="col-sm-3 control-label text-left" for="btc-amount">
-    BTC Amount
+    UNO Amount
     <a href="#" data-toggle="tooltip" title='This is the amount that you would like to charge per dispense' class="pull-right" id="btc-amount-tooltip"><i class="fa fa-lg fa-question-circle-o margin-top-5" ></i></a>
 </label>
 <div class="col-sm-9">
@@ -31,27 +31,27 @@ function updateBTCAmount(val){
 
 $(document).ready(function(){
 
-    // Stash current price info on BTC and XCP
-    var btc_info = getAssetPrice('BTC',true);
-        xcp_info = getAssetPrice('XCP',true);
+    // Stash current price info on UNO and XUP
+    var btc_info = getAssetPrice('UNO',true);
+        xcp_info = getAssetPrice('XUP',true);
         type     = getFormType(),
         dust_sat = 5430,
         tip      = $('#btc-amount-tooltip');
 
-    // Set initial value 
+    // Set initial value
     if(type=='dispenser-buy'){
-        $('#btc-amount').val(FW.DIALOG_DATA.satoshirate);
+        $('#btc-amount').val(FUW.DIALOG_DATA.satoshirate);
     }
 
     // Wait a brief moment to allow things to initialize
     setTimeout(function(){
 
-        // Change toolip text based on form type 
+        // Change toolip text based on form type
         var txt = false;
         if(type=='dispenser')
             txt = 'This is the amount that you would like to charge per dispense';
         if(type=='dispenser-buy')
-            txt = 'This is the amount of BTC that this purchase will cost';
+            txt = 'This is the amount of UNO that this purchase will cost';
         if(txt)
             tip.attr('data-original-title',txt);
 
@@ -62,7 +62,7 @@ $(document).ready(function(){
     // Detect any amount change and format as valid number
     $('#btc-amount').change(function(e){
         var amt = String($(this).val()).replace(/[^0-9.]/g,''),
-            o   = FW.DIALOG_DATA;
+            o   = FUW.DIALOG_DATA;
         // Force the amount to an increment of what the dispenser is selling
         if(type=='dispenser-buy'){
             var amt = numeral(amt).value(),

@@ -10,12 +10,12 @@
     <div class="input-group pull-left" style="width:180px" id="amount-value-wrapper">
         <label class="input-group-addon">Format</label>
         <select id="format-select" name="format" class="selectpicker">
-            <option data-content="Counterwallet">Counterwallet</option>
+            <option data-content="Counterwallet">Unowallet</option>
             <option data-content="BIP39">BIP39</option>
         </select>
     </div>
-    <div id="btn-ok" class="btn btn-ok btn-success pull-right margin-left-5"><i class="fa fa-lg fa-fw fa-thumbs-up"></i> Ok</div>
-    <div id="btn-cancel" class="btn btn-ok btn-danger pull-right margin-left-5"><i class="fa fa-lg fa-fw fa-thumbs-down"></i> Cancel</div>
+    <div id="btn-ok" class="btn btn-ok btn-success pull-right margin-left-5"><i class="fa fa-lg fa-fuw fa-thumbs-up"></i> Ok</div>
+    <div id="btn-cancel" class="btn btn-ok btn-danger pull-right margin-left-5"><i class="fa fa-lg fa-fuw fa-thumbs-down"></i> Cancel</div>
 
     <div class="clear-both"></div>
 </div>
@@ -23,7 +23,7 @@
 <script>
 $(document).ready(function(){
 
-    var isBip39    = FW.WALLET_FORMAT,
+    var isBip39    = FUW.WALLET_FORMAT,
         passphrase = null;
 
     // Focus the passphrase after 1/2 a second to let things initialize
@@ -64,7 +64,7 @@ $(document).ready(function(){
             resetWallet();
             createWallet(passphrase, isBip39);
             dialogClose('dialog-manual-passphrase');
-            dialogMessage('<i class="fa fa-lg fa-fw fa-info-circle"></i> Wallet Updated!', 'Your wallet has been updated to use the passphrase you just entered.', false, false);
+            dialogMessage('<i class="fa fa-lg fa-fuw fa-info-circle"></i> Wallet Updated!', 'Your wallet has been updated to use the passphrase you just entered.', false, false);
         }
     });
 

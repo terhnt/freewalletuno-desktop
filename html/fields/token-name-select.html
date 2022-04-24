@@ -16,28 +16,28 @@ $(document).ready(function(){
     var type = getFormType(),
         tip  = $('#token-name-select-tooltip');
 
-    // Stash current price info on BTC and XCP
-    btc_info = getAssetPrice('BTC',true),
-    xcp_info = getAssetPrice('XCP',true);
+    // Stash current price info on UNO and XUP
+    btc_info = getAssetPrice('UNO',true),
+    xcp_info = getAssetPrice('XUP',true);
 
     // Populate the token name / asset list
-    var balances = getAddressBalance(FW.WALLET_ADDRESS),
+    var balances = getAddressBalance(FUW.WALLET_ADDRESS),
         html     = '',
         el       = $('#token-name-select');
-    // Force "BTC" to be the only option for burning
+    // Force "UNO" to be the only option for burning
     if(type=='burn'){
-        html += '<option data-content="<img src=\'' + FW.XCHAIN_API + '/icon/BTC.png\' class=\'fw-icon-20 margin-right-5\'>BTC">BTC</option>';
+        html += '<option data-content="<img src=\'' + FUW.XCHAIN_API + '/icon/UNO.png\' class=\'fuw-icon-20 margin-right-5\'>UNO">UNO</option>';
     } else if(type=='dispenser-buy'){
-        var o = FW.DIALOG_DATA;
-        html += '<option data-content="<img src=\'' + FW.XCHAIN_API + '/icon/' + o.asset + '.png\' class=\'fw-icon-20 margin-right-5\'>' + o.name +'">' + o.name + '</option>';
+        var o = FUW.DIALOG_DATA;
+        html += '<option data-content="<img src=\'' + FUW.XCHAIN_API + '/icon/' + o.asset + '.png\' class=\'fuw-icon-20 margin-right-5\'>' + o.name +'">' + o.name + '</option>';
     } else {
         if(balances && balances.data){
             balances.data.forEach(function(item){
-                // Skip BTC in some cases
-                if(item.asset=='BTC' && (type=='destroy'||type=='dispenser'))
+                // Skip UNO in some cases
+                if(item.asset=='UNO' && (type=='destroy'||type=='dispenser'))
                     return;
                 var asset = (item.asset_longname && item.asset_longname!='') ? item.asset_longname : item.asset;
-                html += '<option data-content="<img src=\'' + FW.XCHAIN_API + '/icon/' + item.asset + '.png\' class=\'fw-icon-20 margin-right-5\'>' + asset + '">' + asset + '</option>';
+                html += '<option data-content="<img src=\'' + FUW.XCHAIN_API + '/icon/' + item.asset + '.png\' class=\'fuw-icon-20 margin-right-5\'>' + asset + '">' + asset + '</option>';
             });
         }
 
@@ -61,7 +61,7 @@ $(document).ready(function(){
     // Wait a brief moment to allow things to initialize
     setTimeout(function(){
 
-        // Change toolip text based on form type 
+        // Change toolip text based on form type
         var txt = false;
         if(type=='send')
             txt = 'This is the name of the token which you would like to send';
@@ -88,10 +88,10 @@ $(document).ready(function(){
             updateAvailableQuantity();
         // Callback function to handle saving current asset information
         var cb = function(o){
-            FW.ASSET_INFO = o;
-            btc_info = getAssetPrice('BTC',true);
-            xcp_info = getAssetPrice('XCP',true);
-            // Handle enabling/disabling the fiat field based on if we detect some estimated BTC value
+            FUW.ASSET_INFO = o;
+            btc_info = getAssetPrice('UNO',true);
+            xcp_info = getAssetPrice('XUP',true);
+            // Handle enabling/disabling the fiat field based on if we detect some estimated UNO value
             if(o.estimated_value.btc=='0.00000000'){
                 $('#amount-value').prop('disabled',true);
                 $('#escrow-amount-value').prop('disabled',true);
@@ -102,14 +102,14 @@ $(document).ready(function(){
                 $('#give-amount-value').prop('disabled',false);
             }
         }
-        // If this is BTC, hardcode the values and skip getting asset info
-        if(val=='BTC'){
+        // If this is UNO, hardcode the values and skip getting asset info
+        if(val=='UNO'){
             cb({
-                asset: "BTC",
+                asset: "UNO",
                 estimated_value: {
                     btc: '1.00000000',
                     usd: numeral(btc_info.price_usd).format('0.00'),
-                    xcp: numeral(xcp_info.price_btc).format('0.00000000'),
+                    xcp: numeral(xcp_info.price_uno).format('0.00000000'),
                 },
             });
             // Disable the memo
