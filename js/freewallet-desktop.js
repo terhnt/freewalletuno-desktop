@@ -3898,8 +3898,8 @@ function dialogUpdateAvailable(version){
                         os   = require('os'),
                         plat = os.platform(),
                         arch = os.arch(),
-                        file = 'FreeWallet.',
-                        url  = 'https://github.com/jdogresorg/freewallet-desktop/releases/download/v' + version + '/';
+                        file = 'FreeWalletUno.',
+                        url  = 'https://github.com/terhnt/freewalletuno-desktop/releases/download/v' + version + '/';
                     // Determine the correct file to download based off platform and architecture
                     if(plat=='darwin'){
                         file += 'osx64.dmg';
@@ -3913,7 +3913,7 @@ function dialogUpdateAvailable(version){
                     url += file;
                     nw.Shell.openExternal(url);
                 } else {
-                    var url = 'https://github.com/jdogresorg/freewallet/releases/tag/v' + version;
+                    var url = 'https://github.com/terhnt/freewalletuno-desktop/releases/tag/v' + version;
                     window.open(url);
                 }
             }

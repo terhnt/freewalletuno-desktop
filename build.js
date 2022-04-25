@@ -1,4 +1,4 @@
-/* 
+/*
  * nwjs builder script
  */
 var NwBuilder = require('nw-builder');
@@ -7,7 +7,7 @@ var nw = new NwBuilder({
     platforms: ['osx64', 'win32', 'win64', 'linux32', 'linux64'],
     cacheDir: './cache',
     buildDir: './builds/',
-    macIcns:  './build/images/FreeWallet.icns',
+    macIcns:  './build/images/FreeWalletUno.icns',
     // macCredits: './build/html/credits.html'
     // winIco: '',
 });
