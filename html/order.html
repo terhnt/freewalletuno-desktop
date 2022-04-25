@@ -7,7 +7,7 @@
     <!-- Order Information -->
     <div class="form-group">
         <label class="col-sm-3 control-label text-left order-type">
-            Buy 
+            Buy
         </label>
         <div class="col-sm-9">
             <table width="100%">
@@ -18,7 +18,7 @@
                         <td><img src="images/icons/blank.png" class="margin-right-5" id="assetA-icon"></td>
                         <td id="infoA" class="bold"></td>
                     </tr>
-                    </table>                
+                    </table>
                 </td>
                 <td width="*%" class="text-center">for</td>
                 <td width="180">
@@ -42,25 +42,25 @@
     <!-- Auto-Sign BTCPay Information -->
     <div class="form-group" id="btcpay" style="display: none">
         <label class="col-sm-3 control-label text-left">
-            Auto-BTCPay 
-            <a href="#" data-toggle="tooltip" title='This indicates if you would like to automatically sign and broadcast BTCPay transactions when matches for this order are detected' class="pull-right"><i class="fa fa-lg fa-question-circle-o margin-top-5"></i></a>
+            Auto-UNOPay
+            <a href="#" data-toggle="tooltip" title='This indicates if you would like to automatically sign and broadcast UNOPay transactions when matches for this order are detected' class="pull-right"><i class="fa fa-lg fa-question-circle-o margin-top-5"></i></a>
         </label>
         <div class="col-sm-9">
             <select id="autopay" class="selectpicker" name="autopay" data-width="100%">
-                <option value="Y">Yes - Automatically sign &amp; broadcast BTCpay transactions</option>
-                <option value="N">No - Manually sign &amp; broadcast BTCpay transactions</option>
+                <option value="Y">Yes - Automatically sign &amp; broadcast UNOpay transactions</option>
+                <option value="N">No - Manually sign &amp; broadcast UNOpay transactions</option>
             </select>
         </div>
         <div class="col-xs-12" class="dialog-autobtcpay">
             <div class="checkbox dialog-autobtcpay-confirm" style="display: none" id="dialog-autobtcpay-yes">
                 <label>
-                    <input type="checkbox" name="autopay-confirm" value="Y"> 
-                    I understand that I need to  <u><i><b>keep FreeWallet open</b></i></u> in order for Auto-BTCPay to work.
+                    <input type="checkbox" name="autopay-confirm" value="Y">
+                    I understand that I need to  <u><i><b>keep FreeWalletUno open</b></i></u> in order for Auto-UNOPay to work.
                 </label>
             </div>
             <div class="checkbox dialog-autobtcpay-confirm" style="display: none" id="dialog-autobtcpay-no">
                 <label>
-                    <input type="checkbox" name="autopay-confirm" value="Y"> 
+                    <input type="checkbox" name="autopay-confirm" value="Y">
                     I understand that I need to <u><i><b>pay within 20 blocks of a match</b></i></u> or the match will fail.
                 </label>
             </div>
@@ -132,10 +132,10 @@ $(document).ready(function(){
         FUW.DIALOG_DATA = {};
 
         // Initialize any tooltips
-        $('[data-toggle="tooltip"]').tooltip({ 
+        $('[data-toggle="tooltip"]').tooltip({
             html: true,
             placement: 'bottom'
-        }); 
+        });
 
     },100);
 
@@ -160,14 +160,14 @@ $(document).ready(function(){
     // Handle form validation and displaying any errors
     $('#create-order-form').validator().on('submit', function(e){
         // prevent form submission
-        e.preventDefault(); 
+        e.preventDefault();
         // Get object with form values
         var vals   = array2Object($(this).serializeArray()),
             errors = [];
         console.log('vals=',vals);
-        // Remove error indicators from any fields 
+        // Remove error indicators from any fields
         $('.form-group').removeClass('has-error has-danger');
-        // Verify we have valid fee amount 
+        // Verify we have valid fee amount
         if(numeral(vals['fee-amount']).value()==0){
             errors.push('You must enter a fee which is greater than 0.00000000!');
             $('#fee-amount').closest('.form-group').addClass('has-error has-danger');
@@ -205,7 +205,7 @@ $(document).ready(function(){
                             FUW.BTCPAY_ORDERS[network] = {};
                         if(!FUW.BTCPAY_ORDERS[network][vals.source])
                             FUW.BTCPAY_ORDERS[network][vals.source] = {};
-                        // Save transaction hash and autopay preference 
+                        // Save transaction hash and autopay preference
                         FUW.BTCPAY_ORDERS[network][vals.source][tx] = autopay;
                         // Save data to disk
                         ls.setItem('btcpayOrders',JSON.stringify(FUW.BTCPAY_ORDERS));

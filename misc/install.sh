@@ -1,6 +1,6 @@
 #!/bin/sh
-# FreeWallet - Linux installer script
-# Handles installing FreeWallet and integrating with window manager
+# FreewalletUno - Linux installer script
+# Handles installing FreewalletUno and integrating with window manager
 ###########################################################
 basedir=/usr/share
 echo "### Creating installation directories..."

@@ -1,4 +1,4 @@
-FreeWallet Uno - Desktop Wallet
+FreeWalletUno - Desktop Wallet
 ---
 FreeWalletUno is a free wallet which supports Unobtanium and Unoparty.
 
