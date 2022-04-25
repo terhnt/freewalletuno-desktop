@@ -1,9 +1,9 @@
 {
   "main": "index.html",
-  "name": "FreeWallet",
-  "description": "Freewallet is a free open source desktop wallet that supports Unobtanium and Unoparty",
-  "version": "0.9.19",
-  "author": "Jeremy Johnson <j-dog@j-dog.net> / Andrew K <terhnt@unoparty.io>",
+  "name": "FreeWalletUno",
+  "description": "FreewalletUno is a free open source desktop wallet that supports Unobtanium and Unoparty",
+  "version": "0.9.20",
+  "author": "Jeremy Johnson <j-dog@j-dog.net> / Andrew K <stterhnt@gmail.com>",
   "license": "MIT",
   "user-agent": "%name %ver (%osinfo)",
   "repository": {
@@ -12,7 +12,7 @@
   },
   "single-instance": true,
   "window": {
-    "title": "FreeWallet",
+    "title": "FreeWalletUno",
     "icon": "images/freewallet-icon-180.png",
     "toolbar": false,
     "min_width": 1024,

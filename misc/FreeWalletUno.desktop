@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Version=1.1
+Name=FreeWalletUno
+Comment=by Jeremy Johnson <j-dog@j-dog.net> and Andrew K <stterhnt@gmail.com>
+Exec=/usr/share/FreeWalletUno/FreeWalletUno %U
+Icon=/usr/share/icons/FreeWalletUno/FreeWallet.png
+Terminal=false
+Categories=Office;
+MimeType=x-scheme-handler/unobtanium;x-scheme-handler/unoparty;x-scheme-handler/freewalletuno;
